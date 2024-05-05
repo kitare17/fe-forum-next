@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 
 const logoStyle = {
-    width: '140px',
+    width: '60px',
     height: 'auto',
     cursor: 'pointer',
 };
@@ -88,20 +88,26 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                 px: 0,
                             }}
                         >
-                            <img
-                                src={
-                                    'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
-                                }
-                                style={logoStyle}
-                                alt="logo of sitemark"
-                            />
-                            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            <div>
+
+                                <h3>
+                                    <img
+                                        src={
+                                            'https://img.icons8.com/?size=60&id=flgyO0XZfexw&format=png'
+                                        }
+                                        style={logoStyle}
+                                        alt="logo of sitemark"
+                                    /> Fu forum
+                                </h3>
+                            </div>
+
+                            <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                                 <MenuItem
                                     onClick={() => scrollToSection('features')}
-                                    sx={{ py: '6px', px: '12px' }}
+                                    sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
-                                        Features
+                                        Trang chủ
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
@@ -109,7 +115,7 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                     sx={{ py: '6px', px: '12px' }}
                                 >
                                     <Typography variant="body2" color="text.primary">
-                                        Testimonials
+                                        Diễn đàn
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
@@ -117,7 +123,7 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                     sx={{ py: '6px', px: '12px' }}
                                 >
                                     <Typography variant="body2" color="text.primary">
-                                        Highlights
+                                        Chat bot
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
@@ -125,7 +131,7 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                     sx={{ py: '6px', px: '12px' }}
                                 >
                                     <Typography variant="body2" color="text.primary">
-                                        Pricing
+                                        Chợ trời
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
@@ -133,7 +139,7 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                     sx={{ py: '6px', px: '12px' }}
                                 >
                                     <Typography variant="body2" color="text.primary">
-                                        FAQ
+                                        Hội nhóm
                                     </Typography>
                                 </MenuItem>
                             </Box>
@@ -151,20 +157,20 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                 variant="text"
                                 size="small"
                                 component="a"
-                                href="/material-ui/getting-started/templates/sign-in/"
+                                href="/pages/auth/login"
                                 target="_blank"
                             >
-                                Sign in
+                                Đăng nhập
                             </Button>
                             <Button
                                 color="primary"
                                 variant="contained"
                                 size="small"
                                 component="a"
-                                href="/material-ui/getting-started/templates/sign-up/"
+                                href="/pages/auth/register"
                                 target="_blank"
                             >
-                                Sign up
+                                Đăng ki
                             </Button>
                         </Box>
                         <Box sx={{ display: { sm: '', md: 'none' } }}>
@@ -215,11 +221,11 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                             color="primary"
                                             variant="contained"
                                             component="a"
-                                            href="/material-ui/getting-started/templates/sign-up/"
+                                            href="/pages/auth/register"
                                             target="_blank"
                                             sx={{ width: '100%' }}
                                         >
-                                            Sign up
+                                            Đăng kí
                                         </Button>
                                     </MenuItem>
                                     <MenuItem>
@@ -227,11 +233,11 @@ function Header({ mode, toggleColorMode }: AppAppBarProps) {
                                             color="primary"
                                             variant="outlined"
                                             component="a"
-                                            href="/material-ui/getting-started/templates/sign-in/"
+                                            href="/pages/auth/login"
                                             target="_blank"
                                             sx={{ width: '100%' }}
                                         >
-                                            Sign in
+                                            Đăng nhập
                                         </Button>
                                     </MenuItem>
                                 </Box>

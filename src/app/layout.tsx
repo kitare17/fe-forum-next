@@ -6,6 +6,11 @@ import {Providers} from "./store/provider";
 import {ToastContainer} from "react-toastify";
 import Header from "@/app/component/Header";
 import Footer from "@/app/component/Footer";
+import "../../public/css/style.css"
+import "../../public/css/bootstrap.css"
+import "../../public/lib/animate/animate.min.css"
+import "../../public/lib/owlcarousel/assets/owl.carousel.min.css"
+
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -26,13 +31,10 @@ export default function RootLayout({
     return (
         <html lang="en">
         <body className={inter.className}>
-        <Header/>
         <Providers>
             {children}
         </Providers>
-        <Footer/>
         <ToastContainer/>
-
         </body>
         </html>
     );
