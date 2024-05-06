@@ -11,12 +11,14 @@ export const fetchUsers = createAsyncThunk(
 
             await new Promise(resolve => setTimeout(function () {
                 console.log("Kích hoạt")
+                // @ts-ignore
                 resolve();
             }, 2000));
             const data: UserInterface = response.data;
             return data;
         } catch (error) {
             console.log("Error: " + Types.FETCH_FAKE_DATA);
+
         }
     }
 );

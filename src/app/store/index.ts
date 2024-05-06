@@ -1,11 +1,12 @@
 "use client"
 import {configureStore} from '@reduxjs/toolkit'
 import userReducer from "./reducer/user"
-
+import chatEnglishReducer from "./reducer/chat"
 export const index =
     configureStore({
             reducer: {
-                user: userReducer
+                user: userReducer,
+                chatEnglish:chatEnglishReducer
             }
         }
     )

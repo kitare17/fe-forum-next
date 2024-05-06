@@ -1,6 +1,7 @@
 import { TextMessage} from "inconnect-chat-ui";
 import React from "react";
 import 'react-chat-elements/dist/main.css'
+// @ts-ignore
 export const UserMesssage=({text})=>{
     return(
         <TextMessage
@@ -18,7 +19,7 @@ export const UserMesssage=({text})=>{
         />
     )
 }
-
+// @ts-ignore
 export const BotMessage=({text})=>{
     return(
         <TextMessage

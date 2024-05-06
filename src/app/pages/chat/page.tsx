@@ -1,5 +1,5 @@
 "use client"
-import {ChatItem, MessageBox, Input, Button} from 'react-chat-elements';
+import {ChatItem} from 'react-chat-elements';
 import React, {useState} from "react";
 import 'react-chat-elements/dist/main.css'
 import {
@@ -21,7 +21,12 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import {ImageMessage} from 'inconnect-chat-ui';
 import {BotMessage, UserMesssage} from "@/app/pages/chat/component/messsage-box";
-
+import {useForm} from "react-hook-form";
+import {toast} from "react-toastify";
+import {fetchUsers} from "@/app/store/action/user";
+import {useDispatch, useSelector} from "react-redux";
+import {chatEnglish} from "@/app/store/action/chat";
+import {RootState} from "@/app/store";
 
 const drawerWidth = 300;
 
@@ -32,38 +37,53 @@ interface Message {
     text: string
 }
 
+
+
 const ChatEnglish = () => {
+    const dipatch = useDispatch();
+    const {listMessageResponse, isLoading, isError} = useSelector((state:RootState) => state.chatEnglish);
+    // const [listMessage, setListMessage] = useState<Message[]>([
+    //
+    // ]);
 
-    const [listMessage, setListMessage] = useState<Message[]>([
-        {
-            id: 1,
-            role: true,
-            text: "Xin chào bạn tôi là chat bot ai dịch nghĩa từ vựng, bạn cần tôi giúp gì không?"
-        },
-        {
-            id: 2,
-            role: false,
-            text: "Xin chào bạn tôi là chat bot ai dịch nghĩa từ vựng, bạn cần tôi giúp gì không?"
+    const handleSendMessage = (messageData: Message) => {
+        if(messageData.text){
+            // setListMessage(
+            //     [
+            //         ...listMessage,
+            //         messageData
+            //     ]
+            // )
+            // @ts-ignore
+            dipatch(chatEnglish(messageData));
+
+            //listMessageResponse=[...listMessageResponse,messageData]
+
+
         }
-    ]);
 
-    const handleSendMessage = () => {
-        setListMessage(
-            [
-                ...listMessage,
-                {
-                    id: 2,
-                    role: false,
-                    text: "Xin chào bạn tôi là chat bot ai dịch nghĩa từ vựng, bạn cần tôi giúp gì không?"
-                }
-            ]
-        )
-        console.log({listMessage})
+        else {
+            toast.error("Vui lòng nhập câu hỏi")
+        }
+        reset();
     }
+
+
+    //form handle
+    const {register, handleSubmit, reset, formState,} = useForm<Message>(
+        {
+            defaultValues: {
+                text: "",
+                role: false,
+                id: 1
+            }
+        }
+    );
+    const {errors} = formState;
     const RenderChat = () => {
         return (
             <>
-                {listMessage.map((message: Message, index) => {
+                {listMessageResponse.map((message: Message, index) => {
                         return (
                             <div key={index}>
                                 {message.role ?
@@ -74,7 +94,6 @@ const ChatEnglish = () => {
 
                                 }
                             </div>
-
 
 
                         )
@@ -168,12 +187,17 @@ const ChatEnglish = () => {
                                 sx={{ml: 1, flex: 1}}
                                 placeholder="Nhập câu hỏi"
                                 inputProps={{'aria-label': 'search google maps'}}
+                                required
+                                {...register(
+                                    'text'
+                                )}
+
                             />
 
                             <Divider sx={{height: 28, m: 0.5}} orientation="vertical"/>
                             <IconButton color="primary" sx={{p: '10px'}} aria-label="directions"
-                                      >
-                                <SendIcon   onClick={handleSendMessage}/>
+                            >
+                                <SendIcon onClick={handleSubmit(handleSendMessage)}/>
                             </IconButton>
                         </Paper>
                     </Box>

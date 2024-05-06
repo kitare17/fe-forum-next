@@ -25,6 +25,7 @@ const View = () => {
     },[isLoading,isError])
 
     const handleClick = () => {
+        // @ts-ignore
         dipatch(fetchUsers());
         toast.success("ok");
     }
