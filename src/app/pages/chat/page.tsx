@@ -15,19 +15,23 @@ import {
     CssBaseline,
     Paper,
     IconButton,
-    InputBase
+    InputBase, LinearProgress
 
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import {ImageMessage} from 'inconnect-chat-ui';
+
 import {BotMessage, UserMesssage} from "@/app/pages/chat/component/messsage-box";
 import {useForm} from "react-hook-form";
 import {toast} from "react-toastify";
-import {fetchUsers} from "@/app/store/action/user";
+
 import {useDispatch, useSelector} from "react-redux";
 import {chatEnglish} from "@/app/store/action/chat";
 import {RootState} from "@/app/store";
-
+import MenuIcon from '@mui/icons-material/Menu';
+import ListItemIcon from "@mui/material/ListItemIcon";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
+import ListItemText from "@mui/material/ListItemText";
 const drawerWidth = 300;
 
 //interface role bot (true), user (false)
@@ -38,31 +42,34 @@ interface Message {
 }
 
 
-
 const ChatEnglish = () => {
     const dipatch = useDispatch();
-    const {listMessageResponse, isLoading, isError} = useSelector((state:RootState) => state.chatEnglish);
-    // const [listMessage, setListMessage] = useState<Message[]>([
-    //
-    // ]);
+    const {listMessageResponse, isLoading, isError} = useSelector((state: RootState) => state.chatEnglish);
+
+
+
+
+
+
+
+    const [open, setOpen] = React.useState(false);
+    const toggleDrawer = (newOpen: boolean) => () => {
+        setOpen(newOpen);
+    };
+
+
+
+
 
     const handleSendMessage = (messageData: Message) => {
-        if(messageData.text){
-            // setListMessage(
-            //     [
-            //         ...listMessage,
-            //         messageData
-            //     ]
-            // )
-            // @ts-ignore
+        if (messageData.text) {
+
             dipatch(chatEnglish(messageData));
 
             //listMessageResponse=[...listMessageResponse,messageData]
 
 
-        }
-
-        else {
+        } else {
             toast.error("Vui lòng nhập câu hỏi")
         }
         reset();
@@ -70,7 +77,7 @@ const ChatEnglish = () => {
 
 
     //form handle
-    const {register, handleSubmit, reset, formState,} = useForm<Message>(
+    const {register, handleSubmit, reset, formState} = useForm<Message>(
         {
             defaultValues: {
                 text: "",
@@ -104,6 +111,36 @@ const ChatEnglish = () => {
         )
     }
 
+    const DrawerList = (
+        <Box sx={{ width: 300 }} role="presentation" onClick={toggleDrawer(false)}>
+            <Toolbar>
+                <Typography variant="h6" noWrap component="div">
+                    List of chat
+                </Typography>
+            </Toolbar>
+            <Divider/>
+            <List>
+                {['Inbox', 'Starred', 'Drafts0', 'Send email', 'Drafts', 'Starred', 'Drafts0', 'Send email', 'Drafts'].map((text, index) => (
+                    <ListItem key={text} disablePadding>
+                        <ListItemButton sx={{background: "#ede7e6"}}>
+                            <ChatItem
+                                id="1"
+                                avatar={'https://png.pngtree.com/png-vector/20230416/ourmid/pngtree-avatar-ninja-symbol-icon-vector-png-image_6709524.png'}
+                                alt={'Reactjs'}
+                                title={'Facebook'}
+                                subtitle={'What are you doing?'}
+                                date={new Date()}
+                                unread={1}
+                            />
+                        </ListItemButton>
+                    </ListItem>
+                ))}
+            </List>
+            <Divider/>
+
+        </Box>
+    );
+
     return (
         <div>
 
@@ -111,9 +148,28 @@ const ChatEnglish = () => {
                 <CssBaseline/>
                 <AppBar
                     position="fixed"
-                    sx={{width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`}}
+                    sx={{
+                        width: {
+                            lg: `calc(100% - ${drawerWidth}px)`
+                        },
+                        ml: {
+                            lg: `${drawerWidth}px`
+                        }
+                    }}
                 >
                     <Toolbar>
+
+                        <MenuIcon
+                        sx={{
+                            display:{
+                                xs:"block",
+                                sm:"block",
+                                md:"block",
+                                lg:"none"
+                            }
+                        }}
+                        onClick={toggleDrawer(true)}
+                        />
                         <Typography variant="h6" noWrap component="div">
                             Chat bot AI
                         </Typography>
@@ -121,6 +177,12 @@ const ChatEnglish = () => {
                 </AppBar>
                 <Drawer
                     sx={{
+                        display:{
+                            xs:"none",
+                            sm:"none",
+                            md:"none",
+                            lg:"block"
+                        },
                         width: drawerWidth,
                         flexShrink: 0,
                         '& .MuiDrawer-paper': {
@@ -160,17 +222,32 @@ const ChatEnglish = () => {
                 </Drawer>
                 <Box
 
-                    sx={{flexGrow: 1, bgcolor: 'background.default', p: 3, marginTop: "60px"}}
+                    sx={{flexGrow: 1, bgcolor: 'background.default', p: 3, marginTop: "60px", marginBottom: "100px"}}
                     position={"relative"}
                 >
-                    <RenderChat/>
 
+
+                    <RenderChat/>
+                    {isLoading && <>
+                        <BotMessage key="loading" text={"Dữ liệu đang xử lí bạn đợi chút nhé ..."}/>
+                        <LinearProgress/>
+                    </>
+                    }
 
                     {/*box input*/}
                     <Box
                         position={"fixed"}
                         bottom={"30px"}
-                        width={"70%"}
+                        sx={{
+                            width:{
+                                xs:"90%",
+                                sm:"90%",
+                                md:"90%",
+                                lg:"70%"
+
+                            }
+                        }}
+
                     >
                         <Paper
                             component="form"
@@ -191,6 +268,24 @@ const ChatEnglish = () => {
                                 {...register(
                                     'text'
                                 )}
+                                onKeyDown={(ev) => {
+
+
+                                    if (ev.key === 'Enter') {
+                                        // Do code here
+                                        console.log(`Pressed keyCode ${ev.key}`);
+
+                                        handleSendMessage(
+                                            {
+                                                // @ts-ignore
+                                                text: ev.target.value,
+                                                role: false,
+                                                id: 1
+                                            }
+                                        )
+                                        ev.preventDefault();
+                                    }
+                                }}
 
                             />
 
@@ -202,8 +297,16 @@ const ChatEnglish = () => {
                         </Paper>
                     </Box>
 
+
+
+
                 </Box>
             </Box>
+
+
+            <Drawer open={open} onClose={toggleDrawer(false)}>
+                {DrawerList}
+            </Drawer>
         </div>
     )
 }
