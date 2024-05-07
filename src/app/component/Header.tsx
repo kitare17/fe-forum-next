@@ -1,6 +1,6 @@
 "use client"
 import * as React from 'react';
-import { PaletteMode } from '@mui/material';
+import {PaletteMode} from '@mui/material';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import Image from 'next/image'
 
 const logoStyle = {
     width: '60px',
@@ -36,7 +37,7 @@ function Header() {
         const offset = 128;
         if (sectionElement) {
             const targetScroll = sectionElement.offsetTop - offset;
-            sectionElement.scrollIntoView({ behavior: 'smooth' });
+            sectionElement.scrollIntoView({behavior: 'smooth'});
             window.scrollTo({
                 top: targetScroll,
                 behavior: 'smooth',
@@ -91,12 +92,14 @@ function Header() {
                             <div>
 
                                 <h3>
-                                    <img
+                                    <Image
                                         src={
                                             'https://img.icons8.com/?size=60&id=flgyO0XZfexw&format=png'
                                         }
                                         style={logoStyle}
-                                        alt="logo of sitemark"
+                                        width={500}
+                                        height={500}
+                                    alt="logo of sitemark"
                                     /> Fu forum
                                 </h3>
                             </div>
@@ -112,7 +115,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => scrollToSection('testimonials')}
-                                    sx={{ py: '6px', px: '12px' }}
+                                    sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Diễn đàn
@@ -120,7 +123,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => scrollToSection('highlights')}
-                                    sx={{ py: '6px', px: '12px' }}
+                                    sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Chat bot
@@ -128,7 +131,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => scrollToSection('pricing')}
-                                    sx={{ py: '6px', px: '12px' }}
+                                    sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Chợ trời
@@ -136,7 +139,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => scrollToSection('faq')}
-                                    sx={{ py: '6px', px: '12px' }}
+                                    sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Hội nhóm
@@ -146,7 +149,7 @@ function Header() {
                         </Box>
                         <Box
                             sx={{
-                                display: { xs: 'none', md: 'flex' },
+                                display: {xs: 'none', md: 'flex'},
                                 gap: 0.5,
                                 alignItems: 'center',
                             }}
@@ -173,15 +176,15 @@ function Header() {
                                 Đăng ki
                             </Button>
                         </Box>
-                        <Box sx={{ display: { sm: '', md: 'none' } }}>
+                        <Box sx={{display: {sm: '', md: 'none'}}}>
                             <Button
                                 variant="text"
                                 color="primary"
                                 aria-label="menu"
                                 onClick={toggleDrawer(true)}
-                                sx={{ minWidth: '30px', p: '4px' }}
+                                sx={{minWidth: '30px', p: '4px'}}
                             >
-                                <MenuIcon />
+                                <MenuIcon/>
                             </Button>
                             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
                                 <Box
@@ -215,7 +218,7 @@ function Header() {
                                         Pricing
                                     </MenuItem>
                                     <MenuItem onClick={() => scrollToSection('faq')}>FAQ</MenuItem>
-                                    <Divider />
+                                    <Divider/>
                                     <MenuItem>
                                         <Button
                                             color="primary"
@@ -223,7 +226,7 @@ function Header() {
                                             component="a"
                                             href="/pages/auth/register"
                                             target="_blank"
-                                            sx={{ width: '100%' }}
+                                            sx={{width: '100%'}}
                                         >
                                             Đăng kí
                                         </Button>
@@ -235,7 +238,7 @@ function Header() {
                                             component="a"
                                             href="/pages/auth/login"
                                             target="_blank"
-                                            sx={{ width: '100%' }}
+                                            sx={{width: '100%'}}
                                         >
                                             Đăng nhập
                                         </Button>
