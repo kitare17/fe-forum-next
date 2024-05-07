@@ -28,10 +28,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {chatEnglish} from "@/app/store/action/chat";
 import {RootState} from "@/app/store";
 import MenuIcon from '@mui/icons-material/Menu';
-import ListItemIcon from "@mui/material/ListItemIcon";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import ListItemText from "@mui/material/ListItemText";
+
 const drawerWidth = 300;
 
 //interface role bot (true), user (false)
@@ -47,17 +44,10 @@ const ChatEnglish = () => {
     const {listMessageResponse, isLoading, isError} = useSelector((state: RootState) => state.chatEnglish);
 
 
-
-
-
-
-
     const [open, setOpen] = React.useState(false);
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
-
-
 
 
 
@@ -296,9 +286,6 @@ const ChatEnglish = () => {
                             </IconButton>
                         </Paper>
                     </Box>
-
-
-
 
                 </Box>
             </Box>

@@ -24,7 +24,7 @@ interface AppAppBarProps {
     toggleColorMode: () => void;
 }
 
-function Header({ mode, toggleColorMode }: AppAppBarProps) {
+function Header() {
     const [open, setOpen] = React.useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {
