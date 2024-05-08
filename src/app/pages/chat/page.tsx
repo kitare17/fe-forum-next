@@ -54,6 +54,7 @@ const ChatEnglish = () => {
     const handleSendMessage = (messageData: Message) => {
         if (messageData.text) {
 
+            // @ts-ignore
             dipatch(chatEnglish(messageData));
 
             //listMessageResponse=[...listMessageResponse,messageData]

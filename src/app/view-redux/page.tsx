@@ -15,6 +15,8 @@ const View = () => {
     const {listUser, isLoading, isError} = useSelector((state:RootState) => state.user);
 
     useEffect(()=>{
+
+        // @ts-ignore
         dipatch(fetchUsers());
     },[])
     useEffect(()=>{
