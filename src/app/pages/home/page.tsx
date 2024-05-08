@@ -1,12 +1,8 @@
 import Image from 'next/image'
-import {headers} from 'next/headers';
+
 
 const HomePage = () => {
 
-    const headersList = headers();
-
-    // headersList.get('host');
-    console.log({headersList});
     return (
         < >
             <div className="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
@@ -17,7 +13,15 @@ const HomePage = () => {
                 >
                     <div className="carousel-inner">
                         <div className="carousel-item active">
-                            <img className="w-100" src="img/FPT1.jpg" alt="Image"/>
+                            <Image
+                                width={0}
+                                height={0}
+                                className="w-100" src="/img/FPT1.jpg"
+                                sizes="100vw"
+                                style={{ width: '100%', height: 'auto' }}
+                                alt="Image"/>
+
+
                             <div className="carousel-caption">
                                 <div className="container">
                                     <div className="row justify-content-center">
@@ -34,7 +38,13 @@ const HomePage = () => {
                             </div>
                         </div>
                         <div className="carousel-item">
-                            <img className="w-100" src="img/FPT2.jpg" alt="Image"/>
+                            <Image
+                                width={0}
+                                height={0}
+                                sizes="100vw"
+                                style={{ width: '100%', height: 'auto' }}
+                                alt="Image"
+                                className="w-100" src="/img/FPT2.jpg" />
                             <div className="carousel-caption">
                                 <div className="container">
                                     <div className="row justify-content-center">
