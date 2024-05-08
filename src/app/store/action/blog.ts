@@ -4,6 +4,7 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
+import {BLOG_FIND_ONE} from "../../constant/ActionType";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -19,6 +20,21 @@ export const createBlog = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BLOG_CREATE);
+
+        }
+    }
+);
+
+export const findOneBlog = createAsyncThunk(
+    Types.BLOG_FIND_ONE,
+    async (blodId:string) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/posts/${blodId}`);
+
+            const data: BlogInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BLOG_FIND_ONE);
 
         }
     }

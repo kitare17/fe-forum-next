@@ -25,12 +25,16 @@ import {RootState} from "@/app/store";
 import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
 import {findOneBlog} from "@/app/store/action/blog";
+import {useParams} from "next/navigation";
 
 
 
 
 
 const Blog = () => {
+    const {blogId}=useParams();
+
+
     const [expanded, setExpanded] = useState(false);
 
     const handleExpandClick = () => {
@@ -42,7 +46,7 @@ const Blog = () => {
 
     useEffect(()=>{
         // @ts-ignore
-        dipatch(findOneBlog("663bb0faf25d79025e81c504"));
+        dipatch(findOneBlog(blogId));
     },[])
 
     useEffect(()=>{
@@ -84,12 +88,17 @@ const Blog = () => {
                                 <MoreVertIcon />
                             </IconButton>
                         }
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
+                        title={ `${blogDetail?.creator?.fullname} (${blogDetail?.creator?.username})`}
+                        // @ts-ignore
+                        subheader={`Đăng ngày ${new Date(blogDetail?.createdAt).getDate()}/${new Date(blogDetail?.createdAt).getMonth() + 1}/${new Date(blogDetail?.createdAt).getFullYear()}` }
+
                     />
 
                     <CardContent>
-                               <div className="Container" dangerouslySetInnerHTML={{__html: blogDetail?.detail}}></div>
+
+                        <div className="Container"
+                             dangerouslySetInnerHTML={{__html: blogDetail?.detail}}></div>
+
                     </CardContent>
                     <Divider />
                     <CardActions disableSpacing>
@@ -163,7 +172,7 @@ const Blog = () => {
                                             <MoreVertIcon />
                                         </IconButton>
                                     }
-                                    title="Shrimp and Chorizo Paella"
+                                    title={blogDetail?.creator?.fullname}
                                     subheader=" This impressive paella is a perfect party dish and a fun meal to cook
                                     together with your guests. Add 1 cup of frozen peas along with the mussels,
                                     if you like."

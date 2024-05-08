@@ -4,4 +4,6 @@ export interface UserInterface{
     email:string,
     phone:string,
     admin:boolean
+    _id:string,
+    fullname?:string
 }

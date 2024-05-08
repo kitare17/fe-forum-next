@@ -24,7 +24,7 @@ const WriteBlog = () => {
         {
             defaultValues: {
                 "title": "",
-                "id": "",
+                "_id": "",
                 "detail": ""
             }
         }
@@ -33,13 +33,16 @@ const WriteBlog = () => {
     const [text, setText] = useState<string>("");
     const onChangeText = (event: any, editor: any) => {
         setText(editor.getData())
+        console.log(editor.getData())
     }
 
     const handleWriteBlog = (newBlog: BlogInterface) => {
 
 
         if (text) {
-            newBlog.detail = text;
+            newBlog.detail = text
+                .replace("<figure class=\"image image-style-side\">","<figure style=\"text-align: center;\" class=\"image image-style-side\">")
+                .replace("<figure class=\"image\"","<figure class=\"image\" style=\"text-align: center;\"");
 
             // @ts-ignore
             dipatch(createBlog(newBlog));

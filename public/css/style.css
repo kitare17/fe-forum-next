@@ -520,3 +520,10 @@ h6,
 .copyright a:hover {
     color: var(--primary);
 }
+
+figure .image{
+    text-align: center;
+}
+.image .image-style-side{
+    text-align: right!important;
+}
