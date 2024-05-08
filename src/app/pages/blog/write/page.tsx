@@ -1,13 +1,12 @@
 import dynamic from 'next/dynamic'
 
-const DynamicHeader = dynamic(() => import('./formSubmit'), {
+const FormSubmit = dynamic(() => import('./formSubmit'), {
     ssr: false,
 })
 
 const Page=()=>{
     return(
-
-        <DynamicHeader  />
+        <FormSubmit  />
     )
 }
 export default Page;

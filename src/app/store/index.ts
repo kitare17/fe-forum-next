@@ -2,11 +2,13 @@
 import {configureStore} from '@reduxjs/toolkit'
 import userReducer from "./reducer/user"
 import chatEnglishReducer from "./reducer/chat"
+import blog from "./reducer/blog"
 export const index =
     configureStore({
             reducer: {
                 user: userReducer,
-                chatEnglish:chatEnglishReducer
+                chatEnglish:chatEnglishReducer,
+                blog:blog
             }
         }
     )

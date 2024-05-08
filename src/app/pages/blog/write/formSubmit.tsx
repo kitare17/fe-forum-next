@@ -10,12 +10,15 @@ import {useState} from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import {toast} from "react-toastify";
-import {fetchUsers} from "@/app/store/action/user";
 import {useDispatch} from "react-redux";
-
+import {createBlog} from "@/app/store/action/blog";
+import {useRouter} from "next/navigation";
 
 
 const WriteBlog = () => {
+    const router = useRouter();
+
+
     const dipatch = useDispatch();
     const {register, handleSubmit, reset, formState} = useForm<BlogInterface>(
         {
@@ -39,9 +42,13 @@ const WriteBlog = () => {
             newBlog.detail = text;
 
             // @ts-ignore
-            dipatch(fetchUsers());
-            console.log({newBlog});
+            dipatch(createBlog(newBlog));
+            setText("")
+
             reset();
+
+            router.replace("/");
+
         } else {
             toast.error("Vui lòng nhập nội dung");
         }
@@ -96,38 +103,16 @@ const WriteBlog = () => {
 
                         <div style={{marginTop: "10px", marginBottom: "10px", width: "100%"}}>
                             <CKEditor
-                                editor={ClassicEditor}
+                                editor ={ClassicEditor}
                                 config={
                                     {
-                                        toolbar: {
-                                            items: [
-                                                'heading',
-                                                '|',
-                                                'bold',
-                                                'italic',
-                                                'link',
-                                                'bulletedList',
-                                                'numberedList',
-                                                'alignment',
-                                                'imageUpload',
-                                                'blockQuote',
-                                                'undo',
-                                                'redo'
-                                            ]
-                                        },
-                                        // alignment: {
-                                        //     options: ['left', 'right', 'center', 'justify']
-                                        // },
-
-                                        ckfinder: {
-                                            uploadUrl: "http://localhost:8080/minio/upload-ckeditor"
+                                        ckfinder:{
+                                            uploadUrl:"http://localhost:8080/minio/upload-ckeditor"
                                         }
-
                                     }
                                 }
                                 onChange={onChangeText}
                                 data={text}
-
                             >
                             </CKEditor>
                         </div>
