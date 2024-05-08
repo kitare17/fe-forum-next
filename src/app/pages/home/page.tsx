@@ -1,5 +1,13 @@
+import Image from 'next/image'
+import {headers} from 'next/headers';
+
 const HomePage = () => {
-    return(
+
+    const headersList = headers();
+
+    // headersList.get('host');
+    console.log({headersList});
+    return (
         < >
             <div className="container-fluid p-0 wow fadeIn" data-wow-delay="0.1s">
                 <div
@@ -79,7 +87,10 @@ const HomePage = () => {
                             >
                                 <div className="d-flex">
                                     <div className="flex-shrink-0 btn-lg-square rounded-circle bg-light">
-                                        <img src="https://img.icons8.com/?size=50&id=35218&format=png" alt=""/>
+                                        <Image
+                                            width={50}
+                                            height={50}
+                                            src="https://img.icons8.com/?size=50&id=35218&format=png" alt=""/>
                                     </div>
                                     <div className="ps-3">
                                         <h4>Hoàn toàn miễn phí</h4>
@@ -97,7 +108,10 @@ const HomePage = () => {
                             >
                                 <div className="d-flex">
                                     <div className="flex-shrink-0 btn-lg-square rounded-circle bg-light">
-                                        <img src="https://img.icons8.com/?size=60&id=cjUb4tRvBCNt&format=png" alt=""/>
+                                        <Image
+                                            width={50}
+                                            height={50}
+                                            src="https://img.icons8.com/?size=60&id=cjUb4tRvBCNt&format=png" alt=""/>
                                     </div>
                                     <div className="ps-3">
                                         <h4>Hỏi&Đáp</h4>
@@ -116,7 +130,10 @@ const HomePage = () => {
                             >
                                 <div className="d-flex">
                                     <div className="flex-shrink-0 btn-lg-square rounded-circle bg-light">
-                                        <img src="https://img.icons8.com/?size=60&id=63312&format=png" alt=""/>
+                                        <Image
+                                            width={50}
+                                            height={50}
+                                            src="https://img.icons8.com/?size=60&id=63312&format=png" alt=""/>
                                     </div>
                                     <div className="ps-3">
                                         <h4>24/7</h4>
@@ -139,11 +156,14 @@ const HomePage = () => {
                             className="col-lg-3 col-md-5 wow fadeInUp"
                             data-wow-delay="0.1s"
                         >
-                            <img
+                            <Image
+                                width={300}
+                                height={50}
                                 className="img-fluid rounded"
                                 style={{height: "450px"}}
-                                data-wow-delay="0.1s"
-                                src="img/about.jpg"
+                                quality={100}
+                                src="/img/about.jpg"
+                                alt="banner"
                             />
                         </div>
                         <div
@@ -280,8 +300,11 @@ const HomePage = () => {
                                                     className="btn-square bg-light rounded-circle mx-auto mb-4"
                                                     style={{width: "90px", height: "90px"}}
                                                 >
-                                                    <img src="https://img.icons8.com/?size=50&id=35218&format=png"
-                                                         alt=""/>
+                                                    <Image
+                                                        width={50}
+                                                        height={50}
+                                                        src="https://img.icons8.com/?size=50&id=35218&format=png"
+                                                        alt=""/>
                                                 </div>
                                                 <h4 className="mb-0">100% Miễn phí</h4>
                                             </div>
@@ -295,8 +318,11 @@ const HomePage = () => {
                                                     className="btn-square bg-light rounded-circle mx-auto mb-4"
                                                     style={{width: "90px", height: "90px"}}
                                                 >
-                                                    <img src="https://img.icons8.com/?size=60&id=yIGiaaLl7bsg&format=png"
-                                                         alt=""/>
+                                                    <Image
+                                                        width={50}
+                                                        height={50}
+                                                        src="https://img.icons8.com/?size=60&id=yIGiaaLl7bsg&format=png"
+                                                        alt=""/>
                                                 </div>
                                                 <h4 className="mb-0">Kết nối cộng đồng sinh viên FU</h4>
                                             </div>
@@ -312,7 +338,10 @@ const HomePage = () => {
                                             className="btn-square bg-light rounded-circle mx-auto mb-4"
                                             style={{width: "90px", height: "90px"}}
                                         >
-                                            <img src="https://img.icons8.com/?size=60&id=16081&format=png" alt=""/>
+                                            <Image
+                                                width={50}
+                                                height={50} src="https://img.icons8.com/?size=60&id=16081&format=png"
+                                                alt=""/>
                                         </div>
                                         <h4 className="mb-0">Hỏi & Đáp nhanh chóng, tiện lợi </h4>
                                     </div>
@@ -347,7 +376,10 @@ const HomePage = () => {
                             data-wow-delay="0.1s"
                         >
                             <div className="team-item rounded">
-                                <img className="img-fluid" style={{height: "450px"}} src="img/Khoa.jpg" alt=""/>
+                                <Image
+                                    width={300}
+                                    height={50}
+                                    className="img-fluid" style={{height: "450px"}} src="/img/Khoa.jpg" alt=""/>
                                 <div className="team-text">
                                     <h4 className="mb-0">Nguyễn Anh Khoa </h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
@@ -370,7 +402,10 @@ const HomePage = () => {
                             data-wow-delay="0.3s"
                         >
                             <div className="team-item rounded">
-                                <img className="img-fluid" style={{height: "450px"}} src="img/Anh.png" alt=""/>
+                                <Image
+                                    width={300}
+                                    height={50}
+                                    className="img-fluid" style={{height: "450px"}} src="/img/Anh.png" alt=""/>
                                 <div className="team-text">
                                     <h4 className="mb-0">Nguyễn Ngọc Anh</h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
@@ -393,7 +428,10 @@ const HomePage = () => {
                             data-wow-delay="0.5s"
                         >
                             <div className="team-item rounded">
-                                <img className="img-fluid" style={{height: "450px"}} src="img/Yen.jpg" alt=""/>
+                                <Image
+                                    width={300}
+                                    height={50} className="img-fluid" style={{height: "450px"}} src="/img/Yen.jpg"
+                                    alt=""/>
                                 <div className="team-text">
                                     <h4 className="mb-0">Lương Tôn Hải Yến</h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
@@ -416,7 +454,10 @@ const HomePage = () => {
                             data-wow-delay="0.5s"
                         >
                             <div className="team-item rounded">
-                                <img className="img-fluid" style={{height: "450px"}} src="img/Quang.jpg" alt=""/>
+                                <Image
+                                    width={300}
+                                    height={50} className="img-fluid" style={{height: "450px"}} src="/img/Quang.jpg"
+                                    alt=""/>
                                 <div className="team-text">
                                     <h4 className="mb-0">Nguyễn Minh Quang</h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
