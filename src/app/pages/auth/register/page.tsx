@@ -110,12 +110,12 @@ return(
                             </Button>
                             <Grid container>
                                 <Grid item xs>
-                                    <Link href="#" variant="body2">
+                                    <Link href="#" >
                                       Quên mật khẩu?
                                     </Link>
                                 </Grid>
                                 <Grid item>
-                                    <Link href="/pages/auth/login" variant="body2">
+                                    <Link href="/pages/auth/login" >
                                         {"Đăng nhập►"}
                                     </Link>
                                 </Grid>
