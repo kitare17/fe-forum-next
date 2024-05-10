@@ -4,7 +4,7 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_FIND_ONE} from "../../constant/ActionType";
+import {BLOG_ADD_CMT, BLOG_FIND_ONE} from "../../constant/ActionType";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -27,14 +27,39 @@ export const createBlog = createAsyncThunk(
 
 export const findOneBlog = createAsyncThunk(
     Types.BLOG_FIND_ONE,
-    async (blodId:string) => {
+    async (blogId:string) => {
         try {
-            const response = await axios.get(`http://localhost:3001/posts/${blodId}`);
+            const response = await axios.get(`http://localhost:3001/posts/${blogId}`);
 
             const data: BlogInterface = response.data;
             return data;
         } catch (error) {
             console.log("Error: " + Types.BLOG_FIND_ONE);
+
+        }
+    }
+);
+
+
+
+// @ts-ignore
+export const addNewComment = createAsyncThunk(
+    Types.BLOG_ADD_CMT,
+    async ({blogId,detail}:{blogId:string,detail:string}) => {
+        try {
+            console.log({blogId,detail})
+            const userComment="65f6aa46e21e50bbf7cf0e1c"
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`,{
+                commentPost: {
+                    "detail": detail,
+                    "userComment": userComment
+                }
+            });
+
+            const data: BlogInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BLOG_ADD_CMT);
 
         }
     }

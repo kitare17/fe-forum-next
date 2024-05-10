@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-import {createBlog, findOneBlog} from "@/app/store/action/blog";
+import {addNewComment, createBlog, findOneBlog} from "@/app/store/action/blog";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 
@@ -59,6 +59,23 @@ const blogSlice = createSlice({
                 state.isError = false
             })
             .addCase(findOneBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            //ADD COMMENT
+            .addCase(addNewComment.fulfilled, (state, action) => {
+                console.log({action})
+                // @ts-ignore
+                state.blogDetail=action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(addNewComment.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(addNewComment.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
             })

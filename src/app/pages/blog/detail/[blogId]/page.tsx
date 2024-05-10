@@ -1,48 +1,58 @@
 "use client"
 
 import * as React from 'react';
-import {styled} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
+import {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Avatar from "@mui/material/Avatar";
-import {CardHeader, CardMedia, Collapse, IconButtonProps} from '@mui/material';
-import {Card} from '@mui/material';
-import {red} from "@mui/material/colors";
+import {Card, CardHeader, Collapse} from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {useEffect, useState} from "react";
-import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
-import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
-import {findOneBlog} from "@/app/store/action/blog";
+import {addNewComment, findOneBlog} from "@/app/store/action/blog";
 import {useParams} from "next/navigation";
 
 // @ts-ignore
 import DOMPurify from 'dompurify';
+import {CKEditor} from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
 
 
 const Blog = () => {
+
+
+    const dipatch = useDispatch();
+    //Get param
     const {blogId} = useParams();
 
 
     const [expanded, setExpanded] = useState(false);
-
-
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const dipatch = useDispatch();
+
+    //Add comment
+    const [text, setText] = useState<string>("");
+    const onChangeText = (event: any, editor: any) => {
+        setText(editor.getData())
+    }
+    const handleComment=()=>{
+        // @ts-ignore
+        dipatch(addNewComment({blogId,detail:text}))
+    }
+
+
+    //Fetch data
     const {blogDetail, comments, isLoading, isError} = useSelector((state: RootState) => state.blog);
     useEffect(() => {
         // @ts-ignore
@@ -57,11 +67,6 @@ const Blog = () => {
             toast.error("lỗi rồi")
     }, [isLoading, isError])
 
-    const handleClick = () => {
-        // @ts-ignore
-        dipatch(fetchUsers());
-        toast.success("ok");
-    }
 
 
     return (
@@ -150,6 +155,37 @@ const Blog = () => {
                         </CardContent>
                     </Collapse>
                     <Divider/>
+
+                    <Grid container
+                          direction="row"
+                          justifyContent="center"
+                          alignItems="center"
+                          spacing={2}
+                          mt={2}
+                          mb={9}
+                    >
+                        <Grid item xs={11}>
+                            <div style={{marginTop: "10px", marginBottom: "10px", width: "100%"}}>
+                                <CKEditor
+                                    editor={ClassicEditor}
+                                    config={
+                                        {
+                                            ckfinder: {
+                                                uploadUrl: "http://localhost:8080/minio/upload-ckeditor"
+                                            }
+                                        }
+                                    }
+                                    onChange={onChangeText}
+                                    data={text}
+                                >
+                                </CKEditor>
+                            </div>
+
+                            <Button onClick={handleComment} variant="contained" endIcon={<SendIcon />}>
+                                Bình luận
+                            </Button>
+                        </Grid>
+                    </Grid>
                     <Grid container
                           direction="row"
                           justifyContent="center"
@@ -159,12 +195,12 @@ const Blog = () => {
                           mb={9}
                     >
                         {
-                            [...(blogDetail.comments ?? [])].map((comment) => {
-                                    return (
-                                        <>
-                                            <Grid item xs={11}>
-                                                <Card sx={{width: "100%"}}>
-                                                    <CardHeader
+                            [...(blogDetail.comments ?? [])].toReversed().map((comment) => {
+                                return (
+                                    <>
+                                        <Grid item xs={11}>
+                                            <Card sx={{width: "100%"}}>
+                                            <CardHeader
                                                         avatar={
                                                             <Avatar
                                                                 src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
@@ -181,8 +217,16 @@ const Blog = () => {
                                                             </IconButton>
                                                         }
                                                         title={`${comment?.userComment?.fullname} (${comment?.userComment?.username})`}
-                                                        subheader={comment?.detail}
+                                                        subheader={`Bình luận ngày ${new Date(comment?.createdAt).getDate()}/${new Date(comment?.createdAt).getMonth() + 1}/${new Date(comment?.createdAt).getFullYear()}`}
+
                                                     />
+                                                <CardContent>
+
+
+                                                    <div className="Container"
+                                                         dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(comment?.detail)}}></div>
+
+                                                </CardContent>
                                                 </Card>
                                             </Grid>
                                         </>
