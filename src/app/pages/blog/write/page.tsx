@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 
-const FormSubmit = dynamic(() => import('./formSubmit'), {
+const FormSubmit = dynamic(() => import('../component/FormSubmit'), {
     ssr: false,
 })
 

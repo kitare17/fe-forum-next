@@ -24,7 +24,7 @@ export default function RootLayout({
     return (
         <>
             <Header />
-            <div style={{height:'90px',background:"orange"}} />
+            <div style={{height:'120px',background:"orange"}} />
             {children}
             <Footer/>
         </>

@@ -75,8 +75,10 @@ const Blog = () => {
               justifyContent="center"
               alignItems="center"
               spacing={2}
-              mt={4}
-              mb={9}
+
+              pt={5}
+              pb={5}
+              sx={{ bgcolor: '#f0eded' }}
         >
             <Grid item xs={10}>
                 <Card sx={{width: "100%"}}>
@@ -164,7 +166,11 @@ const Blog = () => {
                           mt={2}
                           mb={9}
                     >
+
                         <Grid item xs={11}>
+                            <Typography variant="h5" >
+                                Bình luận
+                            </Typography>
                             <div style={{marginTop: "10px", marginBottom: "10px", width: "100%"}}>
                                 <CKEditor
                                     editor={ClassicEditor}
@@ -194,6 +200,7 @@ const Blog = () => {
                           mt={2}
                           mb={9}
                     >
+
                         {
                             [...(blogDetail.comments ?? [])].toReversed().map((comment) => {
                                 return (

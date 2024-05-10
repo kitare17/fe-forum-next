@@ -1,53 +1,69 @@
 "use client"
-
-import * as React from 'react';
-import {styled} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import Avatar from "@mui/material/Avatar";
-import {CardHeader, CardMedia, Collapse, IconButtonProps} from '@mui/material';
-import { Card } from '@mui/material';
-import {red} from "@mui/material/colors";
-import IconButton from "@mui/material/IconButton";
-import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {useEffect, useState} from "react";
-
-import Divider from "@mui/material/Divider";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import {FiCard, FiCardActionArea, FiCardActions, FiCardContent, FiCardMedia} from "./component/BlogCard";
+import React, {useEffect} from "react";
+import {makeStyles} from "@mui/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
-import {findOneBlog} from "@/app/store/action/blog";
-import DOMPurify from 'dompurify';
+import {findAllTopic} from "@/app/store/action/topic";
+import Grid from "@mui/material/Grid";
 
 
+const useStyles = makeStyles({
+    container: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    /**
+     * Max Card with for demo
+     * same values used in Material-Ui Card Demos
+     */
+    card: {
+
+        height:160
+    },
+
+    /**
+     * Applied to Orginal Card demo
+     * Same vale used in Material-ui Card Demos
+     */
+    media: {
+        height: 140
+    },
+
+    /**
+     * Demo stlying to inclrease text visibility
+     * May verry on implementation
+     */
+    fiCardContent: {
+        color: "#ffffff",
+        backgroundColor: "rgba(0,0,0,.24)"
+    },
+    fiCardContentTextSecondary: {
+        color: "rgba(255,255,255,0.78)"
+    },
+    cardContent:{
+
+        height:160
+    }
+});
 
 
 
 const Blog = () => {
-
-
-    const [expanded, setExpanded] = useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
     const dipatch = useDispatch();
-    const {blogDetail, isLoading, isError} = useSelector((state:RootState) => state.blog);
+    const {listTopic, isLoading, isError} = useSelector((state:RootState) => state.topic);
 
     useEffect(()=>{
         // @ts-ignore
-        dipatch(findOneBlog("663bb0faf25d79025e81c504"));
+        dipatch(findAllTopic());
     },[])
-
     useEffect(()=>{
         if(isLoading)
             toast.info("Đang tải thông tin")
@@ -60,130 +76,100 @@ const Blog = () => {
         dipatch(fetchUsers());
         toast.success("ok");
     }
-
-
+    // @ts-ignore
+    const classes = useStyles();
     return (
-        <Grid container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
-              mt={4}
-              mb={9}
-        >
-            <Grid item xs={10}>
-                <Card sx={{ width:"100%"}}>
-                    <CardHeader
-                        avatar={
-                            <Avatar src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg" sx={{
-                                width:70,
-                                height:70
-                            }} aria-label="recipe">
+        <div >
+            <h1 style={{textAlign:'center',marginTop:"10px"}}>Các chủ đề được quan tâm</h1>
+            <Grid container spacing={2} mt={2} mb={2}>
+                {
+                    [...( listTopic?? [])].map((topic) => {
+                        return(
 
-                            </Avatar>
-                        }
-                        action={
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon />
-                            </IconButton>
-                        }
-                        title="Shrimp and Chorizo Paella"
-                        subheader="September 14, 2016"
-                    />
+                            <Grid item
+                                  md={6}
+                                  xs={12}
+                                  sm={12}
+                                  key={topic._id}
+                                  sx={{ display: 'flex',justifyContent: 'center' }}
+                            >
+                                <Box width={"50%"}
+                                height={"100%"}
+                                >
+                                    <FiCard
+                                        className={classes.card}>
+                                        <FiCardActionArea className={classes.cardContent}>
+                                            <FiCardMedia
+                                                image={topic.imgUrl}
+                                                title="Contemplative Reptile"
+                                            />
+                                            <FiCardContent className={classes.fiCardContent}>
+                                                <Typography gutterBottom variant="h5" component="h2">
+                                                    {topic.title}
+                                                </Typography>
+                                                <Typography
+                                                    variant="body2"
+                                                    className={classes.fiCardContentTextSecondary}
+                                                    component="p"
+                                                >
+                                                    {topic.detail}
+                                                </Typography>
+                                            </FiCardContent>
+                                        </FiCardActionArea>
+                                    </FiCard>
+                                </Box>
 
-                    <CardContent>
-                               <div className="Container" dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(blogDetail?.detail) }}></div>
-                    </CardContent>
-                    <Divider />
-                    <CardActions disableSpacing>
+                            </Grid>
+                        )
+                    })
+                }
 
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                        </IconButton>
-                        <IconButton aria-label="share">
-                            <ShareIcon />
-                        </IconButton>
-                        {/*<ExpandMore*/}
-                        {/*    expand={expanded}*/}
-                        {/*    onClick={handleExpandClick}*/}
-                        {/*    aria-expanded={expanded}*/}
-                        {/*    aria-label="show more"*/}
-                        {/*>*/}
-                        {/*    <ExpandMoreIcon />*/}
-                        {/*</ExpandMore>*/}
-                    </CardActions>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
-                        <CardContent>
-                            <Typography paragraph>Method:</Typography>
-                            <Typography paragraph>
-                                Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                                aside for 10 minutes.
-                            </Typography>
-                            <Typography paragraph>
-                                Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-                                medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-                                occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-                                large plate and set aside, leaving chicken and chorizo in the pan. Add
-                                pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-                                stirring often until thickened and fragrant, about 10 minutes. Add
-                                saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-                            </Typography>
-                            <Typography paragraph>
-                                Add rice and stir very gently to distribute. Top with artichokes and
-                                peppers, and cook without stirring, until most of the liquid is absorbed,
-                                15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-                                mussels, tucking them down into the rice, and cook again without
-                                stirring, until mussels have opened and rice is just tender, 5 to 7
-                                minutes more. (Discard any mussels that don&apos;t open.)
-                            </Typography>
-                            <Typography>
-                                Set aside off of the heat to let rest for 10 minutes, and then serve.
-                            </Typography>
-                        </CardContent>
-                    </Collapse>
-                    <Divider />
-                    <Grid container
-                          direction="row"
-                          justifyContent="center"
-                          alignItems="center"
-                          spacing={2}
-                          mt={2}
-                          mb={9}
-                    >
-                        <Grid item xs={11}>
-                            <Card sx={{ width:"100%"}}>
-                                <CardHeader
-                                    avatar={
-                                        <Avatar src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg" sx={{
-                                            width:70,
-                                            height:70
-                                        }} aria-label="recipe">
 
-                                        </Avatar>
-                                    }
-                                    action={
-                                        <IconButton aria-label="settings">
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                    }
-                                    title="Shrimp and Chorizo Paella"
-                                    subheader=" This impressive paella is a perfect party dish and a fun meal to cook
-                                    together with your guests. Add 1 cup of frozen peas along with the mussels,
-                                    if you like."
-                                />
-                            </Card>
-                        </Grid>
-                        <Grid item xs={11}>
-                            <div className="bg-danger">
-                                kk
-                            </div>
-                        </Grid>
-                    </Grid>
-                </Card>
+
             </Grid>
 
-        </Grid>
-    )
+
+
+
+
+
+
+
+
+
+            {/*<Box my={4}>*/}
+            {/*    <FiCard className={classes.card}>*/}
+            {/*        <FiCardMedia*/}
+            {/*            alt="Contemplative Reptile"*/}
+            {/*            image="https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg?cs=srgb&dl=pexels-pixabay-301920.jpg&fm=jpg"*/}
+            {/*            title="Contemplative Reptile"*/}
+            {/*        />*/}
+            {/*        <FiCardContent className={classes.fiCardContent}>*/}
+            {/*            <Typography gutterBottom variant="h5" component="h2">*/}
+            {/*                Lizard*/}
+            {/*            </Typography>*/}
+            {/*            <Typography*/}
+            {/*                variant="body2"*/}
+            {/*                className={classes.fiCardContentTextSecondary}*/}
+            {/*                component="p"*/}
+            {/*            >*/}
+            {/*                Lizards are a widespread group of squamate reptiles, with over*/}
+            {/*                6,000 species, ranging across all continents except Antarctica*/}
+            {/*            </Typography>*/}
+            {/*        </FiCardContent>*/}
+            {/*        <FiCardActions className={classes.fiCardContent}>*/}
+            {/*            <Button size="small" color="inherit" variant="outlined">*/}
+            {/*                Share*/}
+            {/*            </Button>*/}
+            {/*            <Button size="small" color="inherit" variant="outlined">*/}
+            {/*                Learn More*/}
+            {/*            </Button>*/}
+            {/*        </FiCardActions>*/}
+            {/*    </FiCard>*/}
+            {/*</Box>*/}
+        </div>
+    );
+
 }
 
 export default Blog;
