@@ -1,4 +1,5 @@
 import {UserInterface} from "@/app/interface/User";
+import { CommentListInterface} from "@/app/interface/Comment";
 
 export interface BlogInterface {
     "title"?: string,
@@ -7,5 +8,7 @@ export interface BlogInterface {
     "creator"?: UserInterface,
     createdAt?:string,
     updatedAt?:string,
-    statusPost?:string
+    statusPost?:string,
+    comments?:CommentListInterface
 }
+

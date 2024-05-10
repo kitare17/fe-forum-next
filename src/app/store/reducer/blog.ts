@@ -2,12 +2,14 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {createBlog, findOneBlog} from "@/app/store/action/blog";
 import {BlogInterface} from "@/app/interface/Blog";
+import {CommentInterface} from "@/app/interface/Comment";
 
 interface InitialState {
     newBlog: BlogInterface;
     isLoading: boolean;
     isError: boolean;
     blogDetail: BlogInterface;
+    comments?:CommentInterface[] | undefined;
 }
 
 
@@ -16,7 +18,8 @@ var initialState:InitialState = {
     newBlog: {},
     isLoading: false,
     isError: false,
-    blogDetail:{}
+    blogDetail:{
+    }
 }
 const blogSlice = createSlice({
     name: "blog",

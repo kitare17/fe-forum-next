@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Avatar from "@mui/material/Avatar";
 import {CardHeader, CardMedia, Collapse, IconButtonProps} from '@mui/material';
-import { Card } from '@mui/material';
+import {Card} from '@mui/material';
 import {red} from "@mui/material/colors";
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
@@ -27,34 +27,35 @@ import {toast} from "react-toastify";
 import {findOneBlog} from "@/app/store/action/blog";
 import {useParams} from "next/navigation";
 
-
-
+// @ts-ignore
+import DOMPurify from 'dompurify';
 
 
 const Blog = () => {
-    const {blogId}=useParams();
+    const {blogId} = useParams();
 
 
     const [expanded, setExpanded] = useState(false);
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
     const dipatch = useDispatch();
-    const {blogDetail, isLoading, isError} = useSelector((state:RootState) => state.blog);
-
-    useEffect(()=>{
+    const {blogDetail, comments, isLoading, isError} = useSelector((state: RootState) => state.blog);
+    useEffect(() => {
         // @ts-ignore
         dipatch(findOneBlog(blogId));
-    },[])
 
-    useEffect(()=>{
-        if(isLoading)
+    }, [])
+
+    useEffect(() => {
+        if (isLoading)
             toast.info("Đang tải thông tin")
-        if(isError)
+        if (isError)
             toast.error("lỗi rồi")
-    },[isLoading,isError])
+    }, [isLoading, isError])
 
     const handleClick = () => {
         // @ts-ignore
@@ -73,41 +74,42 @@ const Blog = () => {
               mb={9}
         >
             <Grid item xs={10}>
-                <Card sx={{ width:"100%"}}>
+                <Card sx={{width: "100%"}}>
                     <CardHeader
                         avatar={
                             <Avatar src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg" sx={{
-                                width:70,
-                                height:70
+                                width: 70,
+                                height: 70
                             }} aria-label="recipe">
 
                             </Avatar>
                         }
                         action={
                             <IconButton aria-label="settings">
-                                <MoreVertIcon />
+                                <MoreVertIcon/>
                             </IconButton>
                         }
-                        title={ `${blogDetail?.creator?.fullname} (${blogDetail?.creator?.username})`}
+                        title={`${blogDetail?.creator?.fullname} (${blogDetail?.creator?.username})`}
                         // @ts-ignore
-                        subheader={`Đăng ngày ${new Date(blogDetail?.createdAt).getDate()}/${new Date(blogDetail?.createdAt).getMonth() + 1}/${new Date(blogDetail?.createdAt).getFullYear()}` }
+                        subheader={`Đăng ngày ${new Date(blogDetail?.createdAt).getDate()}/${new Date(blogDetail?.createdAt).getMonth() + 1}/${new Date(blogDetail?.createdAt).getFullYear()}`}
 
                     />
 
                     <CardContent>
 
+
                         <div className="Container"
-                             dangerouslySetInnerHTML={{__html: blogDetail?.detail}}></div>
+                             dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(blogDetail?.detail)}}></div>
 
                     </CardContent>
-                    <Divider />
+                    <Divider/>
                     <CardActions disableSpacing>
 
                         <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
+                            <FavoriteIcon/>
                         </IconButton>
                         <IconButton aria-label="share">
-                            <ShareIcon />
+                            <ShareIcon/>
                         </IconButton>
                         {/*<ExpandMore*/}
                         {/*    expand={expanded}*/}
@@ -147,7 +149,7 @@ const Blog = () => {
                             </Typography>
                         </CardContent>
                     </Collapse>
-                    <Divider />
+                    <Divider/>
                     <Grid container
                           direction="row"
                           justifyContent="center"
@@ -156,34 +158,40 @@ const Blog = () => {
                           mt={2}
                           mb={9}
                     >
-                        <Grid item xs={11}>
-                            <Card sx={{ width:"100%"}}>
-                                <CardHeader
-                                    avatar={
-                                        <Avatar src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg" sx={{
-                                            width:70,
-                                            height:70
-                                        }} aria-label="recipe">
+                        {
+                            [...(blogDetail.comments ?? [])].map((comment) => {
+                                    return (
+                                        <>
+                                            <Grid item xs={11}>
+                                                <Card sx={{width: "100%"}}>
+                                                    <CardHeader
+                                                        avatar={
+                                                            <Avatar
+                                                                src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
+                                                                sx={{
+                                                                    width: 70,
+                                                                    height: 70
+                                                                }} aria-label="recipe">
 
-                                        </Avatar>
-                                    }
-                                    action={
-                                        <IconButton aria-label="settings">
-                                            <MoreVertIcon />
-                                        </IconButton>
-                                    }
-                                    title={blogDetail?.creator?.fullname}
-                                    subheader=" This impressive paella is a perfect party dish and a fun meal to cook
-                                    together with your guests. Add 1 cup of frozen peas along with the mussels,
-                                    if you like."
-                                />
-                            </Card>
-                        </Grid>
-                        <Grid item xs={11}>
-                            <div className="bg-danger">
-                                kk
-                            </div>
-                        </Grid>
+                                                            </Avatar>
+                                                        }
+                                                        action={
+                                                            <IconButton aria-label="settings">
+                                                                <MoreVertIcon/>
+                                                            </IconButton>
+                                                        }
+                                                        title={`${comment?.userComment?.fullname} (${comment?.userComment?.username})`}
+                                                        subheader={comment?.detail}
+                                                    />
+                                                </Card>
+                                            </Grid>
+                                        </>
+
+                                    )
+                                }
+                            )}
+
+
                     </Grid>
                 </Card>
             </Grid>

@@ -15,22 +15,25 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {useEffect, useState} from "react";
-import Drawer from "@mui/material/Drawer";
+
 import Divider from "@mui/material/Divider";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
 import {findOneBlog} from "@/app/store/action/blog";
+import DOMPurify from 'dompurify';
 
 
 
 
 
 const Blog = () => {
+
+
     const [expanded, setExpanded] = useState(false);
 
     const handleExpandClick = () => {
@@ -89,7 +92,7 @@ const Blog = () => {
                     />
 
                     <CardContent>
-                               <div className="Container" dangerouslySetInnerHTML={{__html: blogDetail?.detail}}></div>
+                               <div className="Container" dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(blogDetail?.detail) }}></div>
                     </CardContent>
                     <Divider />
                     <CardActions disableSpacing>
