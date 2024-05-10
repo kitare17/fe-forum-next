@@ -1,5 +1,4 @@
 "use client"
-
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
@@ -16,7 +15,7 @@ import Divider from "@mui/material/Divider";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {toast} from "react-toastify";
-import {addNewComment, findOneBlog} from "@/app/store/action/blog";
+import {addNewComment, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
 import {useParams} from "next/navigation";
 
 // @ts-ignore
@@ -34,6 +33,20 @@ const Blog = () => {
     //Get param
     const {blogId} = useParams();
 
+    //like state
+    const [like,setLike]=useState(false);
+    const handleLikeState= () => {
+        setLike(!like)
+        if(!like){
+            // @ts-ignore
+            dipatch(likeBlog({blogId}))
+        }
+        else{
+            // @ts-ignore
+            dipatch(unlikeBlog({blogId}))
+        }
+    };
+
 
     const [expanded, setExpanded] = useState(false);
     const handleExpandClick = () => {
@@ -49,7 +62,9 @@ const Blog = () => {
     const handleComment=()=>{
         // @ts-ignore
         dipatch(addNewComment({blogId,detail:text}))
+
     }
+
 
 
     //Fetch data
@@ -57,7 +72,9 @@ const Blog = () => {
     useEffect(() => {
         // @ts-ignore
         dipatch(findOneBlog(blogId));
-
+        if([...(blogDetail.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
+            setLike(true);
+        }
     }, [])
 
     useEffect(() => {
@@ -66,6 +83,7 @@ const Blog = () => {
         if (isError)
             toast.error("lỗi rồi")
     }, [isLoading, isError])
+
 
 
 
@@ -112,8 +130,11 @@ const Blog = () => {
                     <Divider/>
                     <CardActions disableSpacing>
 
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon/>
+                        <IconButton
+                        onClick={handleLikeState}
+                            aria-label="add to favorites">
+                            {!like && <FavoriteIcon />}
+                            {like && <FavoriteIcon style={{ color: "#eb1b0c" }}/>}
                         </IconButton>
                         <IconButton aria-label="share">
                             <ShareIcon/>

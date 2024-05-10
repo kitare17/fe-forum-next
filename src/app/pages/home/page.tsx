@@ -20,8 +20,6 @@ const HomePage = () => {
                                 sizes="100vw"
                                 style={{ width: '100%', height: 'auto' }}
                                 alt="Image"/>
-
-
                             <div className="carousel-caption">
                                 <div className="container">
                                     <div className="row justify-content-center">

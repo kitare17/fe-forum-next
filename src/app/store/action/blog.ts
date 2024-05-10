@@ -4,7 +4,7 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_ADD_CMT, BLOG_FIND_ONE} from "../../constant/ActionType";
+import {BLOG_ADD_CMT, BLOG_FIND_ONE, BLOG_UNLIKE} from "../../constant/ActionType";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -60,6 +60,40 @@ export const addNewComment = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BLOG_ADD_CMT);
+
+        }
+    }
+);
+
+export const likeBlog = createAsyncThunk(
+    Types.BLOG_LIKE,
+    async ({blogId}:{blogId:string}) => {
+        try {
+            console.log({blogId})
+
+            const userComment="65f6aa46e21e50bbf7cf0e1c"
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/likes`);
+
+            const data: BlogInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BLOG_LIKE);
+
+        }
+    }
+);
+export const unlikeBlog = createAsyncThunk(
+    Types.BLOG_UNLIKE,
+    async ({blogId}:{blogId:string}) => {
+        try {
+
+            const userComment="65f6aa46e21e50bbf7cf0e1c"
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/unlikes`);
+
+            const data: BlogInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BLOG_UNLIKE);
 
         }
     }

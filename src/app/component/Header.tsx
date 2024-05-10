@@ -13,6 +13,7 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import Image from 'next/image'
+import {useRouter} from "next/navigation";
 
 const logoStyle = {
     width: '60px',
@@ -32,6 +33,7 @@ function Header() {
         setOpen(newOpen);
     };
 
+
     const scrollToSection = (sectionId: string) => {
         const sectionElement = document.getElementById(sectionId);
         const offset = 128;
@@ -46,6 +48,7 @@ function Header() {
         }
     };
 
+    const router=useRouter();
     return (
         <div>
             <AppBar
@@ -90,8 +93,7 @@ function Header() {
                             }}
                         >
                             <div>
-
-                                <h3>
+                                <h3  onClick={() => router.push("/")}>
                                     <Image
                                         src={
                                             'https://img.icons8.com/?size=60&id=flgyO0XZfexw&format=png'
@@ -99,6 +101,7 @@ function Header() {
                                         style={logoStyle}
                                         width={500}
                                         height={500}
+
                                     alt="logo of sitemark"
                                     /> Fu forum
                                 </h3>
@@ -106,7 +109,7 @@ function Header() {
 
                             <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                                 <MenuItem
-                                    onClick={() => scrollToSection('features')}
+                                    onClick={() => router.push("/")}
                                     sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
@@ -114,7 +117,7 @@ function Header() {
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
-                                    onClick={() => scrollToSection('testimonials')}
+                                    onClick={() => router.push("/pages/blog")}
                                     sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">
@@ -122,7 +125,7 @@ function Header() {
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
-                                    onClick={() => scrollToSection('highlights')}
+                                    onClick={() => router.push("/pages/chat")}
                                     sx={{py: '6px', px: '12px'}}
                                 >
                                     <Typography variant="body2" color="text.primary">

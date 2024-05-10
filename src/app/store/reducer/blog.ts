@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-import {addNewComment, createBlog, findOneBlog} from "@/app/store/action/blog";
+import {addNewComment, createBlog, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 
@@ -9,17 +9,15 @@ interface InitialState {
     isLoading: boolean;
     isError: boolean;
     blogDetail: BlogInterface;
-    comments?:CommentInterface[] | undefined;
+    comments?: CommentInterface[] | undefined;
 }
 
 
-
-var initialState:InitialState = {
+var initialState: InitialState = {
     newBlog: {},
     isLoading: false,
     isError: false,
-    blogDetail:{
-    }
+    blogDetail: {}
 }
 const blogSlice = createSlice({
     name: "blog",
@@ -31,7 +29,7 @@ const blogSlice = createSlice({
             .addCase(createBlog.fulfilled, (state, action) => {
                 console.log({action})
                 // @ts-ignore
-                state.newBlog=action.payload;
+                state.newBlog = action.payload;
                 state.isLoading = false;
                 state.isError = false;
             })
@@ -49,7 +47,7 @@ const blogSlice = createSlice({
             .addCase(findOneBlog.fulfilled, (state, action) => {
                 console.log({action})
                 // @ts-ignore
-                state.blogDetail=action.payload;
+                state.blogDetail = action.payload;
                 state.isLoading = false;
                 state.isError = false;
             })
@@ -66,7 +64,7 @@ const blogSlice = createSlice({
             .addCase(addNewComment.fulfilled, (state, action) => {
                 console.log({action})
                 // @ts-ignore
-                state.blogDetail=action.payload;
+                state.blogDetail = action.payload;
                 state.isLoading = false;
                 state.isError = false;
             })
@@ -76,6 +74,40 @@ const blogSlice = createSlice({
                 state.isError = false
             })
             .addCase(addNewComment.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            //LIKE BLOG
+            .addCase(likeBlog.fulfilled, (state, action) => {
+                console.log({action})
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(likeBlog.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(likeBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            //UNLIKE BLOG
+            .addCase(unlikeBlog.fulfilled, (state, action) => {
+                console.log({action})
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(unlikeBlog.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(unlikeBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
             })
