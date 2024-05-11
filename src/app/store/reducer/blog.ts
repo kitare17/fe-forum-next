@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-import {addNewComment, createBlog, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
+import {addNewComment, createBlog, findOneBlog, likeBlog, showAllBlog, unlikeBlog} from "@/app/store/action/blog";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 
@@ -10,6 +10,7 @@ interface InitialState {
     isError: boolean;
     blogDetail: BlogInterface;
     comments?: CommentInterface[] | undefined;
+    listBlog: {posts:BlogInterface[],maxPage:number}
 }
 
 
@@ -17,7 +18,11 @@ var initialState: InitialState = {
     newBlog: {},
     isLoading: false,
     isError: false,
-    blogDetail: {}
+    blogDetail: {},
+    listBlog:{
+        posts:[],
+        maxPage:1
+    }
 }
 const blogSlice = createSlice({
     name: "blog",
@@ -108,6 +113,24 @@ const blogSlice = createSlice({
                 state.isError = false
             })
             .addCase(unlikeBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            //SHOW ALL BLOG
+            .addCase(showAllBlog.fulfilled, (state, action) => {
+                console.log({action})
+                // @ts-ignore
+                state.listBlog.posts = action.payload.posts;
+                state.listBlog.maxPage=action.payload.maxPage;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(showAllBlog.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(showAllBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
             })

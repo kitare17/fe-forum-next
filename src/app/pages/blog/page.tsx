@@ -123,50 +123,7 @@ const Blog = () => {
                         )
                     })
                 }
-
-
-
             </Grid>
-
-
-
-
-
-
-
-
-
-
-            {/*<Box my={4}>*/}
-            {/*    <FiCard className={classes.card}>*/}
-            {/*        <FiCardMedia*/}
-            {/*            alt="Contemplative Reptile"*/}
-            {/*            image="https://images.pexels.com/photos/301920/pexels-photo-301920.jpeg?cs=srgb&dl=pexels-pixabay-301920.jpg&fm=jpg"*/}
-            {/*            title="Contemplative Reptile"*/}
-            {/*        />*/}
-            {/*        <FiCardContent className={classes.fiCardContent}>*/}
-            {/*            <Typography gutterBottom variant="h5" component="h2">*/}
-            {/*                Lizard*/}
-            {/*            </Typography>*/}
-            {/*            <Typography*/}
-            {/*                variant="body2"*/}
-            {/*                className={classes.fiCardContentTextSecondary}*/}
-            {/*                component="p"*/}
-            {/*            >*/}
-            {/*                Lizards are a widespread group of squamate reptiles, with over*/}
-            {/*                6,000 species, ranging across all continents except Antarctica*/}
-            {/*            </Typography>*/}
-            {/*        </FiCardContent>*/}
-            {/*        <FiCardActions className={classes.fiCardContent}>*/}
-            {/*            <Button size="small" color="inherit" variant="outlined">*/}
-            {/*                Share*/}
-            {/*            </Button>*/}
-            {/*            <Button size="small" color="inherit" variant="outlined">*/}
-            {/*                Learn More*/}
-            {/*            </Button>*/}
-            {/*        </FiCardActions>*/}
-            {/*    </FiCard>*/}
-            {/*</Box>*/}
         </div>
     );
 

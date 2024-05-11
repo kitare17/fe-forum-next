@@ -98,3 +98,18 @@ export const unlikeBlog = createAsyncThunk(
         }
     }
 );
+
+export const showAllBlog = createAsyncThunk(
+    Types.BlOG_SHOW_ALL,
+    async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/posts`);
+            const data:any = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_SHOW_ALL);
+
+        }
+    }
+);
+

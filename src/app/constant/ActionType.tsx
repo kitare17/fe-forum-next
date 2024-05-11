@@ -15,7 +15,7 @@ export const BLOG_FIND_ONE="BLOG_FIND_ONE"
 export const BLOG_ADD_CMT="BLOG_ADD_CMT"
 export const BLOG_LIKE="BLOG_LIKE"
 export const BLOG_UNLIKE="BLOG_UNLIKE"
-
+export const BlOG_SHOW_ALL="BLOG_SHOW_ALL"
 
 //TOPIC ACION
 export const TOPIC_FIND_ALL="TOPIC_FIND_ALL"
