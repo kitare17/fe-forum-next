@@ -16,8 +16,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {toast} from "react-toastify";
 import {addNewComment, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
-import {useParams} from "next/navigation";
-
+import {useParams, useRouter} from "next/navigation";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // @ts-ignore
 import DOMPurify from 'dompurify';
 import {CKEditor} from "@ckeditor/ckeditor5-react";
@@ -28,24 +28,15 @@ import SendIcon from "@mui/icons-material/Send";
 
 const Blog = () => {
 
+    const router=useRouter();
 
     const dipatch = useDispatch();
     //Get param
     const {blogId} = useParams();
 
     //like state
-    const [like,setLike]=useState(false);
-    const handleLikeState= () => {
-        setLike(!like)
-        if(!like){
-            // @ts-ignore
-            dipatch(likeBlog({blogId}))
-        }
-        else{
-            // @ts-ignore
-            dipatch(unlikeBlog({blogId}))
-        }
-    };
+
+
 
 
     const [expanded, setExpanded] = useState(false);
@@ -62,19 +53,18 @@ const Blog = () => {
     const handleComment=()=>{
         // @ts-ignore
         dipatch(addNewComment({blogId,detail:text}))
+        setText("")
 
     }
 
 
 
     //Fetch data
-    const {blogDetail, comments, isLoading, isError} = useSelector((state: RootState) => state.blog);
-    useEffect(() => {
+    const {blogDetail,isLike, comments, isLoading, isError} = useSelector((state: RootState) => state.blog);
+    useEffect( () => {
         // @ts-ignore
         dipatch(findOneBlog(blogId));
-        if([...(blogDetail.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
-            setLike(true);
-        }
+
     }, [])
 
     useEffect(() => {
@@ -84,7 +74,17 @@ const Blog = () => {
             toast.error("lỗi rồi")
     }, [isLoading, isError])
 
+    const handleLikeState= () => {
 
+        if(!isLike){
+            // @ts-ignore
+            dipatch(likeBlog({blogId}))
+        }
+        else{
+            // @ts-ignore
+            dipatch(unlikeBlog({blogId}))
+        }
+    };
 
 
     return (
@@ -98,6 +98,15 @@ const Blog = () => {
               pb={5}
               sx={{ bgcolor: '#f0eded' }}
         >
+            <Grid item xs={10}>
+                <Button
+                    variant="outlined"
+                    onClick={() => router.back()}
+                >
+                    <ArrowBackIcon />  Trở vể
+                </Button>
+
+            </Grid>
             <Grid item xs={10}>
                 <Card sx={{width: "100%"}}>
                     <CardHeader
@@ -133,8 +142,8 @@ const Blog = () => {
                         <IconButton
                         onClick={handleLikeState}
                             aria-label="add to favorites">
-                            {!like && <FavoriteIcon />}
-                            {like && <FavoriteIcon style={{ color: "#eb1b0c" }}/>}
+                            {!isLike && <FavoriteIcon />}
+                            {isLike && <FavoriteIcon style={{ color: "#eb1b0c" }}/>}
                         </IconButton>
                         <IconButton aria-label="share">
                             <ShareIcon/>
@@ -225,8 +234,10 @@ const Blog = () => {
                         {
                             [...(blogDetail.comments ?? [])].toReversed().map((comment) => {
                                 return (
-                                    <>
-                                        <Grid item xs={11}>
+
+                                        <Grid
+                                            key={comment._id}
+                                            item xs={11}>
                                             <Card sx={{width: "100%"}}>
                                             <CardHeader
                                                         avatar={
@@ -257,7 +268,7 @@ const Blog = () => {
                                                 </CardContent>
                                                 </Card>
                                             </Grid>
-                                        </>
+
 
                                     )
                                 }

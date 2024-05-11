@@ -10,7 +10,8 @@ interface InitialState {
     isError: boolean;
     blogDetail: BlogInterface;
     comments?: CommentInterface[] | undefined;
-    listBlog: {posts:BlogInterface[],maxPage:number}
+    listBlog: {posts:BlogInterface[],maxPage:number},
+    isLike:boolean
 }
 
 
@@ -22,7 +23,9 @@ var initialState: InitialState = {
     listBlog:{
         posts:[],
         maxPage:1
-    }
+    },
+    isLike:false
+
 }
 const blogSlice = createSlice({
     name: "blog",
@@ -32,7 +35,6 @@ const blogSlice = createSlice({
         builder
             //CREATE BLOG
             .addCase(createBlog.fulfilled, (state, action) => {
-                console.log({action})
                 // @ts-ignore
                 state.newBlog = action.payload;
                 state.isLoading = false;
@@ -50,9 +52,13 @@ const blogSlice = createSlice({
 
             //FIND ONE BLOG
             .addCase(findOneBlog.fulfilled, (state, action) => {
-                console.log({action})
                 // @ts-ignore
                 state.blogDetail = action.payload;
+                // @ts-ignore
+                if([...(action.payload.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
+                    state.isLike=true
+                }
+
                 state.isLoading = false;
                 state.isError = false;
             })
@@ -67,7 +73,6 @@ const blogSlice = createSlice({
             })
             //ADD COMMENT
             .addCase(addNewComment.fulfilled, (state, action) => {
-                console.log({action})
                 // @ts-ignore
                 state.blogDetail = action.payload;
                 state.isLoading = false;
@@ -84,9 +89,12 @@ const blogSlice = createSlice({
             })
             //LIKE BLOG
             .addCase(likeBlog.fulfilled, (state, action) => {
-                console.log({action})
                 // @ts-ignore
                 state.blogDetail = action.payload;
+                // @ts-ignore
+                if([...(action.payload.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
+                    state.isLike=true
+                }
                 state.isLoading = false;
                 state.isError = false;
             })
@@ -101,9 +109,12 @@ const blogSlice = createSlice({
             })
             //UNLIKE BLOG
             .addCase(unlikeBlog.fulfilled, (state, action) => {
-                console.log({action})
                 // @ts-ignore
                 state.blogDetail = action.payload;
+                // @ts-ignore
+                if(![...(action.payload.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
+                    state.isLike=false
+                }
                 state.isLoading = false;
                 state.isError = false;
             })
@@ -118,7 +129,6 @@ const blogSlice = createSlice({
             })
             //SHOW ALL BLOG
             .addCase(showAllBlog.fulfilled, (state, action) => {
-                console.log({action})
                 // @ts-ignore
                 state.listBlog.posts = action.payload.posts;
                 state.listBlog.maxPage=action.payload.maxPage;

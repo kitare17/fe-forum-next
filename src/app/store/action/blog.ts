@@ -101,9 +101,9 @@ export const unlikeBlog = createAsyncThunk(
 
 export const showAllBlog = createAsyncThunk(
     Types.BlOG_SHOW_ALL,
-    async () => {
+    async ({page}:{page:number}) => {
         try {
-            const response = await axios.get(`http://localhost:3001/posts`);
+            const response = await axios.get(`http://localhost:3001/posts?page=${page}`);
             const data:any = response.data;
             return data;
         } catch (error) {

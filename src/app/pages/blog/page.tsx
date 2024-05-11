@@ -11,6 +11,7 @@ import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
 import {findAllTopic} from "@/app/store/action/topic";
 import Grid from "@mui/material/Grid";
+import {useRouter} from "next/navigation";
 
 
 const useStyles = makeStyles({
@@ -59,6 +60,7 @@ const useStyles = makeStyles({
 const Blog = () => {
     const dipatch = useDispatch();
     const {listTopic, isLoading, isError} = useSelector((state:RootState) => state.topic);
+    const router=useRouter();
 
     useEffect(()=>{
         // @ts-ignore
@@ -79,9 +81,54 @@ const Blog = () => {
     // @ts-ignore
     const classes = useStyles();
     return (
-        <div >
-            <h1 style={{textAlign:'center',marginTop:"10px"}}>Các chủ đề được quan tâm</h1>
+        <div
+
+        style={{
+            background: `url('/img/background-frog.jpg')`,
+            paddingBottom:"10px"
+        }}
+        >
+            <h1
+                className="mint"
+                style={{
+                    textAlign:'center',
+            }}>
+               Hot topic</h1>
             <Grid container spacing={2} mt={2} mb={2}>
+                <Grid item
+                      md={6}
+                      xs={12}
+                      sm={12}
+                      sx={{ display: 'flex',justifyContent: 'center' }}
+                >
+                    <Box width={"50%"}
+                         height={"100%"}
+                         onClick={() => router.push("/pages/blog/list")}
+                    >
+                        <FiCard
+                            className={classes.card}>
+                            <FiCardActionArea className={classes.cardContent}>
+                                <FiCardMedia
+                                    image={"https://www.thesun.co.uk/wp-content/uploads/2022/07/unnamed-138.jpg?w=620"}
+                                    title="Contemplative Reptile"
+                                />
+                                <FiCardContent className={classes.fiCardContent}>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        Xem tất cả
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        className={classes.fiCardContentTextSecondary}
+                                        component="p"
+                                    >
+                                       Xem tất cả nội dung
+                                    </Typography>
+                                </FiCardContent>
+                            </FiCardActionArea>
+                        </FiCard>
+                    </Box>
+
+                </Grid>
                 {
                     [...( listTopic?? [])].map((topic) => {
                         return(

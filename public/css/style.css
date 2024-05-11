@@ -527,3 +527,17 @@ figure .image{
 .image .image-style-side{
     text-align: right!important;
 }
+
+@font-face {
+    font-family: 'Rocher';
+    src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+@font-palette-values --Mint {
+    font-family: Rocher;
+    base-palette: 7;
+}
+
+.mint {
+    font-palette: --Mint;
+    font-family: 'Rocher';
+}

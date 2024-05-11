@@ -7,11 +7,13 @@ import Button from "@mui/material/Button";
 import Pagination from '@mui/material/Pagination';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
 import {showAllBlog} from "@/app/store/action/blog";
-
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import {useRouter} from "next/navigation";
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -24,7 +26,7 @@ const useStyles = makeStyles({
      * same values used in Material-Ui Card Demos
      */
     card: {
-        height: 160
+        height: 170
     },
 
     /**
@@ -32,7 +34,7 @@ const useStyles = makeStyles({
      * Same vale used in Material-ui Card Demos
      */
     media: {
-        height: 140
+        height: 170
     },
 
     /**
@@ -48,14 +50,19 @@ const useStyles = makeStyles({
     },
     cardContent: {
 
-        height: 160
+        height: 170
     }
 });
 const ListBlog = () => {
     const classes = useStyles();
+    const router=useRouter();
 
-    const handlePaging = (event: any, value: any) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePaging = (event: any, value: number) => {
         console.log("Current page: " + value)
+        setCurrentPage(value)
+        // @ts-ignore
+        dipatch(showAllBlog({page:currentPage}));
     }
 
 
@@ -65,7 +72,7 @@ const ListBlog = () => {
 
     useEffect(() => {
         // @ts-ignore
-        dipatch(showAllBlog());
+        dipatch(showAllBlog({page:currentPage}));
     }, [])
     useEffect(() => {
         if (isLoading)
@@ -85,18 +92,6 @@ const ListBlog = () => {
                       justifyContent: 'center'
                   }}
             >
-                {/*{*/}
-                {/*    [...( listBlog.posts?? [])].map((topic)=>{*/}
-                {/*        return(*/}
-                {/*            */}
-                {/*                <>*/}
-                {/*                  */}
-                {/*                </>*/}
-                {/*           */}
-                {/*        )*/}
-                {/*    }*/}
-                {/*}*/}
-
                 {[...( listBlog.posts?? [])].map(blog => (
                     <Grid key={blog._id}
                         item xs={10}>
@@ -107,24 +102,37 @@ const ListBlog = () => {
                                 title="Contemplative Reptile"
                             />
                             <FiCardContent className={classes.fiCardContent}>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    Lizard
+                                <Typography gutterBottom
+                                            variant="h5"
+                                            component="h2"
+                                            pl={1}
+                                >
+                                    {blog.title}
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     className={classes.fiCardContentTextSecondary}
                                     component="p"
                                 >
-                                    Lizards are a widespread group of squamate reptiles, with over
-                                    6,000 species, ranging across all continents except Antarctica
+                                <PermIdentityIcon/>  Tác giả: {blog.creator?.fullname} ({blog.creator?.username})
                                 </Typography>
+                                <Typography
+                                    variant="body2"
+                                    className={classes.fiCardContentTextSecondary}
+                                    component="p"
+                                >
+                                    <CalendarMonthIcon/>    Ngày đăng: {new Date(blog?.createdAt ??"").getDate()}/{new Date(blog?.createdAt ??"").getMonth() + 1}/{new Date(blog?.createdAt ??"").getFullYear()}
+                                </Typography>
+
                             </FiCardContent>
-                            <FiCardActions className={classes.fiCardContent}>
-                                <Button size="small" color="inherit" variant="outlined">
-                                    Share
-                                </Button>
-                                <Button size="small" color="inherit" variant="outlined">
-                                    Learn More
+                            <FiCardActions className={classes.fiCardContent}
+
+                            >
+                                <Button
+                                    onClick={() => router.push(`/pages/blog/detail/${blog._id}`)}
+                                    size="small" color="inherit"
+                                    variant="outlined">
+                                    Xem bài viết
                                 </Button>
                             </FiCardActions>
                         </FiCard>
