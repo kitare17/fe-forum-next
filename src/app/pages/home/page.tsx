@@ -352,14 +352,14 @@ const HomePage = () => {
                                     <h4 className="mb-0">Nguyễn Anh Khoa </h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
                                     <div className="team-social d-flex">
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-facebook-f"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=13963&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-twitter"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=32323&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-instagram"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=118497&format=png"></img>
                                         </a>
                                     </div>
                                 </div>
@@ -375,14 +375,14 @@ const HomePage = () => {
                                     <h4 className="mb-0">Nguyễn Ngọc Anh</h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
                                     <div className="team-social d-flex">
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-facebook-f"></i>
+                                    <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=13963&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-twitter"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=32323&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-instagram"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=118497&format=png"></img>
                                         </a>
                                     </div>
                                 </div>
@@ -398,14 +398,14 @@ const HomePage = () => {
                                     <h4 className="mb-0">Lương Tôn Hải Yến</h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
                                     <div className="team-social d-flex">
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-facebook-f"></i>
+                                    <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=13963&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-twitter"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=32323&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-instagram"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=118497&format=png"></img>
                                         </a>
                                     </div>
                                 </div>
@@ -421,14 +421,14 @@ const HomePage = () => {
                                     <h4 className="mb-0">Nguyễn Minh Quang</h4>
                                     <p className="text-warning">K16 - Kỹ thuật phần mềm</p>
                                     <div className="team-social d-flex">
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-facebook-f"></i>
+                                    <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=13963&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-twitter"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=32323&format=png"></img>
                                         </a>
-                                        <a className="btn btn-square rounded-circle me-2" href="">
-                                            <i className="fab fa-instagram"></i>
+                                        <a className="" href="">
+                                            <img src="https://img.icons8.com/?size=32&id=118497&format=png"></img>
                                         </a>
                                     </div>
                                 </div>
