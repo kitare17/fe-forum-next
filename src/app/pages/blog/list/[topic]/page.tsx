@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {showOneBlog, showOneTopic} from "@/app/store/action/blog";
+import { showOneTopic} from "@/app/store/action/blog";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import {useParams, useRouter} from "next/navigation";
