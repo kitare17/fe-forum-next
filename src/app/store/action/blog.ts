@@ -8,11 +8,12 @@ import {BLOG_ADD_CMT, BLOG_FIND_ONE, BLOG_UNLIKE} from "../../constant/ActionTyp
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
-    async (newBlog:BlogInterface) => {
+    async (newBlog: BlogInterface) => {
         try {
-            const response = await axios.post('http://localhost:3001/posts',{
+            const response = await axios.post('http://localhost:3001/posts', {
                 "title": newBlog.title,
                 "detail": newBlog.detail,
+                "topic": newBlog.topic,
                 "creator": "65f6aa46e21e50bbf7cf0e1c"
             });
             toast.success("Tạo bài viết thành công");
@@ -27,7 +28,7 @@ export const createBlog = createAsyncThunk(
 
 export const findOneBlog = createAsyncThunk(
     Types.BLOG_FIND_ONE,
-    async (blogId:string) => {
+    async (blogId: string) => {
         try {
             const response = await axios.get(`http://localhost:3001/posts/${blogId}`);
 
@@ -41,15 +42,14 @@ export const findOneBlog = createAsyncThunk(
 );
 
 
-
 // @ts-ignore
 export const addNewComment = createAsyncThunk(
     Types.BLOG_ADD_CMT,
-    async ({blogId,detail}:{blogId:string,detail:string}) => {
+    async ({blogId, detail}: { blogId: string, detail: string }) => {
         try {
-            console.log({blogId,detail})
-            const userComment="65f6aa46e21e50bbf7cf0e1c"
-            const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`,{
+            console.log({blogId, detail})
+            const userComment = "65f6aa46e21e50bbf7cf0e1c"
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`, {
                 commentPost: {
                     "detail": detail,
                     "userComment": userComment
@@ -67,11 +67,11 @@ export const addNewComment = createAsyncThunk(
 
 export const likeBlog = createAsyncThunk(
     Types.BLOG_LIKE,
-    async ({blogId}:{blogId:string}) => {
+    async ({blogId}: { blogId: string }) => {
         try {
             console.log({blogId})
 
-            const userComment="65f6aa46e21e50bbf7cf0e1c"
+            const userComment = "65f6aa46e21e50bbf7cf0e1c"
             const response = await axios.put(`http://localhost:3001/posts/${blogId}/likes`);
 
             const data: BlogInterface = response.data;
@@ -84,10 +84,10 @@ export const likeBlog = createAsyncThunk(
 );
 export const unlikeBlog = createAsyncThunk(
     Types.BLOG_UNLIKE,
-    async ({blogId}:{blogId:string}) => {
+    async ({blogId}: { blogId: string }) => {
         try {
 
-            const userComment="65f6aa46e21e50bbf7cf0e1c"
+            const userComment = "65f6aa46e21e50bbf7cf0e1c"
             const response = await axios.put(`http://localhost:3001/posts/${blogId}/unlikes`);
 
             const data: BlogInterface = response.data;
@@ -101,10 +101,10 @@ export const unlikeBlog = createAsyncThunk(
 
 export const showAllBlog = createAsyncThunk(
     Types.BlOG_SHOW_ALL,
-    async ({page}:{page:number}) => {
+    async ({page}: { page: number }) => {
         try {
             const response = await axios.get(`http://localhost:3001/posts?page=${page}`);
-            const data:any = response.data;
+            const data: any = response.data;
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_SHOW_ALL);
