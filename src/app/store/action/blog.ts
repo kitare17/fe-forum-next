@@ -4,7 +4,7 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_ADD_CMT, BLOG_FIND_ONE, BLOG_UNLIKE} from "../../constant/ActionType";
+import {BLOG_ADD_CMT, BLOG_FIND_ONE, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -108,6 +108,20 @@ export const showAllBlog = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_SHOW_ALL);
+
+        }
+    }
+);
+
+export const showOneTopic = createAsyncThunk(
+    Types.TOPIC_FIND_ONE,
+    async ({page,slug}: { page: number,slug:string }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/topics/${slug}?page=${page}`);
+            const data: any = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.TOPIC_FIND_ONE);
 
         }
     }
