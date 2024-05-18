@@ -13,8 +13,7 @@ const userSlice = createSlice({
     initialState: initialState,
     reducers: {},
     extraReducers: builder => {
-        builder
-            .addCase(fetchUsers.fulfilled, (state, action) => {
+        builder.addCase(fetchUsers.fulfilled, (state, action) => {
                 console.log("ok xong fulfilled");
                 console.log({action})
                 // @ts-ignore
@@ -31,6 +30,7 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
             })
+            
     }
 
 })

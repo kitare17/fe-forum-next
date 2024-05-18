@@ -1,6 +1,7 @@
 "use client"
 import {configureStore} from '@reduxjs/toolkit'
 import userReducer from "./reducer/user"
+import auth from "./reducer/auth"
 import chatEnglishReducer from "./reducer/chat"
 import blog from "./reducer/blog"
 import topic from "@/app/store/reducer/topic";
@@ -10,7 +11,8 @@ export const index =
                 user: userReducer,
                 chatEnglish:chatEnglishReducer,
                 blog:blog,
-                topic:topic
+                topic:topic,
+                auth: auth
             }
         }
     )
