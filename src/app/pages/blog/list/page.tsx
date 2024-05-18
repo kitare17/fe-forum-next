@@ -61,8 +61,7 @@ const ListBlog = () => {
     const handlePaging = (event: any, value: number) => {
         console.log("Current page: " + value)
         setCurrentPage(value)
-        // @ts-ignore
-        dipatch(showAllBlog({page:currentPage}));
+
     }
 
 
@@ -73,7 +72,7 @@ const ListBlog = () => {
     useEffect(() => {
         // @ts-ignore
         dipatch(showAllBlog({page:currentPage}));
-    }, [])
+    }, [currentPage])
     useEffect(() => {
         if (isLoading)
             toast.info("Đang tải thông tin")
