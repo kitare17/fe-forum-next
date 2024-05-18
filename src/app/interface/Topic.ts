@@ -4,5 +4,6 @@ export interface TopicInterface {
     "detail": string,
     "imgUrl": string,
     "createdAt": string,
-    "updatedAt": string
+    "updatedAt": string,
+    "slug":string
 }

@@ -24,25 +24,25 @@ import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
-
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
+import ReplyIcon from '@mui/icons-material/Reply';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const Blog = () => {
 
     const router=useRouter();
 
     const dipatch = useDispatch();
+
+
     //Get param
     const {blogId} = useParams();
-
-    //like state
-
-
-
-
-    const [expanded, setExpanded] = useState(false);
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
 
     //Add comment
@@ -56,7 +56,6 @@ const Blog = () => {
         setText("")
 
     }
-
 
 
     //Fetch data
@@ -85,6 +84,41 @@ const Blog = () => {
             dipatch(unlikeBlog({blogId}))
         }
     };
+
+
+    //reply comment dialog
+    const [replyDialog, setDialog] = React.useState(false);
+
+    const handleReplyOpen = () => {
+        setDialog(true);
+    };
+
+    const handleReplyClose = () => {
+        setDialog(false);
+    };
+
+
+    //Menu main post
+    const [menuMain, setMenuMain] = React.useState<null | HTMLElement>(null);
+    const openMenuMain = Boolean(menuMain);
+    const handleMenuMainOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuMain(event.currentTarget);
+    };
+    const handleMenuMainClose = () => {
+        setMenuMain(null);
+    };
+
+
+    //Menu comment post
+    const [menuComment, setMenuComment] = React.useState<null | HTMLElement>(null);
+    const openMenuComment = Boolean(menuComment);
+    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuComment(event.currentTarget);
+    };
+    const handleMenuCommentClose = () => {
+        setMenuComment(null);
+    };
+
 
 
     return (
@@ -119,8 +153,16 @@ const Blog = () => {
                             </Avatar>
                         }
                         action={
-                            <IconButton aria-label="settings">
+                            <IconButton
+                                id="menu-main-btn"
+                                onClick={handleMenuMainOpen}
+                                aria-controls={openMenuMain ? 'menu-main' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={openMenuMain ? 'true' : undefined}
+                                >
+
                                 <MoreVertIcon/>
+
                             </IconButton>
                         }
                         title={`${blogDetail?.creator?.fullname} (${blogDetail?.creator?.username})`}
@@ -129,16 +171,14 @@ const Blog = () => {
 
                     />
 
-                    <CardContent>
-
-
+                    <CardContent
+                        sx={{padding: "30px"}}
+                    >
                         <div className="Container"
                              dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(blogDetail?.detail)}}></div>
-
                     </CardContent>
                     <Divider/>
                     <CardActions disableSpacing>
-
                         <IconButton
                         onClick={handleLikeState}
                             aria-label="add to favorites">
@@ -148,44 +188,9 @@ const Blog = () => {
                         <IconButton aria-label="share">
                             <ShareIcon/>
                         </IconButton>
-                        {/*<ExpandMore*/}
-                        {/*    expand={expanded}*/}
-                        {/*    onClick={handleExpandClick}*/}
-                        {/*    aria-expanded={expanded}*/}
-                        {/*    aria-label="show more"*/}
-                        {/*>*/}
-                        {/*    <ExpandMoreIcon />*/}
-                        {/*</ExpandMore>*/}
+
                     </CardActions>
-                    <Collapse in={expanded} timeout="auto" unmountOnExit>
-                        <CardContent>
-                            <Typography paragraph>Method:</Typography>
-                            <Typography paragraph>
-                                Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-                                aside for 10 minutes.
-                            </Typography>
-                            <Typography paragraph>
-                                Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-                                medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-                                occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-                                large plate and set aside, leaving chicken and chorizo in the pan. Add
-                                pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-                                stirring often until thickened and fragrant, about 10 minutes. Add
-                                saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-                            </Typography>
-                            <Typography paragraph>
-                                Add rice and stir very gently to distribute. Top with artichokes and
-                                peppers, and cook without stirring, until most of the liquid is absorbed,
-                                15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-                                mussels, tucking them down into the rice, and cook again without
-                                stirring, until mussels have opened and rice is just tender, 5 to 7
-                                minutes more. (Discard any mussels that don&apos;t open.)
-                            </Typography>
-                            <Typography>
-                                Set aside off of the heat to let rest for 10 minutes, and then serve.
-                            </Typography>
-                        </CardContent>
-                    </Collapse>
+
                     <Divider/>
 
                     <Grid container
@@ -251,7 +256,13 @@ const Blog = () => {
                                                             </Avatar>
                                                         }
                                                         action={
-                                                            <IconButton aria-label="settings">
+                                                            <IconButton
+                                                                id="menu-comment-btn"
+                                                                onClick={handleMenuCommentOpen}
+                                                                aria-controls={openMenuComment ? 'menu-comment' : undefined}
+                                                                aria-haspopup="true"
+                                                                aria-expanded={openMenuComment ? 'true' : undefined}
+                                                            >
                                                                 <MoreVertIcon/>
                                                             </IconButton>
                                                         }
@@ -266,6 +277,10 @@ const Blog = () => {
                                                          dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(comment?.detail)}}></div>
 
                                                 </CardContent>
+                                                <Divider/>
+                                                <CardActions>
+                                                    <ReplyIcon  onClick={handleReplyOpen}/>
+                                                </CardActions>
                                                 </Card>
                                             </Grid>
 
@@ -278,6 +293,82 @@ const Blog = () => {
                     </Grid>
                 </Card>
             </Grid>
+
+
+
+
+            {/*Reply dialog*/}
+            <Dialog
+                open={replyDialog}
+                onClose={handleReplyClose}
+                PaperProps={{
+                    component: 'form',
+                    onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries((formData as any).entries());
+                        const email = formJson.email;
+                        console.log(email);
+                        handleReplyClose();
+                    },
+                }}
+            >
+                <DialogTitle>Trả lời bình luận</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Nhập bình luận ở bên dưới nhé 🤗🤗🤗
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        name="email"
+                        label="Bình luận"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleReplyClose}>Hủy</Button>
+                    <Button type="submit">Bình luận</Button>
+                </DialogActions>
+            </Dialog>
+
+
+            {/*Menu main*/}
+            <Menu
+                id="menu-main"
+                anchorEl={menuMain}
+                open={openMenuMain}
+                onClose={handleMenuMainClose}
+                MenuListProps={{
+                    'aria-labelledby': 'menu-main-btn',
+                }}
+            >
+                <MenuItem onClick={handleMenuMainClose}>Profile</MenuItem>
+                <MenuItem onClick={handleMenuMainClose}>My account</MenuItem>
+                <MenuItem onClick={handleMenuMainClose}>Logout</MenuItem>
+            </Menu>
+
+
+            {/*Menu comment*/}
+            <Menu
+                id="menu-comment"
+                anchorEl={menuComment}
+                open={openMenuComment}
+                onClose={handleMenuCommentClose}
+                MenuListProps={{
+                    'aria-labelledby': 'menu-comment-btn',
+                }}
+            >
+                <MenuItem onClick={handleMenuCommentClose}>Profile</MenuItem>
+                <MenuItem onClick={handleMenuCommentClose}>My account</MenuItem>
+                <MenuItem onClick={handleMenuCommentClose}>Logout</MenuItem>
+            </Menu>
+
+
 
         </Grid>
     )

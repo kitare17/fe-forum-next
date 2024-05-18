@@ -8,12 +8,11 @@ import Pagination from '@mui/material/Pagination';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {useEffect, useState} from "react";
-import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
-import {showAllBlog} from "@/app/store/action/blog";
+import { showOneTopic} from "@/app/store/action/blog";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import {useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -54,13 +53,16 @@ const useStyles = makeStyles({
     }
 });
 const ListBlog = () => {
+    const {topic} = useParams();
+
+
     const classes = useStyles();
     const router=useRouter();
 
     const [currentPage, setCurrentPage] = useState(1);
     const handlePaging = (event: any, value: number) => {
         console.log("Current page: " + value)
-        setCurrentPage(value)
+        setCurrentPage(value);
 
     }
 
@@ -71,8 +73,9 @@ const ListBlog = () => {
 
     useEffect(() => {
         // @ts-ignore
-        dipatch(showAllBlog({page:currentPage}));
+        dipatch(showOneTopic({slug:topic,page:currentPage}));
     }, [currentPage])
+
     useEffect(() => {
         if (isLoading)
             toast.info("Đang tải thông tin")
@@ -93,7 +96,7 @@ const ListBlog = () => {
             >
                 {[...( listBlog.posts?? [])].map(blog => (
                     <Grid key={blog._id}
-                        item xs={10}>
+                          item xs={10}>
 
                         <FiCard className={classes.card}>
                             <FiCardMedia
@@ -113,7 +116,7 @@ const ListBlog = () => {
                                     className={classes.fiCardContentTextSecondary}
                                     component="p"
                                 >
-                                <PermIdentityIcon/>  Tác giả: {blog.creator?.fullname} ({blog.creator?.username})
+                                    <PermIdentityIcon/>  Tác giả: {blog.creator?.fullname} ({blog.creator?.username})
                                 </Typography>
                                 <Typography
                                     variant="body2"

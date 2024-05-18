@@ -1,6 +1,14 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-import {addNewComment, createBlog, findOneBlog, likeBlog, showAllBlog, unlikeBlog} from "@/app/store/action/blog";
+import {
+    addNewComment,
+    createBlog,
+    findOneBlog,
+    likeBlog,
+    showAllBlog,
+    showOneTopic,
+    unlikeBlog
+} from "@/app/store/action/blog";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 
@@ -141,6 +149,24 @@ const blogSlice = createSlice({
                 state.isError = false
             })
             .addCase(showAllBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            //SHOW ONE TOPIC
+
+            .addCase(showOneTopic.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.listBlog.posts = action.payload.posts;
+                state.listBlog.maxPage=action.payload.maxPage;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(showOneTopic.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(showOneTopic.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
             })

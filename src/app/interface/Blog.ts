@@ -10,6 +10,7 @@ export interface BlogInterface {
     updatedAt?:string,
     statusPost?:string,
     likes?:string[],
-    comments?:CommentListInterface
+    comments?:CommentListInterface,
+    topic?:any
 }
 

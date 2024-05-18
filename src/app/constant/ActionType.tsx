@@ -19,6 +19,7 @@ export const BlOG_SHOW_ALL="BLOG_SHOW_ALL"
 
 //TOPIC ACION
 export const TOPIC_FIND_ALL="TOPIC_FIND_ALL"
+export const TOPIC_FIND_ONE="TOPIC_FIND_ONE"
 
 // LOGIN
 export const LOGIN="LOGIN"
@@ -28,3 +29,6 @@ export const REGISTER="REGISTER"
 
 // LOGOUT
 export const LOGOUT="LOGOUT"
+
+
+
