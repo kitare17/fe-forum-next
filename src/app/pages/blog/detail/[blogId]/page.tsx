@@ -31,22 +31,18 @@ import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import Dialog from "@mui/material/Dialog";
 import ReplyIcon from '@mui/icons-material/Reply';
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const Blog = () => {
 
     const router=useRouter();
 
     const dipatch = useDispatch();
+
+
     //Get param
     const {blogId} = useParams();
-
-    //like state
-
-
-    const [expanded, setExpanded] = useState(false);
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
 
 
     //Add comment
@@ -60,7 +56,6 @@ const Blog = () => {
         setText("")
 
     }
-
 
 
     //Fetch data
@@ -102,6 +97,30 @@ const Blog = () => {
         setDialog(false);
     };
 
+
+    //Menu main post
+    const [menuMain, setMenuMain] = React.useState<null | HTMLElement>(null);
+    const openMenuMain = Boolean(menuMain);
+    const handleMenuMainOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuMain(event.currentTarget);
+    };
+    const handleMenuMainClose = () => {
+        setMenuMain(null);
+    };
+
+
+    //Menu comment post
+    const [menuComment, setMenuComment] = React.useState<null | HTMLElement>(null);
+    const openMenuComment = Boolean(menuComment);
+    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuComment(event.currentTarget);
+    };
+    const handleMenuCommentClose = () => {
+        setMenuComment(null);
+    };
+
+
+
     return (
         <Grid container
               direction="row"
@@ -134,8 +153,16 @@ const Blog = () => {
                             </Avatar>
                         }
                         action={
-                            <IconButton aria-label="settings">
+                            <IconButton
+                                id="menu-main-btn"
+                                onClick={handleMenuMainOpen}
+                                aria-controls={openMenuMain ? 'menu-main' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={openMenuMain ? 'true' : undefined}
+                                >
+
                                 <MoreVertIcon/>
+
                             </IconButton>
                         }
                         title={`${blogDetail?.creator?.fullname} (${blogDetail?.creator?.username})`}
@@ -229,7 +256,13 @@ const Blog = () => {
                                                             </Avatar>
                                                         }
                                                         action={
-                                                            <IconButton aria-label="settings">
+                                                            <IconButton
+                                                                id="menu-comment-btn"
+                                                                onClick={handleMenuCommentOpen}
+                                                                aria-controls={openMenuComment ? 'menu-comment' : undefined}
+                                                                aria-haspopup="true"
+                                                                aria-expanded={openMenuComment ? 'true' : undefined}
+                                                            >
                                                                 <MoreVertIcon/>
                                                             </IconButton>
                                                         }
@@ -302,6 +335,38 @@ const Blog = () => {
                     <Button type="submit">Bình luận</Button>
                 </DialogActions>
             </Dialog>
+
+
+            {/*Menu main*/}
+            <Menu
+                id="menu-main"
+                anchorEl={menuMain}
+                open={openMenuMain}
+                onClose={handleMenuMainClose}
+                MenuListProps={{
+                    'aria-labelledby': 'menu-main-btn',
+                }}
+            >
+                <MenuItem onClick={handleMenuMainClose}>Profile</MenuItem>
+                <MenuItem onClick={handleMenuMainClose}>My account</MenuItem>
+                <MenuItem onClick={handleMenuMainClose}>Logout</MenuItem>
+            </Menu>
+
+
+            {/*Menu comment*/}
+            <Menu
+                id="menu-comment"
+                anchorEl={menuComment}
+                open={openMenuComment}
+                onClose={handleMenuCommentClose}
+                MenuListProps={{
+                    'aria-labelledby': 'menu-comment-btn',
+                }}
+            >
+                <MenuItem onClick={handleMenuCommentClose}>Profile</MenuItem>
+                <MenuItem onClick={handleMenuCommentClose}>My account</MenuItem>
+                <MenuItem onClick={handleMenuCommentClose}>Logout</MenuItem>
+            </Menu>
 
 
 
