@@ -18,6 +18,7 @@ import {useDispatch} from "react-redux";
 import {fetchLogout} from "../store/action/auth";
 import {resetInitialState} from "../store/reducer/auth";
 import Link from "next/link";
+import {useEffect, useState} from "react";
 
 const logoStyle = {
     width: "60px",
@@ -34,7 +35,15 @@ function Header() {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const [open, setOpen] = React.useState(false);
-    const authLoginString = window.localStorage.getItem("authnRes");
+
+
+    const [authLoginString,setAuthLoginString] = useState("");
+
+    useEffect(() => {
+        // @ts-ignore
+        const authnRes:string=window.localStorage.getItem("authnRes")
+        setAuthLoginString(authnRes);
+    }, []);
     const authLogin = authLoginString ? JSON.parse(authLoginString) : null;
 
     const toggleDrawer = (newOpen: boolean) => () => {
@@ -68,7 +77,7 @@ function Header() {
     }, [])
 
     return (
-        <div>
+        <>
             <AppBar
                 position="fixed"
                 sx={{
@@ -180,7 +189,6 @@ function Header() {
                                     color="primary"
                                     variant="text"
                                     size="small"
-                                    component="a"
                                     onClick={hanldeLogout}
                                 >
                                     Đăng xuất
@@ -282,7 +290,7 @@ function Header() {
                     </Toolbar>
                 </Container>
             </AppBar>
-        </div>
+        </>
     );
 }
 
