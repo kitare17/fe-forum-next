@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useEffect} from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -26,10 +26,25 @@ const defaultTheme = createTheme();
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { user, isLoading, isError } = useSelector(
+  const { user, isLoading, isError, message } = useSelector(
     (state: RootState) => state.auth
   );
 
+
+  useEffect(() => {
+    if(isError){
+      toast.error(message);
+    }
+    // @ts-ignore
+    if(user?.token){
+      console.log("co token"+user)
+      router.push("/");
+    }
+
+  }, [isError,isLoading,user]);
+
+
+  //submit form login
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,18 +53,21 @@ const Login = () => {
 
     // Ensure the data conforms to LoginInterface
     const userLogin: LoginInterface = { email, password };
-    dispatch(fetchLogin(userLogin)).then((result) => {
-      console.log("result", result)
-      if (result?.payload?.code === "AxiosError") {
-        toast.error("Mật khẩu hoặc email sai");
-      } else{
-        toast.success("Đăng nhập thành công");
-        
-      router.push("/");
-      }
-    });
-    
+    dispatch(fetchLogin(userLogin))
+    //     .then((result) => {
+    //   console.log("result", result)
+    //   if (result?.payload?.code === "AxiosError") {
+    //     toast.error("Mật khẩu hoặc email sai");
+    //   } else{
+    //     toast.success("Đăng nhập thành công");
+    //
+    //   router.push("/");
+    //   }
+    // });
   };
+
+
+
 
   return (
     <>

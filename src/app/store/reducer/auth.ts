@@ -1,69 +1,64 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { fetchLogin, fetchRegister } from "@/app/store/action/auth";
+import {createSlice} from "@reduxjs/toolkit";
+import {fetchLogin, fetchLogout, fetchRegister} from "@/app/store/action/auth";
 
 var initialState = {
-  user: {},
-  isLoading: false,
-  isError: false,
-  message: "",
+    user: {},
+    isLoading: false,
+    isError: false,
+    message: "",
 };
 const authSlice = createSlice({
-  name: "auth",
-  initialState,
-  reducers: {
-    resetInitialState: (state) => {
-      state.isLoading = false;
-      state.isError = false;
+    name: "auth",
+    initialState,
+    reducers: {
+        resetInitialState: (state) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.user= {};
+        },
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      // REGISTER
-      .addCase(fetchRegister.fulfilled, (state, action) => {
-        // @ts-ignore
-        if (!(action.payload?.statusMessage === "Error")) {
-          // @ts-ignore
-          state.user = action.payload;
-        } else {
-          // @ts-ignore
-          state.message = action.payload?.message;
-        }
-        state.isLoading = false;
-        // @ts-ignore
-        state.isError = (action.payload?.statusMessage === "Error");
-      })
-      .addCase(fetchRegister.pending, (state, action) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
-      .addCase(fetchRegister.rejected, (state, action) => {
-        // @ts-ignore
-        console.log("400");
-        state.isLoading = false;
-        state.isError = true;
-      })
+    extraReducers: (builder) => {
+        builder
+            // REGISTER
+            .addCase(fetchRegister.fulfilled, (state, action) => {
 
+                // @ts-ignore
+                state.user = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(fetchRegister.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(fetchRegister.rejected, (state, action) => {
+                // @ts-ignore
+                state.message = action.payload?.data?.message;
+                state.isLoading = false;
+                state.isError = true;
+            })
 
+            // LOGIN
+            .addCase(fetchLogin.fulfilled, (state, action) => {
 
-      // LOGIN
-      .addCase(fetchLogin.fulfilled, (state, action) => {
-        console.log({ action });
-        console.log("action.payload", action.payload)
-        // @ts-ignore
-        state.user = action.payload;
-        state.isLoading = false;
-        state.isError = false;
-      })
-      .addCase(fetchLogin.pending, (state, action) => {
-        state.isLoading = true;
-        state.isError = false;
-      })
-      .addCase(fetchLogin.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-      });
-  },
+                // @ts-ignore
+                state.user = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(fetchLogin.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(fetchLogin.rejected, (state, action) => {
+                // @ts-ignore
+                state.message = action.payload?.data?.message;
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+    },
 });
-export const { resetInitialState } = authSlice.actions;
+export const {resetInitialState} = authSlice.actions;
 
 export default authSlice.reducer;
