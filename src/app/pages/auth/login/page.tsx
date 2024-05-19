@@ -37,6 +37,7 @@ const Login = () => {
     }
     // @ts-ignore
     if(user?.token){
+      console.log("co token"+user)
       router.push("/");
     }
 

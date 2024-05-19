@@ -14,6 +14,7 @@ const authSlice = createSlice({
         resetInitialState: (state) => {
             state.isLoading = false;
             state.isError = false;
+            state.user= {};
         },
     },
     extraReducers: (builder) => {
@@ -55,24 +56,7 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
             })
-            // LOGOUT
-            .addCase(fetchLogout.fulfilled, (state, action) => {
-                console.log("logout")
-                // @ts-ignore
-                state.user = {};
-                state.isLoading = false;
-                state.isError = false;
-            })
-            .addCase(fetchLogout.pending, (state, action) => {
-                state.isLoading = true;
-                state.isError = false;
-            })
-            .addCase(fetchLogout.rejected, (state, action) => {
-                // @ts-ignore
-                state.message = action.payload?.data?.message;
-                state.isLoading = false;
-                state.isError = true;
-            })
+
     },
 });
 export const {resetInitialState} = authSlice.actions;

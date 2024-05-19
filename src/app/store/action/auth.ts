@@ -21,7 +21,7 @@ export const fetchLogin = createAsyncThunk(
 
             // @ts-ignore
             const errorData = error as AxiosError;
-            console.log("Error data",errorData.response?.data)
+            console.log("Error data", errorData.response?.data)
             return rejectWithValue({data: errorData.response?.data});
         }
     }
@@ -29,9 +29,9 @@ export const fetchLogin = createAsyncThunk(
 
 export const fetchLogout = createAsyncThunk(Types.LOGOUT, async () => {
     try {
-        const response = await axios.post("http://localhost:3001/users/logout");
+        // const response = await axios.post("http://localhost:3001/users/logout");
         console.log("dang xuat")
-        return response.data;
+        return {data: "Logout"};
     } catch (error) {
         console.log("Error: " + Types.LOGOUT);
         return error;

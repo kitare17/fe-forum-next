@@ -58,8 +58,8 @@ function Header() {
     const hanldeLogout = () => {
         dispatch(fetchLogout)
         console.log("dang xuat")
-        // resetInitialState()
-        window.localStorage.removeItem("authnRes");
+        resetInitialState();
+        window.localStorage.clear()
         router.push("/pages/auth/login")
     };
 
