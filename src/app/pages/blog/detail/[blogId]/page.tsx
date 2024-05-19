@@ -3,7 +3,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Avatar from "@mui/material/Avatar";
-import {Card, CardHeader, Collapse} from '@mui/material';
+import {Card, CardHeader} from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -59,7 +59,7 @@ const Blog = () => {
 
 
     //Fetch data
-    const {blogDetail,isLike, comments, isLoading, isError} = useSelector((state: RootState) => state.blog);
+    const {blogDetail,isLike, isLoading, isError} = useSelector((state: RootState) => state.blog);
     useEffect( () => {
         // @ts-ignore
         dipatch(findOneBlog(blogId));
@@ -283,8 +283,6 @@ const Blog = () => {
                                                 </CardActions>
                                                 </Card>
                                             </Grid>
-
-
                                     )
                                 }
                             )}
