@@ -27,15 +27,20 @@ import { useRouter } from "next/navigation";
 const Register = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { user, isLoading, isError, message } = useSelector(
+  const { user, isLoading, isError, message,isSuccess } = useSelector(
     (state: RootState) => state.auth
   );
   React.useEffect(() => {
     if(isError){
-        toast.error(message)
+        toast.error(message)}
+
+    if(isSuccess){
+        toast.success(message)
+      router.push("/pages/auth/login");
     }
+
    
-  }, [isError, isLoading]);
+  }, [isError, isLoading,isSuccess]);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
