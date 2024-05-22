@@ -15,7 +15,7 @@ export const fetchLogin = createAsyncThunk(
             });
 
             const data: LoginInterface = response.data;
-            window.localStorage.setItem("authnRes", JSON.stringify(data));
+           localStorage.setItem("authnRes", JSON.stringify(data));
             return data;
         } catch (error) {
 

@@ -54,6 +54,7 @@ const ReportBlogDialog = (
                 "title": "Báo cáo vi phạm",
                 "reason": "",
                 "blogId": blogId,
+                // @ts-ignore
                 "userReport": (user?.userEmailId ?? "")
             }
         }
