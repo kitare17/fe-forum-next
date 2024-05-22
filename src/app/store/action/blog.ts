@@ -5,6 +5,7 @@ import axios from "axios";
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
 import {BLOG_ADD_CMT, BLOG_FIND_ONE, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
+import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -115,7 +116,7 @@ export const showAllBlog = createAsyncThunk(
 
 export const showOneTopic = createAsyncThunk(
     Types.TOPIC_FIND_ONE,
-    async ({page,slug}: { page: number,slug:string }) => {
+    async ({page, slug}: { page: number, slug: string }) => {
         try {
             const response = await axios.get(`http://localhost:3001/topics/${slug}?page=${page}`);
             const data: any = response.data;
@@ -127,3 +128,21 @@ export const showOneTopic = createAsyncThunk(
     }
 );
 
+export const createReport = createAsyncThunk(
+    Types.BlOG_REPORT,
+    async (newReport: ReportBlogInterface) => {
+        try {
+            const response = await axios.post('http://localhost:3001/report-blog', {
+                "title": newReport.title,
+                "reason": newReport.reason,
+                "userReport": newReport.userReport,
+                "blogId": newReport.blogId
+            });
+            const data: ReportBlogInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_REPORT);
+
+        }
+    }
+);

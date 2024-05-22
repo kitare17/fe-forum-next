@@ -37,6 +37,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import FlagIcon from '@mui/icons-material/Flag';
+import ReportBlogDialog from "@/app/pages/blog/component/ReportBlogDialog";
 
 const Blog = () => {
 
@@ -46,7 +47,7 @@ const Blog = () => {
 
 
     //Get param
-    const {blogId} = useParams();
+    const {blogId}: { blogId: string } = useParams();
 
 
     //Add comment
@@ -63,7 +64,15 @@ const Blog = () => {
 
 
     //Fetch data
-    const {blogDetail, isLike, isLoading, isError} = useSelector((state: RootState) => state.blog);
+    const {
+        blogDetail,
+        isLike,
+        isLoading,
+        isError,
+        isSuccess,
+        message
+    } =
+        useSelector((state: RootState) => state.blog);
     useEffect(() => {
         // @ts-ignore
         dipatch(findOneBlog(blogId));
@@ -75,7 +84,10 @@ const Blog = () => {
             toast.info("Đang tải thông tin")
         if (isError)
             toast.error("lỗi rồi")
-    }, [isLoading, isError])
+        if (isSuccess)
+            toast.success(message)
+
+    }, [isLoading, isError, isSuccess])
 
     const handleLikeState = () => {
 
@@ -122,15 +134,17 @@ const Blog = () => {
         setMenuComment(null);
     };
 
+    //state report form
+    const [openFormBlogReport, setOpenFormBlogReport] = useState<boolean>(false);
+
 
     //Handle edit / report main post
     const handleEditMainPost = () => {
-        alert("hanldEditMainPost");
+        alert("hanldEditMainPost ");
 
     }
     const handleReportMainPost = () => {
-        alert("hanldEditMainPost");
-
+        setOpenFormBlogReport(true)
     }
 
 
@@ -143,6 +157,7 @@ const Blog = () => {
         alert("hanldReportComment");
 
     }
+
 
     return (
         <Grid container
@@ -405,7 +420,8 @@ const Blog = () => {
                 </MenuItem>
             </Menu>
 
-
+            <ReportBlogDialog blogId={blogId} openFormBlogReport={openFormBlogReport}
+                              setOpenFormBlogReport={setOpenFormBlogReport}></ReportBlogDialog>
         </Grid>
     )
 }
