@@ -2,9 +2,10 @@ import {createSlice} from "@reduxjs/toolkit";
 import {fetchLogin, fetchLogout, fetchRegister} from "@/app/store/action/auth";
 
 var initialState = {
-    user: {},
+    user:JSON.parse(localStorage.getItem('authnRes')??"{}") ,
     isLoading: false,
     isError: false,
+    isSuccess: false,
     message: "",
 };
 const authSlice = createSlice({
@@ -26,6 +27,9 @@ const authSlice = createSlice({
                 state.user = action.payload;
                 state.isLoading = false;
                 state.isError = false;
+                state.isSuccess=true;
+                // @ts-ignore
+                state.message=action.payload?.message;
             })
             .addCase(fetchRegister.pending, (state, action) => {
                 state.isLoading = true;
