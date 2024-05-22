@@ -33,10 +33,14 @@ import Dialog from "@mui/material/Dialog";
 import ReplyIcon from '@mui/icons-material/Reply';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import EditIcon from '@mui/icons-material/Edit';
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import FlagIcon from '@mui/icons-material/Flag';
 
 const Blog = () => {
 
-    const router=useRouter();
+    const router = useRouter();
 
     const dipatch = useDispatch();
 
@@ -50,17 +54,17 @@ const Blog = () => {
     const onChangeText = (event: any, editor: any) => {
         setText(editor.getData())
     }
-    const handleComment=()=>{
+    const handleComment = () => {
         // @ts-ignore
-        dipatch(addNewComment({blogId,detail:text}))
+        dipatch(addNewComment({blogId, detail: text}))
         setText("")
 
     }
 
 
     //Fetch data
-    const {blogDetail,isLike, isLoading, isError} = useSelector((state: RootState) => state.blog);
-    useEffect( () => {
+    const {blogDetail, isLike, isLoading, isError} = useSelector((state: RootState) => state.blog);
+    useEffect(() => {
         // @ts-ignore
         dipatch(findOneBlog(blogId));
 
@@ -73,13 +77,12 @@ const Blog = () => {
             toast.error("lỗi rồi")
     }, [isLoading, isError])
 
-    const handleLikeState= () => {
+    const handleLikeState = () => {
 
-        if(!isLike){
+        if (!isLike) {
             // @ts-ignore
             dipatch(likeBlog({blogId}))
-        }
-        else{
+        } else {
             // @ts-ignore
             dipatch(unlikeBlog({blogId}))
         }
@@ -120,6 +123,26 @@ const Blog = () => {
     };
 
 
+    //Handle edit / report main post
+    const handleEditMainPost = () => {
+        alert("hanldEditMainPost");
+
+    }
+    const handleReportMainPost = () => {
+        alert("hanldEditMainPost");
+
+    }
+
+
+    //Handle edit / report comment
+    const handleEditComment = () => {
+        alert("hanldEditComment");
+
+    }
+    const handleReportComment = () => {
+        alert("hanldReportComment");
+
+    }
 
     return (
         <Grid container
@@ -130,14 +153,14 @@ const Blog = () => {
 
               pt={5}
               pb={5}
-              sx={{ bgcolor: '#f0eded' }}
+              sx={{bgcolor: '#f0eded'}}
         >
             <Grid item xs={10}>
                 <Button
                     variant="outlined"
                     onClick={() => router.back()}
                 >
-                    <ArrowBackIcon />  Trở vể
+                    <ArrowBackIcon/> Trở vể
                 </Button>
 
             </Grid>
@@ -159,7 +182,7 @@ const Blog = () => {
                                 aria-controls={openMenuMain ? 'menu-main' : undefined}
                                 aria-haspopup="true"
                                 aria-expanded={openMenuMain ? 'true' : undefined}
-                                >
+                            >
 
                                 <MoreVertIcon/>
 
@@ -180,10 +203,10 @@ const Blog = () => {
                     <Divider/>
                     <CardActions disableSpacing>
                         <IconButton
-                        onClick={handleLikeState}
+                            onClick={handleLikeState}
                             aria-label="add to favorites">
-                            {!isLike && <FavoriteIcon />}
-                            {isLike && <FavoriteIcon style={{ color: "#eb1b0c" }}/>}
+                            {!isLike && <FavoriteIcon/>}
+                            {isLike && <FavoriteIcon style={{color: "#eb1b0c"}}/>}
                         </IconButton>
                         <IconButton aria-label="share">
                             <ShareIcon/>
@@ -203,7 +226,7 @@ const Blog = () => {
                     >
 
                         <Grid item xs={11}>
-                            <Typography variant="h5" >
+                            <Typography variant="h5">
                                 Bình luận
                             </Typography>
                             <div style={{marginTop: "10px", marginBottom: "10px", width: "100%"}}>
@@ -222,7 +245,7 @@ const Blog = () => {
                                 </CKEditor>
                             </div>
 
-                            <Button onClick={handleComment} variant="contained" endIcon={<SendIcon />}>
+                            <Button onClick={handleComment} variant="contained" endIcon={<SendIcon/>}>
                                 Bình luận
                             </Button>
                         </Grid>
@@ -238,38 +261,38 @@ const Blog = () => {
 
                         {
                             [...(blogDetail.comments ?? [])].toReversed().map((comment) => {
-                                return (
+                                    return (
 
                                         <Grid
                                             key={comment._id}
                                             item xs={11}>
                                             <Card sx={{width: "100%"}}>
-                                            <CardHeader
-                                                        avatar={
-                                                            <Avatar
-                                                                src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
-                                                                sx={{
-                                                                    width: 70,
-                                                                    height: 70
-                                                                }} aria-label="recipe">
+                                                <CardHeader
+                                                    avatar={
+                                                        <Avatar
+                                                            src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
+                                                            sx={{
+                                                                width: 70,
+                                                                height: 70
+                                                            }} aria-label="recipe">
 
-                                                            </Avatar>
-                                                        }
-                                                        action={
-                                                            <IconButton
-                                                                id="menu-comment-btn"
-                                                                onClick={handleMenuCommentOpen}
-                                                                aria-controls={openMenuComment ? 'menu-comment' : undefined}
-                                                                aria-haspopup="true"
-                                                                aria-expanded={openMenuComment ? 'true' : undefined}
-                                                            >
-                                                                <MoreVertIcon/>
-                                                            </IconButton>
-                                                        }
-                                                        title={`${comment?.userComment?.fullname} (${comment?.userComment?.username})`}
-                                                        subheader={`Bình luận ngày ${new Date(comment?.createdAt).getDate()}/${new Date(comment?.createdAt).getMonth() + 1}/${new Date(comment?.createdAt).getFullYear()}`}
+                                                        </Avatar>
+                                                    }
+                                                    action={
+                                                        <IconButton
+                                                            id="menu-comment-btn"
+                                                            onClick={handleMenuCommentOpen}
+                                                            aria-controls={openMenuComment ? 'menu-comment' : undefined}
+                                                            aria-haspopup="true"
+                                                            aria-expanded={openMenuComment ? 'true' : undefined}
+                                                        >
+                                                            <MoreVertIcon/>
+                                                        </IconButton>
+                                                    }
+                                                    title={`${comment?.userComment?.fullname} (${comment?.userComment?.username})`}
+                                                    subheader={`Bình luận ngày ${new Date(comment?.createdAt).getDate()}/${new Date(comment?.createdAt).getMonth() + 1}/${new Date(comment?.createdAt).getFullYear()}`}
 
-                                                    />
+                                                />
                                                 <CardContent>
 
 
@@ -279,10 +302,10 @@ const Blog = () => {
                                                 </CardContent>
                                                 <Divider/>
                                                 <CardActions>
-                                                    <ReplyIcon  onClick={handleReplyOpen}/>
+                                                    <ReplyIcon onClick={handleReplyOpen}/>
                                                 </CardActions>
-                                                </Card>
-                                            </Grid>
+                                            </Card>
+                                        </Grid>
                                     )
                                 }
                             )}
@@ -291,8 +314,6 @@ const Blog = () => {
                     </Grid>
                 </Card>
             </Grid>
-
-
 
 
             {/*Reply dialog*/}
@@ -345,9 +366,18 @@ const Blog = () => {
                     'aria-labelledby': 'menu-main-btn',
                 }}
             >
-                <MenuItem onClick={handleMenuMainClose}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuMainClose}>My account</MenuItem>
-                <MenuItem onClick={handleMenuMainClose}>Logout</MenuItem>
+                <MenuItem onClick={handleEditMainPost}>
+                    <ListItemIcon>
+                        <EditIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Chỉnh sửa"/>
+                </MenuItem>
+                <MenuItem onClick={handleReportMainPost}>
+                    <ListItemIcon>
+                        <FlagIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Báo cáo"/>
+                </MenuItem>
             </Menu>
 
 
@@ -361,11 +391,19 @@ const Blog = () => {
                     'aria-labelledby': 'menu-comment-btn',
                 }}
             >
-                <MenuItem onClick={handleMenuCommentClose}>Profile</MenuItem>
-                <MenuItem onClick={handleMenuCommentClose}>My account</MenuItem>
-                <MenuItem onClick={handleMenuCommentClose}>Logout</MenuItem>
+                <MenuItem onClick={handleEditComment}>
+                    <ListItemIcon>
+                        <EditIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Chỉnh sửa"/>
+                </MenuItem>
+                <MenuItem onClick={handleEditComment}>
+                    <ListItemIcon>
+                        <FlagIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Báo cáo"/>
+                </MenuItem>
             </Menu>
-
 
 
         </Grid>
