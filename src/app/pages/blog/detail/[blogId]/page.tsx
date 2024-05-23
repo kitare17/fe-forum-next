@@ -38,6 +38,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import FlagIcon from '@mui/icons-material/Flag';
 import ReportBlogDialog from "@/app/pages/blog/component/ReportBlogDialog";
+import ReportCommentDialog from "@/app/pages/blog/component/ReportCommentDialog";
 
 const Blog = () => {
 
@@ -127,14 +128,16 @@ const Blog = () => {
     //Menu comment post
     const [menuComment, setMenuComment] = React.useState<null | HTMLElement>(null);
     const openMenuComment = Boolean(menuComment);
-    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>,commentId:string) => {
         setMenuComment(event.currentTarget);
+        setCommentIdReport(commentId);
     };
     const handleMenuCommentClose = () => {
         setMenuComment(null);
     };
 
-    //state report form
+    //state report blog form
     const [openFormBlogReport, setOpenFormBlogReport] = useState<boolean>(false);
 
 
@@ -148,13 +151,18 @@ const Blog = () => {
     }
 
 
+    //state report comment form
+    const [openFormCommentReport, setOpenFormCommentReport] = useState<boolean>(false);
+    const [commentIdReport,setCommentIdReport] =useState<string>("");
+
+
     //Handle edit / report comment
     const handleEditComment = () => {
         alert("hanldEditComment");
 
     }
     const handleReportComment = () => {
-        alert("hanldReportComment");
+        setOpenFormCommentReport(true);
 
     }
 
@@ -296,7 +304,7 @@ const Blog = () => {
                                                     action={
                                                         <IconButton
                                                             id="menu-comment-btn"
-                                                            onClick={handleMenuCommentOpen}
+                                                            onClick={(e)=>handleMenuCommentOpen(e,comment._id)}
                                                             aria-controls={openMenuComment ? 'menu-comment' : undefined}
                                                             aria-haspopup="true"
                                                             aria-expanded={openMenuComment ? 'true' : undefined}
@@ -412,7 +420,7 @@ const Blog = () => {
                     </ListItemIcon>
                     <ListItemText primary="Chỉnh sửa"/>
                 </MenuItem>
-                <MenuItem onClick={handleEditComment}>
+                <MenuItem onClick={handleReportComment}>
                     <ListItemIcon>
                         <FlagIcon/>
                     </ListItemIcon>
@@ -421,7 +429,12 @@ const Blog = () => {
             </Menu>
 
             <ReportBlogDialog blogId={blogId} openFormBlogReport={openFormBlogReport}
-                              setOpenFormBlogReport={setOpenFormBlogReport}></ReportBlogDialog>
+                              setOpenFormBlogReport={setOpenFormBlogReport}/>
+
+            <ReportCommentDialog  blogId={blogId}  setOpenFormCommentReport={setOpenFormCommentReport}
+                                  openFormCommentReport={openFormCommentReport}
+                                  commentId={commentIdReport}
+            />
         </Grid>
     )
 }

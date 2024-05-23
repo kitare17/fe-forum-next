@@ -9,33 +9,35 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import MenuItem from '@mui/material/MenuItem';
 import {useForm} from "react-hook-form";
-import {ReportBlogInterface} from "@/app/interface/ReportBlog";
+
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {createReport} from "@/app/store/action/blog";
+import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 
 
-const ReportBlogDialog = (
+const ReportCommentDialog = (
     {
         blogId,
-        openFormBlogReport,
-        setOpenFormBlogReport
+        commentId,
+        openFormCommentReport,
+        setOpenFormCommentReport,
+
     }
         :
         {
             blogId: string,
-            openFormBlogReport: boolean,
-            setOpenFormBlogReport: React.Dispatch<React.SetStateAction<boolean>>
+            commentId: string,
+            openFormCommentReport: boolean,
+            setOpenFormCommentReport: React.Dispatch<React.SetStateAction<boolean>>
         }) => {
 
 
     const dipatch = useDispatch();
 
 
-
-
     const handleReportClose = () => {
-        setOpenFormBlogReport(false);
+        setOpenFormCommentReport(false);
     };
 
 
@@ -48,7 +50,7 @@ const ReportBlogDialog = (
         reset,
         formState,
         getValues
-    } = useForm<ReportBlogInterface>(
+    } = useForm<ReportCommentInterface>(
         {
             defaultValues: {
                 "title": "Báo cáo vi phạm",
@@ -63,16 +65,19 @@ const ReportBlogDialog = (
 
     const handleReport = () => {
 
-        const reportForm: ReportBlogInterface = {
+        const reportForm: ReportCommentInterface = {
             title: getValues("title"),
             reason: getValues("reason"),
             userReport: getValues("userReport"),
-            blogId: getValues("blogId")
+            blogId: getValues("blogId"),
+            commentId: commentId
         }
 
+        // alert("Đay ne "+getValues("commentId"))
+        alert(JSON.stringify({reportForm}))
         // @ts-ignore
-        dipatch(createReport(reportForm))
-        handleReportClose();
+        // dipatch(createReport(reportForm))
+        // handleReportClose();
     };
 
     return (
@@ -82,13 +87,13 @@ const ReportBlogDialog = (
             {/*    Open form dialog*/}
             {/*</Button>*/}
             <Dialog
-                open={openFormBlogReport}
+                open={openFormCommentReport}
                 onClose={handleReportClose}
             >
                 <DialogTitle>Báo cáo bình luận</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Hãy cho chúng mình lí do blog này vi phạm nhé
+                        Hãy cho chúng mình lí do comment này vi phạm nhé
                     </DialogContentText>
                     <TextField
                         sx={{
@@ -126,4 +131,4 @@ const ReportBlogDialog = (
         </>
     )
 }
-export default ReportBlogDialog
+export default ReportCommentDialog
