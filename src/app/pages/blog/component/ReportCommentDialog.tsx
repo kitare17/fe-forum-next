@@ -12,7 +12,7 @@ import {useForm} from "react-hook-form";
 
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
-import {createReport} from "@/app/store/action/blog";
+import { createReportComment} from "@/app/store/action/blog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 
 
@@ -72,12 +72,14 @@ const ReportCommentDialog = (
             blogId: getValues("blogId"),
             commentId: commentId
         }
+        // @ts-ignore
 
         // alert("Đay ne "+getValues("commentId"))
-        alert(JSON.stringify({reportForm}))
+        // alert(JSON.stringify({reportForm}))
+
         // @ts-ignore
-        // dipatch(createReport(reportForm))
-        // handleReportClose();
+        dipatch(createReportComment(reportForm))
+        handleReportClose();
     };
 
     return (
