@@ -10,13 +10,13 @@ import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
-    async (newBlog: BlogInterface) => {
+    async ({newBlog,creator}:{newBlog: BlogInterface,creator:string}) => {
         try {
             const response = await axios.post('http://localhost:3001/posts', {
                 "title": newBlog.title,
                 "detail": newBlog.detail,
                 "topic": newBlog.topic,
-                "creator": "65f6aa46e21e50bbf7cf0e1c"
+                "creator": creator
             });
             toast.success("Tạo bài viết thành công");
             const data: BlogInterface = response.data;

@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import {fetchLogin, fetchLogout, fetchRegister} from "@/app/store/action/auth";
 
 var initialState = {
-    user:typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"") : {},
+    user:typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}") : {},
     isLoading: false,
     isError: false,
     isSuccess: false,
