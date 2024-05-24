@@ -47,10 +47,10 @@ export const findOneBlog = createAsyncThunk(
 // @ts-ignore
 export const addNewComment = createAsyncThunk(
     Types.BLOG_ADD_CMT,
-    async ({blogId, detail}: { blogId: string, detail: string }) => {
+    async ({blogId, detail,userComment}: { blogId: string, detail: string,userComment:string }) => {
         try {
             console.log({blogId, detail})
-            const userComment = "65f6aa46e21e50bbf7cf0e1c"
+            // const userComment = "65f6aa46e21e50bbf7cf0e1c"
             const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`, {
                 commentPost: {
                     "detail": detail,

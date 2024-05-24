@@ -46,7 +46,7 @@ const Blog = () => {
 
     const dipatch = useDispatch();
 
-
+    const {user} = useSelector((state: RootState) => state.auth);
     //Get param
     const {blogId}: { blogId: string } = useParams();
 
@@ -57,8 +57,9 @@ const Blog = () => {
         setText(editor.getData())
     }
     const handleComment = () => {
+        const userComment=user?.userEmailId ?? "";
         // @ts-ignore
-        dipatch(addNewComment({blogId, detail: text}))
+        dipatch(addNewComment({blogId, detail: text,userComment}))
         setText("")
 
     }
