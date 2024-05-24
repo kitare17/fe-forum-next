@@ -57,13 +57,12 @@ const Blog = () => {
         setText(editor.getData())
     }
     const handleComment = () => {
-        const userComment=user?.userEmailId ?? "";
+        const userComment = user?.userEmailId ?? "";
         // @ts-ignore
-        dipatch(addNewComment({blogId, detail: text,userComment}))
+        dipatch(addNewComment({blogId, detail: text, userComment}))
         setText("")
 
     }
-
 
     //Fetch data
     const {
@@ -130,7 +129,7 @@ const Blog = () => {
     const [menuComment, setMenuComment] = React.useState<null | HTMLElement>(null);
     const openMenuComment = Boolean(menuComment);
 
-    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>,commentId:string) => {
+    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>, commentId: string) => {
         setMenuComment(event.currentTarget);
         setCommentIdReport(commentId);
     };
@@ -154,7 +153,7 @@ const Blog = () => {
 
     //state report comment form
     const [openFormCommentReport, setOpenFormCommentReport] = useState<boolean>(false);
-    const [commentIdReport,setCommentIdReport] =useState<string>("");
+    const [commentIdReport, setCommentIdReport] = useState<string>("");
 
 
     //Handle edit / report comment
@@ -167,7 +166,7 @@ const Blog = () => {
 
     }
 
-    const handleShare=()=>{
+    const handleShare = () => {
         toast.success("Đã copy vào clipboard chia sẻ cho bạn bè nhé 😍😍😍");
 
         navigator.clipboard.writeText(window.location.href);
@@ -239,9 +238,9 @@ const Blog = () => {
                             {isLike && <FavoriteIcon style={{color: "#eb1b0c"}}/>}
                         </IconButton>
                         <Tooltip title="Nhấn để copy đường link">
-                        <IconButton aria-label="share" onClick={handleShare}>
-                            <ShareIcon/>
-                        </IconButton>
+                            <IconButton aria-label="share" onClick={handleShare}>
+                                <ShareIcon/>
+                            </IconButton>
                         </Tooltip>
                     </CardActions>
 
@@ -312,7 +311,7 @@ const Blog = () => {
                                                     action={
                                                         <IconButton
                                                             id="menu-comment-btn"
-                                                            onClick={(e)=>handleMenuCommentOpen(e,comment._id)}
+                                                            onClick={(e) => handleMenuCommentOpen(e, comment._id)}
                                                             aria-controls={openMenuComment ? 'menu-comment' : undefined}
                                                             aria-haspopup="true"
                                                             aria-expanded={openMenuComment ? 'true' : undefined}
@@ -336,6 +335,57 @@ const Blog = () => {
                                                     <ReplyIcon onClick={handleReplyOpen}/>
                                                 </CardActions>
                                             </Card>
+                                            {comment.replyComment.length>0 && <Card sx={{width: "100%"}}>
+                                                <Grid container
+                                                      direction="row"
+                                                      justifyContent="center"
+                                                      alignItems="center"
+                                                      spacing={2}
+                                                      mt={2}
+                                                     p={3}
+                                                      sx={{bgcolor: '#f0eded'}}
+                                                >
+                                                    {
+                                                        [...(comment.replyComment ?? [])].toReversed().map((replyCmt) => {
+                                                            return (
+                                                                <Card sx={{width: "80%",marginBottom:"10px"}} key={replyCmt._id} >
+                                                                    <CardHeader
+                                                                        avatar={
+                                                                            <Avatar
+                                                                                src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
+                                                                                sx={{
+                                                                                    width: 70,
+                                                                                    height: 70
+                                                                                }} aria-label="recipe">
+
+                                                                            </Avatar>
+                                                                        }
+                                                                        // action={
+                                                                        //     <IconButton
+                                                                        //         id="menu-comment-btn"
+                                                                        //         onClick={(e) => handleMenuCommentOpen(e, comment._id)}
+                                                                        //         aria-controls={openMenuComment ? 'menu-comment' : undefined}
+                                                                        //         aria-haspopup="true"
+                                                                        //         aria-expanded={openMenuComment ? 'true' : undefined}
+                                                                        //     >
+                                                                        //         <MoreVertIcon/>
+                                                                        //     </IconButton>
+                                                                        // }
+                                                                        title={`${replyCmt?.userComment?.fullname} (${replyCmt?.userComment?.username})`}
+                                                                        subheader={`Bình luận ngày ${new Date(replyCmt?.createdAt).getDate()}/${new Date(replyCmt?.createdAt).getMonth() + 1}/${new Date(replyCmt?.createdAt).getFullYear()}`}
+
+                                                                    />
+                                                                    <CardContent>
+                                                                        <p>{replyCmt.detail}</p>
+                                                                    </CardContent>
+                                                                </Card>
+                                                            )
+                                                        })
+                                                    }
+
+                                                </Grid>
+
+                                            </Card>}
                                         </Grid>
                                     )
                                 }
@@ -439,9 +489,9 @@ const Blog = () => {
             <ReportBlogDialog blogId={blogId} openFormBlogReport={openFormBlogReport}
                               setOpenFormBlogReport={setOpenFormBlogReport}/>
 
-            <ReportCommentDialog  blogId={blogId}  setOpenFormCommentReport={setOpenFormCommentReport}
-                                  openFormCommentReport={openFormCommentReport}
-                                  commentId={commentIdReport}
+            <ReportCommentDialog blogId={blogId} setOpenFormCommentReport={setOpenFormCommentReport}
+                                 openFormCommentReport={openFormCommentReport}
+                                 commentId={commentIdReport}
             />
         </Grid>
     )
