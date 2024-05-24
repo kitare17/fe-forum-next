@@ -21,6 +21,7 @@ const WriteBlog = () => {
     const router = useRouter();
 
     const {listTopic, isLoading, isError} = useSelector((state: RootState) => state.topic);
+    const {user} = useSelector((state: RootState) => state.auth);
     const [listTopicOption, setListTopicOptions] = useState<any[]>([]);
     useEffect(() => {
         // @ts-ignore
@@ -82,8 +83,9 @@ const WriteBlog = () => {
             title: getValues("title"),
             id: getValues("_id"),
             detail: getValues("detail"),
-            topic: getValues("topic").id
+            topic: getValues("topic").id,
         }
+        const creator=user?.userEmailId ?? "";
         console.log(newBlog.topic)
         if (text && newBlog.topic) {
             newBlog.detail = text
@@ -92,7 +94,7 @@ const WriteBlog = () => {
 
             console.log(newBlog)
             // @ts-ignore
-            dipatch(createBlog(newBlog));
+            dipatch(createBlog({newBlog,creator}));
             setText("")
 
             reset();

@@ -3,7 +3,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Avatar from "@mui/material/Avatar";
-import {Card, CardHeader} from '@mui/material';
+import {Card, CardHeader, Tooltip} from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -46,7 +46,7 @@ const Blog = () => {
 
     const dipatch = useDispatch();
 
-
+    const {user} = useSelector((state: RootState) => state.auth);
     //Get param
     const {blogId}: { blogId: string } = useParams();
 
@@ -57,8 +57,9 @@ const Blog = () => {
         setText(editor.getData())
     }
     const handleComment = () => {
+        const userComment=user?.userEmailId ?? "";
         // @ts-ignore
-        dipatch(addNewComment({blogId, detail: text}))
+        dipatch(addNewComment({blogId, detail: text,userComment}))
         setText("")
 
     }
@@ -166,6 +167,12 @@ const Blog = () => {
 
     }
 
+    const handleShare=()=>{
+        toast.success("Đã copy vào clipboard chia sẻ cho bạn bè nhé 😍😍😍");
+
+        navigator.clipboard.writeText(window.location.href);
+    }
+
 
     return (
         <Grid container
@@ -231,10 +238,11 @@ const Blog = () => {
                             {!isLike && <FavoriteIcon/>}
                             {isLike && <FavoriteIcon style={{color: "#eb1b0c"}}/>}
                         </IconButton>
-                        <IconButton aria-label="share">
+                        <Tooltip title="Nhấn để copy đường link">
+                        <IconButton aria-label="share" onClick={handleShare}>
                             <ShareIcon/>
                         </IconButton>
-
+                        </Tooltip>
                     </CardActions>
 
                     <Divider/>

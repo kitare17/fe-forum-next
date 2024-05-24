@@ -4,18 +4,19 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_ADD_CMT, BLOG_FIND_ONE, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
+import {BLOG_ADD_CMT, BLOG_FIND_ONE, BlOG_REPORT_COMMENT, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
+import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
-    async (newBlog: BlogInterface) => {
+    async ({newBlog,creator}:{newBlog: BlogInterface,creator:string}) => {
         try {
             const response = await axios.post('http://localhost:3001/posts', {
                 "title": newBlog.title,
                 "detail": newBlog.detail,
                 "topic": newBlog.topic,
-                "creator": "65f6aa46e21e50bbf7cf0e1c"
+                "creator": creator
             });
             toast.success("Tạo bài viết thành công");
             const data: BlogInterface = response.data;
@@ -46,10 +47,10 @@ export const findOneBlog = createAsyncThunk(
 // @ts-ignore
 export const addNewComment = createAsyncThunk(
     Types.BLOG_ADD_CMT,
-    async ({blogId, detail}: { blogId: string, detail: string }) => {
+    async ({blogId, detail,userComment}: { blogId: string, detail: string,userComment:string }) => {
         try {
             console.log({blogId, detail})
-            const userComment = "65f6aa46e21e50bbf7cf0e1c"
+            // const userComment = "65f6aa46e21e50bbf7cf0e1c"
             const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`, {
                 commentPost: {
                     "detail": detail,
@@ -142,6 +143,29 @@ export const createReport = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_REPORT);
+
+        }
+    }
+);
+
+
+export const createReportComment = createAsyncThunk(
+    Types.BlOG_REPORT_COMMENT,
+    async (newReport: ReportCommentInterface) => {
+        // alert(JSON.stringify({newReport}))
+        alert(newReport.userReport)
+        try {
+            const response = await axios.post('http://localhost:3001/report-comment', {
+                "title": newReport.title,
+                "reason": newReport.reason,
+                "userReport": newReport.userReport,
+                "blogId": newReport.blogId,
+                "commentId":newReport.commentId
+            });
+            const data: ReportCommentInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_REPORT_COMMENT);
 
         }
     }
