@@ -10,7 +10,7 @@ import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
-    async ({newBlog,creator}:{newBlog: BlogInterface,creator:string}) => {
+    async ({newBlog, creator}: { newBlog: BlogInterface, creator: string }) => {
         try {
             const response = await axios.post('http://localhost:3001/posts', {
                 "title": newBlog.title,
@@ -47,7 +47,7 @@ export const findOneBlog = createAsyncThunk(
 // @ts-ignore
 export const addNewComment = createAsyncThunk(
     Types.BLOG_ADD_CMT,
-    async ({blogId, detail,userComment}: { blogId: string, detail: string,userComment:string }) => {
+    async ({blogId, detail, userComment}: { blogId: string, detail: string, userComment: string }) => {
         try {
             console.log({blogId, detail})
             // const userComment = "65f6aa46e21e50bbf7cf0e1c"
@@ -69,12 +69,11 @@ export const addNewComment = createAsyncThunk(
 
 export const likeBlog = createAsyncThunk(
     Types.BLOG_LIKE,
-    async ({blogId}: { blogId: string }) => {
+    async ({blogId, userId}: { blogId: string, userId: string }) => {
         try {
-            console.log({blogId})
-
-            const userComment = "65f6aa46e21e50bbf7cf0e1c"
-            const response = await axios.put(`http://localhost:3001/posts/${blogId}/likes`);
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/likes`, {
+                userId: userId
+            });
 
             const data: BlogInterface = response.data;
             return data;
@@ -86,11 +85,13 @@ export const likeBlog = createAsyncThunk(
 );
 export const unlikeBlog = createAsyncThunk(
     Types.BLOG_UNLIKE,
-    async ({blogId}: { blogId: string }) => {
+    async ({blogId, userId}: { blogId: string, userId: string }) => {
         try {
 
             const userComment = "65f6aa46e21e50bbf7cf0e1c"
-            const response = await axios.put(`http://localhost:3001/posts/${blogId}/unlikes`);
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/unlikes`, {
+                userId: userId
+            });
 
             const data: BlogInterface = response.data;
             return data;
@@ -160,7 +161,7 @@ export const createReportComment = createAsyncThunk(
                 "reason": newReport.reason,
                 "userReport": newReport.userReport,
                 "blogId": newReport.blogId,
-                "commentId":newReport.commentId
+                "commentId": newReport.commentId
             });
             const data: ReportCommentInterface = response.data;
             return data;

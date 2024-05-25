@@ -19,10 +19,10 @@ interface InitialState {
     isError: boolean;
     blogDetail: BlogInterface;
     comments?: CommentInterface[] | undefined;
-    listBlog: {posts:BlogInterface[],maxPage:number},
-    isLike:boolean,
-    isSuccess:boolean,
-    message:string
+    listBlog: { posts: BlogInterface[], maxPage: number },
+    isLike: boolean,
+    isSuccess: boolean,
+    message: string
 }
 
 
@@ -32,12 +32,12 @@ var initialState: InitialState = {
     isError: false,
     isSuccess: false,
     blogDetail: {},
-    listBlog:{
-        posts:[],
-        maxPage:1
+    listBlog: {
+        posts: [],
+        maxPage: 1
     },
-    message:"",
-    isLike:false
+    message: "",
+    isLike: false
 
 }
 const blogSlice = createSlice({
@@ -54,37 +54,39 @@ const blogSlice = createSlice({
                 state.isError = false;
             })
             .addCase(createBlog.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(createBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
             })
 
             //FIND ONE BLOG
             .addCase(findOneBlog.fulfilled, (state, action) => {
+
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
                 // @ts-ignore
                 state.blogDetail = action.payload;
                 // @ts-ignore
-                if([...(action.payload.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
-                    state.isLike=true
+                if ([...(action.payload.likes ?? [])].includes(userId)) {
+                    state.isLike = true
                 }
-
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(findOneBlog.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(findOneBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
             })
             //ADD COMMENT
             .addCase(addNewComment.fulfilled, (state, action) => {
@@ -94,135 +96,137 @@ const blogSlice = createSlice({
                 state.isError = false;
             })
             .addCase(addNewComment.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(addNewComment.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
             })
             //LIKE BLOG
             .addCase(likeBlog.fulfilled, (state, action) => {
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
                 // @ts-ignore
                 state.blogDetail = action.payload;
                 // @ts-ignore
-                if([...(action.payload.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
-                    state.isLike=true
+                if ([...(action.payload.likes ?? [])].includes(userId)) {
+                    state.isLike = true
                 }
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(likeBlog.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(likeBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
             })
             //UNLIKE BLOG
             .addCase(unlikeBlog.fulfilled, (state, action) => {
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
                 // @ts-ignore
                 state.blogDetail = action.payload;
                 // @ts-ignore
-                if(![...(action.payload.likes??[])].includes("65f6aa46e21e50bbf7cf0e1c")){
-                    state.isLike=false
+                if (![...(action.payload.likes ?? [])].includes(userId)) {
+                    state.isLike = false
                 }
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(unlikeBlog.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(unlikeBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
 
             })
             //SHOW ALL BLOG
             .addCase(showAllBlog.fulfilled, (state, action) => {
                 // @ts-ignore
                 state.listBlog.posts = action.payload.posts;
-                state.listBlog.maxPage=action.payload.maxPage;
+                state.listBlog.maxPage = action.payload.maxPage;
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(showAllBlog.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(showAllBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
 
             })
             //SHOW ONE TOPIC
             .addCase(showOneTopic.fulfilled, (state, action) => {
                 // @ts-ignore
                 state.listBlog.posts = action.payload.posts;
-                state.listBlog.maxPage=action.payload.maxPage;
+                state.listBlog.maxPage = action.payload.maxPage;
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(showOneTopic.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(showOneTopic.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
 
             })
 
 
             //REPORT BLOG
             .addCase(createReport.fulfilled, (state, action) => {
-                state.message="️🎉️🎉️🎉Cảm ơn bạn đã đóng góp️🎉️🎉️🎉️"
-                state.isSuccess=true
+                state.message = "️🎉️🎉️🎉Cảm ơn bạn đã đóng góp️🎉️🎉️🎉️"
+                state.isSuccess = true
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(createReport.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(createReport.rejected, (state, action) => {
-                state.message="Vui lòng thử lại sau"
+                state.message = "Vui lòng thử lại sau"
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
             })
 
 
             //REPORT COMMENT
             .addCase(createReportComment.fulfilled, (state, action) => {
-                state.message="️🎉️🎉️🎉Cảm ơn bạn đã đóng góp️🎉️🎉️🎉️"
-                state.isSuccess=true
+                state.message = "️🎉️🎉️🎉Cảm ơn bạn đã đóng góp️🎉️🎉️🎉️"
+                state.isSuccess = true
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(createReportComment.pending, (state, action) => {
-                state.isSuccess=false
+                state.isSuccess = false
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(createReportComment.rejected, (state, action) => {
-                state.message="Vui lòng thử lại sau"
+                state.message = "Vui lòng thử lại sau"
                 state.isLoading = false;
                 state.isError = true;
-                state.isSuccess=false
+                state.isSuccess = false
             })
     }
 
