@@ -94,10 +94,10 @@ const Blog = () => {
 
         if (!isLike) {
             // @ts-ignore
-            dipatch(likeBlog({blogId}))
+            dipatch(likeBlog({blogId,userId: (user?.userEmailId ?? "")}))
         } else {
             // @ts-ignore
-            dipatch(unlikeBlog({blogId}))
+            dipatch(unlikeBlog({blogId,userId: (user?.userEmailId ?? "")}))
         }
     };
 
@@ -346,7 +346,7 @@ const Blog = () => {
                                                     {
                                                         [...(comment.replyComment ?? [])].toReversed().map((replyCmt) => {
                                                             return (
-                                                                <Card sx={{width: "80%",marginBottom:"10px"}} key={replyCmt._id} >
+                                                                <Card sx={{width: "95%",marginBottom:"10px"}} key={replyCmt._id} >
                                                                     <CardHeader
                                                                         avatar={
                                                                             <Avatar
