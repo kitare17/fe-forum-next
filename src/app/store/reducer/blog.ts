@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {
     addNewComment,
-    createBlog, createReport, createReportComment,
+    createBlog, createReplyComment, createReport, createReportComment,
     findOneBlog,
     likeBlog,
     showAllBlog,
@@ -224,6 +224,28 @@ const blogSlice = createSlice({
             })
             .addCase(createReportComment.rejected, (state, action) => {
                 state.message = "Vui lòng thử lại sau"
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+
+            //REPLY COMMENT
+            .addCase(createReplyComment.fulfilled, (state, action) => {
+
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(createReplyComment.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createReplyComment.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false

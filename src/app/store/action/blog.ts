@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 import {BLOG_ADD_CMT, BLOG_FIND_ONE, BlOG_REPORT_COMMENT, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
+import {ReplyCommentInterface} from "@/app/interface/ReplyCommentInterface";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -154,7 +155,6 @@ export const createReportComment = createAsyncThunk(
     Types.BlOG_REPORT_COMMENT,
     async (newReport: ReportCommentInterface) => {
         // alert(JSON.stringify({newReport}))
-        alert(newReport.userReport)
         try {
             const response = await axios.post('http://localhost:3001/report-comment', {
                 "title": newReport.title,
@@ -167,6 +167,39 @@ export const createReportComment = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_REPORT_COMMENT);
+
+        }
+    }
+);
+
+
+export const createReplyComment = createAsyncThunk(
+    Types.BlOG_REPLY_COMMENT,
+    async ({
+               detail,
+               postId,
+               userComment,
+               commentId
+           }:
+               {
+                   detail: string,
+                   postId: string,
+                   userComment: string,
+                   commentId: string
+               }) => {
+        try {
+
+            const response = await axios.post('http://localhost:3001/posts/replyComment', {
+                "postId": postId,
+                "commentId": commentId,
+                "detail": detail,
+                "userComment": userComment
+            });
+            console.log(response.data)
+            const data: BlogInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_REPLY_COMMENT);
 
         }
     }

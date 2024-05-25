@@ -15,7 +15,7 @@ import Divider from "@mui/material/Divider";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {toast} from "react-toastify";
-import {addNewComment, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
+import {addNewComment, createReplyComment, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
 import {useParams, useRouter} from "next/navigation";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // @ts-ignore
@@ -94,18 +94,19 @@ const Blog = () => {
 
         if (!isLike) {
             // @ts-ignore
-            dipatch(likeBlog({blogId,userId: (user?.userEmailId ?? "")}))
+            dipatch(likeBlog({blogId, userId: (user?.userEmailId ?? "")}))
         } else {
             // @ts-ignore
-            dipatch(unlikeBlog({blogId,userId: (user?.userEmailId ?? "")}))
+            dipatch(unlikeBlog({blogId, userId: (user?.userEmailId ?? "")}))
         }
     };
 
 
     //reply comment dialog
     const [replyDialog, setDialog] = React.useState(false);
-
-    const handleReplyOpen = () => {
+    const [replyCommentId, setReplyCommentId] = useState<string>("");
+    const handleReplyOpen = (commentId: string) => {
+        setReplyCommentId(commentId)
         setDialog(true);
     };
 
@@ -330,23 +331,24 @@ const Blog = () => {
                                                 </CardContent>
                                                 <Divider/>
                                                 <CardActions>
-                                                    <ReplyIcon onClick={handleReplyOpen}/>
+                                                    <ReplyIcon onClick={() => handleReplyOpen(comment._id)}/>
                                                 </CardActions>
                                             </Card>
-                                            {comment.replyComment.length>0 && <Card sx={{width: "100%"}}>
+                                            {comment.replyComment.length > 0 && <Card sx={{width: "100%"}}>
                                                 <Grid container
                                                       direction="row"
                                                       justifyContent="center"
                                                       alignItems="center"
                                                       spacing={2}
                                                       mt={2}
-                                                     p={3}
+                                                      p={3}
                                                       sx={{bgcolor: '#f0eded'}}
                                                 >
                                                     {
                                                         [...(comment.replyComment ?? [])].toReversed().map((replyCmt) => {
                                                             return (
-                                                                <Card sx={{width: "95%",marginBottom:"10px"}} key={replyCmt._id} >
+                                                                <Card sx={{width: "95%", marginBottom: "10px"}}
+                                                                      key={replyCmt._id}>
                                                                     <CardHeader
                                                                         avatar={
                                                                             <Avatar
@@ -405,8 +407,16 @@ const Blog = () => {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
-                        const email = formJson.email;
-                        console.log(email);
+                        const detail = formJson.replyComment;
+
+                        // @ts-ignore
+                        dipatch(createReplyComment({
+                            commentId: replyCommentId,
+                            detail: detail,
+                            postId: blogId,
+                            userComment: user?.userEmailId ?? "",
+                        }))
+                        console.log(detail);
                         handleReplyClose();
                     },
                 }}
@@ -421,7 +431,7 @@ const Blog = () => {
                         required
                         margin="dense"
                         id="name"
-                        name="email"
+                        name="replyComment"
                         label="Bình luận"
                         type="text"
                         fullWidth
