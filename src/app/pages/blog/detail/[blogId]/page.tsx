@@ -288,11 +288,9 @@ const Blog = () => {
                           mt={2}
                           mb={9}
                     >
-
                         {
                             [...(blogDetail.comments ?? [])].toReversed().map((comment) => {
                                     return (
-
                                         <Grid
                                             key={comment._id}
                                             item xs={11}>
