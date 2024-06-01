@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import SearchGroup from "@/app/pages/group/component/SearchGroup";
 import CardGroup from "@/app/pages/group/component/CardGroup";
 import Grid from "@mui/material/Grid";
@@ -42,7 +42,7 @@ const GroupPage = () => {
 
 
     return (
-        <>
+        <Suspense >
             <SearchGroup/>
 
             <CardGroup array={listGroup}/>
@@ -63,7 +63,7 @@ const GroupPage = () => {
                     showLastButton
                     showFirstButton/>
             </Grid>
-        </>
+        </Suspense>
     );
 };
 
