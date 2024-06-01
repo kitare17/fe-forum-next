@@ -13,6 +13,7 @@
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@mui/icons-material": "^5.15.16",
     "@mui/material": "^5.15.16",
     "@mui/styles": "^5.15.17",
@@ -27,6 +28,7 @@
     "react-dom": "^18",
     "react-h5-audio-player": "^3.9.1",
     "react-hook-form": "^7.51.4",
+    "react-material-ui-carousel": "^3.4.2",
     "react-redux": "^9.1.2",
     "react-toastify": "^10.0.5"
   },
