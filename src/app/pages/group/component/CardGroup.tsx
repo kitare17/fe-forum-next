@@ -1,14 +1,15 @@
 import React from 'react';
-import {Card, CardHeader, IconButton} from "@mui/material";
+import {Card, CardHeader, IconButton, Tooltip} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import Grid from "@mui/material/Grid";
+import {GroupInterface} from "@/app/interface/GroupInterface";
 
-const CardGroup = ({array}:{array:any[]}) => {
+const CardGroup = ({array}:{array:GroupInterface[]}) => {
     return (
         <Grid container spacing={3} p={6} mb={2}>
         {
-            array.map((com, index) => {
+            [...array??[]].map((group, index) => {
                 return (
                     <Grid key={index} item lg={4} xs={12} md={6}>
                         <Card >
@@ -21,12 +22,14 @@ const CardGroup = ({array}:{array:any[]}) => {
                                     </Avatar>
                                 }
                                 action={
+                                    <Tooltip title="Tham gia">
                                     <IconButton aria-label="settings">
                                         <ElectricBoltIcon />
                                     </IconButton>
+                                    </Tooltip>
                                 }
-                                title="CardHeader Example"
-                                subheader="A flexbox with avatar, title, subtitle and action"
+                                title={group.groupName}
+                                subheader={group.adminGroup.username}
                             />
                         </Card>
                     </Grid>

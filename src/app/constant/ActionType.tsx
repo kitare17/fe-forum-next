@@ -34,4 +34,9 @@ export const REGISTER="REGISTER"
 export const LOGOUT="LOGOUT"
 
 
+//GROUP
+export const GROUP_SHOW_ALL="GROUP_SHOW_ALL"
+
+
+
 

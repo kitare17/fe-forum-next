@@ -30,18 +30,18 @@ export default function Footer() {
                         </div>
                         <div className="col-12 col-sm-4 align-self-center">
                             <div className="d-flex pt-6">
-                                <Link href={"/"}>
-                                    <Image src="https://img.icons8.com/?size=39&id=13963&format=png" alt={"logo"}></Image>
-                                </Link>
-                                <Link href={"/"}>
-                                    <Image src="https://img.icons8.com/?size=39&id=118497&format=png" alt={"logo"}></Image>
-                                </Link>
-                                <Link href={"/"}>
-                                    <Image src="https://img.icons8.com/?size=39&id=V5cGWnc9R4xj&format=png" alt={"logo"}></Image>
-                                </Link>
-                                <Link href={"/"}>
-                                    <Image src="https://img.icons8.com/?size=39&id=32323&format=png" alt={"logo"}></Image>
-                                </Link>
+                                {/*<Link href={"/"}>*/}
+                                {/*    <Image src="https://img.icons8.com/?size=39&id=13963&format=png" alt={"logo"}></Image>*/}
+                                {/*</Link>*/}
+                                {/*<Link href={"/"}>*/}
+                                {/*    <Image src="https://img.icons8.com/?size=39&id=118497&format=png" alt={"logo"}></Image>*/}
+                                {/*</Link>*/}
+                                {/*<Link href={"/"}>*/}
+                                {/*    <Image src="https://img.icons8.com/?size=39&id=V5cGWnc9R4xj&format=png" alt={"logo"}></Image>*/}
+                                {/*</Link>*/}
+                                {/*<Link href={"/"}>*/}
+                                {/*    <Image src="https://img.icons8.com/?size=39&id=32323&format=png" alt={"logo"}></Image>*/}
+                                {/*</Link>*/}
             
                                 
                             </div>

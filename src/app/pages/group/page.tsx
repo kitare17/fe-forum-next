@@ -1,17 +1,51 @@
 "use client"
-import React from 'react';
+import React, {useEffect} from 'react';
 import SearchGroup from "@/app/pages/group/component/SearchGroup";
 import CardGroup from "@/app/pages/group/component/CardGroup";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
-const GroupPage = () => {
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/app/store";
+import {fetchUsers} from "@/app/store/action/user";
+import {toast} from "react-toastify";
+import {findAllGroup} from "@/app/store/action/group";
 
-    const array = [1, 2, 3, 5, 4, 8, 41, 8, 6];
+import {useRouter, useSearchParams} from "next/navigation";
+
+const GroupPage = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page') ?? 1;
+
+
+    //fetch data
+    const dipatch = useDispatch();
+    const {listGroup, maxPage, isLoading, isError} = useSelector((state: RootState) => state.group);
+
+
+    useEffect(() => {
+        console.log("vào useEffect",page)
+        // @ts-ignore
+        dipatch(findAllGroup({page}));
+    }, [page])
+    useEffect(() => {
+        // if (isLoading)
+        //     toast.info("Đang tải thông tin")
+        if (isError)
+            toast.error("lỗi rồi")
+    }, [isLoading, isError])
+
+
+    const handlePaging = (event: any, value: number) => {
+        router.push(`/pages/group?page=${value}`)
+    };
+
+
     return (
         <>
             <SearchGroup/>
-            <CardGroup array={array} />
 
+            <CardGroup array={listGroup}/>
 
             <Grid item xs={10}
                   sx={{
@@ -21,8 +55,8 @@ const GroupPage = () => {
                   mb={2}
             >
                 <Pagination
-                   // onChange={handlePaging}
-                    count={10}
+                    onChange={handlePaging}
+                    count={maxPage}
                     defaultPage={1}
                     siblingCount={1}
                     size="large"
@@ -32,6 +66,7 @@ const GroupPage = () => {
         </>
     );
 };
+
 
 export default GroupPage;
 
