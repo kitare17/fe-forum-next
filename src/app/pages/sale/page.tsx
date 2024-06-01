@@ -19,7 +19,7 @@ const Sale=()=>{
       `}</style>
           <div className="container my-2">
     <div className="row">
-        <div className="col-md-2">
+        <div className="col-md-3">
             <div>
                 <a href="#" className="text-decoration-none">
                     <div className="card" style={{ width: "100%" }}>
@@ -35,7 +35,7 @@ const Sale=()=>{
                 </a>
             </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-md-3">
             <div>
                 <a href="#" className="text-decoration-none">
                     <div className="card" style={{ width: "100%" }}>
@@ -51,7 +51,7 @@ const Sale=()=>{
                 </a>
             </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-md-3">
             <div>
                 <a href="#" className="text-decoration-none">
                     <div className="card" style={{ width: "100%" }}>
@@ -67,7 +67,7 @@ const Sale=()=>{
                 </a>
             </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-md-3">
             <div>
                 <a href="#" className="text-decoration-none">
                     <div className="card" style={{ width: "100%" }}>
@@ -83,38 +83,7 @@ const Sale=()=>{
                 </a>
             </div>
         </div>
-        <div className="col-md-2">
-            <div>
-                <a href="#" className="text-decoration-none">
-                    <div className="card" style={{ width: "100%" }}>
-                        <img src="https://via.placeholder.com/300x200" className="card-img-top" alt="Product Image" />
-                        <div className="card-body">
-                            <h5 className="card-title" style={{ color: "black" }}>Product Title</h5>
-                            <p className="card-text text-secondary">This is a short description of the product</p>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <span className="text-danger fw-bold">$29.99</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div className="col-md-2">
-            <div>
-                <a href="#" className="text-decoration-none">
-                    <div className="card" style={{ width: "100%" }}>
-                        <img src="https://via.placeholder.com/300x200" className="card-img-top" alt="Product Image" />
-                        <div className="card-body">
-                            <h5 className="card-title" style={{ color: "black" }}>Product Title</h5>
-                            <p className="card-text text-secondary">This is a short description of the product</p>
-                            <div className="d-flex justify-content-between align-items-center">
-                                <span className="text-danger fw-bold">$29.99</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
+        
     </div>
 
     {/* đổ data xóa row mẫu từ đây đến ..... */}
