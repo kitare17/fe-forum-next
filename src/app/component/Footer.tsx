@@ -27,15 +27,21 @@ export default function Footer() {
                             </address>
                         </div>
                         <div className="col-12 col-sm-4 align-self-center">
-                            <div className="d-flex pt-5">
-                                <a className="btn btn-square btn-outline-primary rounded-circle me-2 fw-bold" href=""><i
-                                    className="fab fa-twitter"></i></a>
-                                <a className="btn btn-square btn-outline-primary rounded-circle me-2 fw-bold" href=""><i
-                                    className="fab fa-facebook-f"></i></a>
-                                <a className="btn btn-square btn-outline-danger rounded-circle me-2 fw-bold" href=""><i
-                                    className="fab fa-youtube"></i></a>
-                                <a className="btn btn-square btn-outline-dark rounded-circle me-2 fw-bold" href=""><i
-                                    className="fab fa-linkedin-in"></i></a>
+                            <div className="d-flex pt-6">
+                                <a className="" href="">
+                                    <img src="https://img.icons8.com/?size=39&id=13963&format=png"></img>
+                                    </a>
+                                <a className="" href="">
+                                    <img src="https://img.icons8.com/?size=39&id=118497&format=png"></img>
+                                    </a>
+                                <a className="" href="">
+                                    <img src="https://img.icons8.com/?size=39&id=V5cGWnc9R4xj&format=png"></img>
+                                    </a>
+                                <a className="" href="">
+                                    <img src="https://img.icons8.com/?size=39&id=32323&format=png"></img>
+                                    </a>
+            
+                                
                             </div>
                         </div>
                     </div>
