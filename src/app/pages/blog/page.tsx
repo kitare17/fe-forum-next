@@ -46,7 +46,7 @@ const useStyles = makeStyles({
      */
     fiCardContent: {
         color: "#ffffff",
-        backgroundColor: "rgba(0,0,0,.24)"
+
     },
     fiCardContentTextSecondary: {
         color: "rgba(255,255,255,0.78)"
@@ -63,7 +63,7 @@ const Blog = () => {
     const {listTopic, isLoading, isError} = useSelector((state: RootState) => state.topic);
     const router = useRouter();
 
-    const [showListTopic,setShowListTopic] = useState<TopicInterface[]>([]);
+    const [showListTopic, setShowListTopic] = useState<TopicInterface[]>([]);
     useEffect(() => {
         // @ts-ignore
         dipatch(findAllTopic());
@@ -73,9 +73,9 @@ const Blog = () => {
             toast.info("Đang tải thông tin")
         if (isError)
             toast.error("lỗi rồi")
-        setShowListTopic([...listTopic??[]]);
+        setShowListTopic([...listTopic ?? []]);
 
-    }, [isLoading, isError,listTopic])
+    }, [isLoading, isError, listTopic])
 
     const handleClick = () => {
         // @ts-ignore
@@ -88,7 +88,6 @@ const Blog = () => {
         <div
 
             style={{
-                background: `url('/img/background-frog.jpg')`,
                 paddingBottom: "10px"
             }}
         >
@@ -114,11 +113,14 @@ const Blog = () => {
                                 className={classes.card}>
                                 <FiCardActionArea className={classes.cardContent}>
                                     <FiCardMedia
-                                        image={"https://www.thesun.co.uk/wp-content/uploads/2022/07/unnamed-138.jpg?w=620"}
+                                        // image={"data:image/jpeg;base64,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"}
                                         title="Contemplative Reptile"
+                                        style={{ background: "linear-gradient(90deg, rgba(173,188,232,1) 18%, rgba(227,199,153,1) 100%)"}}
                                     />
                                     <FiCardContent className={classes.fiCardContent}>
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <Typography gutterBottom variant="h5" component="h2"
+                                                    style ={{color:"#f58303"}}
+                                        >
                                             Xem tất cả
                                         </Typography>
                                         <Typography
@@ -154,11 +156,14 @@ const Blog = () => {
                                             className={classes.card}>
                                             <FiCardActionArea className={classes.cardContent}>
                                                 <FiCardMedia
-                                                    image={topic.imgUrl}
+                                                    // image={topic.imgUrl}
                                                     title="Contemplative Reptile"
+                                                    style={{ background: "linear-gradient(90deg, rgba(173,188,232,1) 18%, rgba(227,199,153,1) 100%)"}}
                                                 />
                                                 <FiCardContent className={classes.fiCardContent}>
-                                                    <Typography gutterBottom variant="h5" component="h2">
+                                                    <Typography gutterBottom  variant="h5" component="h2"
+                                                        style ={{color:"#f58303"}}
+                                                  >
                                                         {topic.title}
                                                     </Typography>
                                                     <Typography
