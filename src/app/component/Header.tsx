@@ -168,7 +168,7 @@ function Header() {
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
-                                    onClick={() => scrollToSection("faq")}
+                                    onClick={() => router.push("/pages/group")}
                                     sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
