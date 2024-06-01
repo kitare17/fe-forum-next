@@ -24,7 +24,7 @@ const GroupPage = () => {
 
 
     useEffect(() => {
-        console.log("vào useEffect",page)
+        console.log("vào useEffect", page)
         // @ts-ignore
         dipatch(findAllGroup({page}));
     }, [page])
@@ -42,7 +42,7 @@ const GroupPage = () => {
 
 
     return (
-        <Suspense >
+        <>
             <SearchGroup/>
 
             <CardGroup array={listGroup}/>
@@ -63,10 +63,20 @@ const GroupPage = () => {
                     showLastButton
                     showFirstButton/>
             </Grid>
-        </Suspense>
+        </>
     );
 };
 
 
-export default GroupPage;
+
+const GroupPageRender = () => {
+    return (
+        // You could have a loading skeleton as the `fallback` too
+        <Suspense>
+            <GroupPage/>
+        </Suspense>
+    )
+};
+
+export default GroupPageRender
 
