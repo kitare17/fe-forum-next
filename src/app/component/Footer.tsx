@@ -1,3 +1,5 @@
+import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
     return (
@@ -8,10 +10,10 @@ export default function Footer() {
                         <div className="col-4 offset-1 col-sm-2">
                             <h5>Links</h5>
                             <ul className="list-unstyled">
-                                <li><a href="#">Trang chủ</a></li>
-                                <li><a href="#">Giới thiệu</a></li>
-                                <li><a href="#">Diễn đàn</a></li>
-                                <li><a href="#">Liên hệ</a></li>
+                                <li><Link href="#">Trang chủ</Link></li>
+                                <li><Link href="#">Giới thiệu</Link></li>
+                                <li><Link href="#">Diễn đàn</Link></li>
+                                <li><Link href="#">Liên hệ</Link></li>
                             </ul>
                         </div>
                         <div className="col-7 col-sm-5">
@@ -28,18 +30,18 @@ export default function Footer() {
                         </div>
                         <div className="col-12 col-sm-4 align-self-center">
                             <div className="d-flex pt-6">
-                                <a className="" href="">
-                                    <img src="https://img.icons8.com/?size=39&id=13963&format=png"></img>
-                                    </a>
-                                <a className="" href="">
-                                    <img src="https://img.icons8.com/?size=39&id=118497&format=png"></img>
-                                    </a>
-                                <a className="" href="">
-                                    <img src="https://img.icons8.com/?size=39&id=V5cGWnc9R4xj&format=png"></img>
-                                    </a>
-                                <a className="" href="">
-                                    <img src="https://img.icons8.com/?size=39&id=32323&format=png"></img>
-                                    </a>
+                                <Link href={"/"}>
+                                    <Image src="https://img.icons8.com/?size=39&id=13963&format=png" alt={"logo"}></Image>
+                                </Link>
+                                <Link href={"/"}>
+                                    <Image src="https://img.icons8.com/?size=39&id=118497&format=png" alt={"logo"}></Image>
+                                </Link>
+                                <Link href={"/"}>
+                                    <Image src="https://img.icons8.com/?size=39&id=V5cGWnc9R4xj&format=png" alt={"logo"}></Image>
+                                </Link>
+                                <Link href={"/"}>
+                                    <Image src="https://img.icons8.com/?size=39&id=32323&format=png" alt={"logo"}></Image>
+                                </Link>
             
                                 
                             </div>
@@ -47,7 +49,7 @@ export default function Footer() {
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-auto">
-                            <p>© Copyright 2024 by Hải Yến dễ thương</p>
+                            <p>© Copyright 2024 by FU-Forum</p>
                         </div>
                     </div>
                 </div>
