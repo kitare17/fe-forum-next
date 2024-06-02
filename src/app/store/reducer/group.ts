@@ -9,13 +9,12 @@ var initialState = {
     maxPage:1
 }
 const groupSlice = createSlice({
-    name: "user",
+    name: "group",
     initialState: initialState,
     reducers: {},
     extraReducers: builder => {
         builder.addCase(findAllGroup.fulfilled, (state, action) => {
-            console.log("ok xong fulfilled");
-            console.log({action})
+
             // @ts-ignore
             state.listGroup=action.payload.groups;
             state.maxPage=action.payload.maxPage

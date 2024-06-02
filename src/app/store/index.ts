@@ -6,6 +6,7 @@ import chatEnglishReducer from "./reducer/chat"
 import blog from "./reducer/blog"
 import topic from "@/app/store/reducer/topic";
 import group from "@/app/store/reducer/group";
+import sale from "@/app/store/reducer/sale";
 export const index =
     configureStore({
             reducer: {
@@ -14,7 +15,8 @@ export const index =
                 blog:blog,
                 topic:topic,
                 auth: auth,
-                group: group
+                group: group,
+                sale: sale
             }
         }
     )
