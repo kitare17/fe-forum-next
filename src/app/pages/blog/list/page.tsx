@@ -1,19 +1,19 @@
 "use client"
 import Grid from "@mui/material/Grid";
-import {makeStyles} from "@mui/styles";
-import {FiCard, FiCardActions, FiCardContent, FiCardMedia} from "@/app/pages/blog/component/BlogCard";
+import { makeStyles } from "@mui/styles";
+import { FiCard, FiCardActions, FiCardContent, FiCardMedia } from "@/app/pages/blog/component/BlogCard";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Pagination from '@mui/material/Pagination';
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/app/store";
-import {useEffect, useState} from "react";
-import {fetchUsers} from "@/app/store/action/user";
-import {toast} from "react-toastify";
-import {showAllBlog} from "@/app/store/action/blog";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/store";
+import { useEffect, useState } from "react";
+import { fetchUsers } from "@/app/store/action/user";
+import { toast } from "react-toastify";
+import { showAllBlog } from "@/app/store/action/blog";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -55,7 +55,7 @@ const useStyles = makeStyles({
 });
 const ListBlog = () => {
     const classes = useStyles();
-    const router=useRouter();
+    const router = useRouter();
 
     const [currentPage, setCurrentPage] = useState(1);
     const handlePaging = (event: any, value: number) => {
@@ -67,11 +67,11 @@ const ListBlog = () => {
 
     //fetch data
     const dipatch = useDispatch();
-    const {listBlog, isLoading, isError} = useSelector((state: RootState) => state.blog);
+    const { listBlog, isLoading, isError } = useSelector((state: RootState) => state.blog);
 
     useEffect(() => {
         // @ts-ignore
-        dipatch(showAllBlog({page:currentPage}));
+        dipatch(showAllBlog({ page: currentPage }));
     }, [currentPage])
     useEffect(() => {
         if (isLoading)
@@ -84,14 +84,14 @@ const ListBlog = () => {
     return (
         <>
             <Grid container spacing={2}
-                  mt={5}
-                  mb={5}
-                  sx={{
-                      display: 'flex',
-                      justifyContent: 'center'
-                  }}
+                mt={5}
+                mb={5}
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center'
+                }}
             >
-                {[...( listBlog.posts?? [])].map(blog => (
+                {[...(listBlog.posts ?? [])].map(blog => (
                     <Grid key={blog._id}
                         item xs={10}>
 
@@ -102,9 +102,9 @@ const ListBlog = () => {
                             />
                             <FiCardContent className={classes.fiCardContent}>
                                 <Typography gutterBottom
-                                            variant="h5"
-                                            component="h2"
-                                            pl={1}
+                                    variant="h5"
+                                    component="h2"
+                                    pl={1}
                                 >
                                     {blog.title}
                                 </Typography>
@@ -113,14 +113,14 @@ const ListBlog = () => {
                                     className={classes.fiCardContentTextSecondary}
                                     component="p"
                                 >
-                                <PermIdentityIcon/>  Tác giả: {blog.creator?.fullname} ({blog.creator?.username})
+                                    <PermIdentityIcon />  Tác giả: {blog.creator?.fullname} ({blog.creator?.username})
                                 </Typography>
                                 <Typography
                                     variant="body2"
                                     className={classes.fiCardContentTextSecondary}
                                     component="p"
                                 >
-                                    <CalendarMonthIcon/>    Ngày đăng: {new Date(blog?.createdAt ??"").getDate()}/{new Date(blog?.createdAt ??"").getMonth() + 1}/{new Date(blog?.createdAt ??"").getFullYear()}
+                                    <CalendarMonthIcon />    Ngày đăng: {new Date(blog?.createdAt ?? "").getDate()}/{new Date(blog?.createdAt ?? "").getMonth() + 1}/{new Date(blog?.createdAt ?? "").getFullYear()}
                                 </Typography>
 
                             </FiCardContent>
@@ -142,10 +142,10 @@ const ListBlog = () => {
 
 
                 <Grid item xs={10}
-                      sx={{
-                          display: 'flex',
-                          justifyContent: 'center'
-                      }}
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
                 >
                     <Pagination
                         onChange={handlePaging}
@@ -154,7 +154,7 @@ const ListBlog = () => {
                         siblingCount={1}
                         size="large"
                         showLastButton
-                        showFirstButton/>
+                        showFirstButton />
                 </Grid>
             </Grid>
 

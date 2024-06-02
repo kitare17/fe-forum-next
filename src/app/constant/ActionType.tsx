@@ -1,6 +1,6 @@
 
 
-export const  GET_RESPONSE_CHAT_GPT="GET_RESPONSE_CHAT_GPT";
+export const GET_RESPONSE_CHAT_GPT = "GET_RESPONSE_CHAT_GPT";
 export const SAVE_CHAT_CONSERVATION = "SAVE_CHAT_CONSERVATION";
 export const FETCH_FAKE_DATA = "FETCH_FAKE_DATA";
 
@@ -10,36 +10,41 @@ export const CHAT_CONSERVATION_ENGLISH = "CHAT_CONSERVATION_ENGLISH";
 
 
 //BLOG ACTION
-export const BLOG_CREATE="BLOG_CREATE"
-export const BLOG_FIND_ONE="BLOG_FIND_ONE"
-export const BLOG_ADD_CMT="BLOG_ADD_CMT"
-export const BLOG_LIKE="BLOG_LIKE"
-export const BLOG_UNLIKE="BLOG_UNLIKE"
-export const BlOG_SHOW_ALL="BLOG_SHOW_ALL"
-export const BlOG_REPORT="BlOG_REPORT"
-export const BlOG_REPORT_COMMENT="BlOG_REPORT_COMMENT"
-export const BlOG_REPLY_COMMENT="BlOG_REPLY_COMMENT"
+export const BLOG_CREATE = "BLOG_CREATE"
+export const BLOG_FIND_ONE = "BLOG_FIND_ONE"
+export const BLOG_ADD_CMT = "BLOG_ADD_CMT"
+export const BLOG_LIKE = "BLOG_LIKE"
+export const BLOG_UNLIKE = "BLOG_UNLIKE"
+export const BlOG_SHOW_ALL = "BLOG_SHOW_ALL"
+export const BlOG_REPORT = "BlOG_REPORT"
+export const BlOG_REPORT_COMMENT = "BlOG_REPORT_COMMENT"
+export const BlOG_REPLY_COMMENT = "BlOG_REPLY_COMMENT"
 
 //TOPIC ACION
-export const TOPIC_FIND_ALL="TOPIC_FIND_ALL"
-export const TOPIC_FIND_ONE="TOPIC_FIND_ONE"
+export const TOPIC_FIND_ALL = "TOPIC_FIND_ALL"
+export const TOPIC_FIND_ONE = "TOPIC_FIND_ONE"
 
 // LOGIN
-export const LOGIN="LOGIN"
+export const LOGIN = "LOGIN"
 
 // REGISTER
-export const REGISTER="REGISTER"
+export const REGISTER = "REGISTER"
 
 // LOGOUT
-export const LOGOUT="LOGOUT"
+export const LOGOUT = "LOGOUT"
 
 
 //GROUP
-export const GROUP_SHOW_ALL="GROUP_SHOW_ALL"
+export const GROUP_SHOW_ALL = "GROUP_SHOW_ALL"
+
+// Quiz
+export const QUIZ_CREATE = 'QUIZ_CREATE';
+export const QUIZ_FIND_ONE = 'QUIZ_FIND_ONE';
+export const QUIZ_SHOW_ALL = 'QUIZ_SHOW_ALL';
 
 
 //SALE ACTION
 
-export const SAlE_SHOW_ALL="GROUP_SHOW_ALL"
+export const SAlE_SHOW_ALL = "GROUP_SHOW_ALL"
 
 
