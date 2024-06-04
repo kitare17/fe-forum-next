@@ -11,20 +11,27 @@ import FormEdit from "@/app/pages/blog/component/FormEdit";
 import {useDispatch} from "react-redux";
 import {useForm} from "react-hook-form";
 import {BlogInterface} from "@/app/interface/Blog";
-import {useState} from "react";
-import {createBlog} from "@/app/store/action/blog";
+import {useEffect, useState} from "react";
+
 import {toast} from "react-toastify";
 import Grid from "@mui/material/Grid";
 import {Box} from "@mui/material";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {editBlog} from "@/app/store/action/blog";
 
-const FormDialog = (
+const FormEditDialog = (
     {
+        blogId,
+        title,
+        detail,
         openEditBlog,
         setOpenEditBlog
     }
         : {
+        blogId: string,
+        title: string,
+        detail: string,
         openEditBlog: boolean,
         setOpenEditBlog: React.Dispatch<React.SetStateAction<boolean>>
     }
@@ -56,9 +63,9 @@ const FormDialog = (
     } = useForm<BlogInterface>(
         {
             defaultValues: {
-                "title": "",
-                "_id": "",
-                "detail": ""
+                "title": title,
+                "_id": blogId,
+                "detail": detail
             }
         }
     )
@@ -67,27 +74,39 @@ const FormDialog = (
 
 
     ///text edit field
-    const [text, setText] = useState<string>("");
+    const [text, setText] = useState<string>(detail);
+
+    useEffect(() => {
+        setText(detail);
+        setValue("title", title);
+
+    }, [detail, title])
     const onChangeText = (event: any, editor: any) => {
         setText(editor.getData())
         console.log(editor.getData())
     }
 
     const handleEditBlog = () => {
-        const editBlog = {
+        const editBlogData = {
             title: getValues("title"),
             id: getValues("_id"),
             detail: getValues("detail"),
         }
         if (text) {
-            editBlog.detail = text
+            editBlogData.detail = text
                 .replace("<figure class=\"image image-style-side\">", "<figure style=\"text-align: center;\" class=\"image image-style-side\">")
                 .replace("<figure class=\"image\"", "<figure class=\"image\" style=\"text-align: center;\"");
 
             console.log(editBlog)
             // @ts-ignore
-            // dipatch(createBlog({newBlog,creator}));
-            // setText("");
+            dipatch(editBlog({
+                postId:blogId,
+                detail:editBlogData.detail,
+                title:editBlogData.title,
+
+            }));
+
+            setOpenEditBlog(false);
 
         } else {
             if (!text) toast.error("Vui lòng nhập nội dung");
@@ -98,9 +117,7 @@ const FormDialog = (
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpenEditBlog}>
-                Open form dialog
-            </Button>
+
             <Dialog
                 open={openEditBlog}
                 onClose={handleClickCloseEditBlog}
@@ -113,7 +130,7 @@ const FormDialog = (
                     },
                 }}
             >
-                <DialogTitle>Chỉnh sửa bài viết</DialogTitle>
+                <DialogTitle>Chỉnh sửa bài viết {title}</DialogTitle>
                 <DialogContent>
                     <Grid container
                           direction="row"
@@ -133,6 +150,7 @@ const FormDialog = (
                                 noValidate
                                 autoComplete="off">
                                 <TextField
+
                                     id="title"
                                     fullWidth
                                     margin="normal"
@@ -176,4 +194,4 @@ const FormDialog = (
     );
 }
 
-export default FormDialog;
+export default FormEditDialog;

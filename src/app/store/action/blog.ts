@@ -4,7 +4,6 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_ADD_CMT, BLOG_FIND_ONE, BlOG_REPORT_COMMENT, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 import {ReplyCommentInterface} from "@/app/interface/ReplyCommentInterface";
@@ -204,3 +203,35 @@ export const createReplyComment = createAsyncThunk(
         }
     }
 );
+
+
+
+export const editBlog = createAsyncThunk(
+    Types.BlOG_EDIT,
+    async ({
+               postId,
+               detail,
+               title
+           }:
+               {
+                   detail: string,
+                   postId: string,
+                   title: string
+               }) => {
+        try {
+
+            const response = await axios.put('http://localhost:3001/posts/editDetail', {
+                "postId": postId,
+                "detail": detail,
+                "title": title
+            });
+            console.log(response.data)
+            const data: BlogInterface = response.data.post;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_EDIT);
+
+        }
+    }
+);
+

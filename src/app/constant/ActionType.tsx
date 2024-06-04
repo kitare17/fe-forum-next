@@ -19,6 +19,7 @@ export const BlOG_SHOW_ALL="BLOG_SHOW_ALL"
 export const BlOG_REPORT="BlOG_REPORT"
 export const BlOG_REPORT_COMMENT="BlOG_REPORT_COMMENT"
 export const BlOG_REPLY_COMMENT="BlOG_REPLY_COMMENT"
+export const BlOG_EDIT="BlOG_EDIT"
 
 //TOPIC ACION
 export const TOPIC_FIND_ALL="TOPIC_FIND_ALL"

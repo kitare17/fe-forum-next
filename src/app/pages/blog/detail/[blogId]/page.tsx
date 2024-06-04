@@ -3,7 +3,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import Grid from '@mui/material/Grid';
 import Avatar from "@mui/material/Avatar";
-import {Card, CardHeader, Tooltip} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Card, CardHeader, Tooltip} from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -39,6 +39,8 @@ import ListItemText from "@mui/material/ListItemText";
 import FlagIcon from '@mui/icons-material/Flag';
 import ReportBlogDialog from "@/app/pages/blog/component/ReportBlogDialog";
 import ReportCommentDialog from "@/app/pages/blog/component/ReportCommentDialog";
+import FormEditDialog from "@/app/pages/blog/component/FormEdit";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Blog = () => {
 
@@ -142,9 +144,13 @@ const Blog = () => {
     const [openFormBlogReport, setOpenFormBlogReport] = useState<boolean>(false);
 
 
+    //state edit blog
+    const [openEditBlog, setOpenEditBlog] = useState<boolean>(false);
+
     //Handle edit / report main post
     const handleEditMainPost = () => {
-        alert("hanldEditMainPost ");
+        // alert("hanldEditMainPost ");
+        setOpenEditBlog(true);
 
     }
     const handleReportMainPost = () => {
@@ -167,9 +173,10 @@ const Blog = () => {
 
     }
 
+
+    //handle share
     const handleShare = () => {
         toast.success("Đã copy vào clipboard chia sẻ cho bạn bè nhé 😍😍😍");
-
         navigator.clipboard.writeText(window.location.href);
     }
 
@@ -283,10 +290,7 @@ const Blog = () => {
                     </Grid>
                     <Grid container
                           direction="row"
-                          justifyContent="center"
-                          alignItems="center"
                           spacing={2}
-                          mt={2}
                           mb={9}
                     >
                         {
@@ -294,8 +298,10 @@ const Blog = () => {
                                     return (
                                         <Grid
                                             key={comment._id}
-                                            item xs={11}>
-                                            <Card sx={{width: "100%"}}>
+                                            item xs={11}
+                                            sx={{display:"flex" ,justifyContent:"center"}}
+                                        >
+                                            <Card sx={{width: "80%", boxShadow: 5}}>
                                                 <CardHeader
                                                     avatar={
                                                         <Avatar
@@ -333,59 +339,76 @@ const Blog = () => {
                                                 <CardActions>
                                                     <ReplyIcon onClick={() => handleReplyOpen(comment._id)}/>
                                                 </CardActions>
+                                                {comment.replyComment.length > 0
+                                                    &&
+                                                    <Accordion sx={{width: "100%"}}>
+                                                        <AccordionSummary
+                                                            expandIcon={<ExpandMoreIcon/>}
+                                                            aria-controls="panel1-content"
+                                                            id="panel1-header"
+                                                        >
+
+                                                        <span
+                                                            style={{color: "#007bff"}}>Xem thêm bình luận ({comment.replyComment.length})</span>
+                                                        </AccordionSummary>
+                                                        <AccordionDetails>
+                                                            <Card sx={{width: "80%"}}>
+                                                                <Grid container
+                                                                      direction="row"
+                                                                      justifyContent="center"
+                                                                      alignItems="center"
+                                                                      spacing={2}
+                                                                      mt={2}
+                                                                      p={3}
+                                                                      sx={{bgcolor: '#f0eded'}}
+                                                                >
+                                                                    {
+                                                                        [...(comment.replyComment ?? [])].toReversed().map((replyCmt) => {
+                                                                            return (
+                                                                                <Card sx={{width: "95%", marginBottom: "10px"}}
+                                                                                      key={replyCmt._id}>
+                                                                                    <CardHeader
+                                                                                        avatar={
+                                                                                            <Avatar
+                                                                                                src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
+                                                                                                sx={{
+                                                                                                    width: 70,
+                                                                                                    height: 70
+                                                                                                }} aria-label="recipe">
+
+                                                                                            </Avatar>
+                                                                                        }
+                                                                                        // action={
+                                                                                        //     <IconButton
+                                                                                        //         id="menu-comment-btn"
+                                                                                        //         onClick={(e) => handleMenuCommentOpen(e, comment._id)}
+                                                                                        //         aria-controls={openMenuComment ? 'menu-comment' : undefined}
+                                                                                        //         aria-haspopup="true"
+                                                                                        //         aria-expanded={openMenuComment ? 'true' : undefined}
+                                                                                        //     >
+                                                                                        //         <MoreVertIcon/>
+                                                                                        //     </IconButton>
+                                                                                        // }
+                                                                                        title={`${replyCmt?.userComment?.fullname} (${replyCmt?.userComment?.username})`}
+                                                                                        subheader={`Bình luận ngày ${new Date(replyCmt?.createdAt).getDate()}/${new Date(replyCmt?.createdAt).getMonth() + 1}/${new Date(replyCmt?.createdAt).getFullYear()}`}
+
+                                                                                    />
+                                                                                    <CardContent>
+                                                                                        <p>{replyCmt.detail}</p>
+                                                                                    </CardContent>
+                                                                                </Card>
+                                                                            )
+                                                                        })
+                                                                    }
+
+                                                                </Grid>
+
+                                                            </Card>
+                                                        </AccordionDetails>
+                                                    </Accordion>
+                                                }
                                             </Card>
-                                            {comment.replyComment.length > 0 && <Card sx={{width: "100%"}}>
-                                                <Grid container
-                                                      direction="row"
-                                                      justifyContent="center"
-                                                      alignItems="center"
-                                                      spacing={2}
-                                                      mt={2}
-                                                      p={3}
-                                                      sx={{bgcolor: '#f0eded'}}
-                                                >
-                                                    {
-                                                        [...(comment.replyComment ?? [])].toReversed().map((replyCmt) => {
-                                                            return (
-                                                                <Card sx={{width: "95%", marginBottom: "10px"}}
-                                                                      key={replyCmt._id}>
-                                                                    <CardHeader
-                                                                        avatar={
-                                                                            <Avatar
-                                                                                src="https://gaming.vn/wp-content/uploads/2024/01/Solo-Leveling.jpg"
-                                                                                sx={{
-                                                                                    width: 70,
-                                                                                    height: 70
-                                                                                }} aria-label="recipe">
 
-                                                                            </Avatar>
-                                                                        }
-                                                                        // action={
-                                                                        //     <IconButton
-                                                                        //         id="menu-comment-btn"
-                                                                        //         onClick={(e) => handleMenuCommentOpen(e, comment._id)}
-                                                                        //         aria-controls={openMenuComment ? 'menu-comment' : undefined}
-                                                                        //         aria-haspopup="true"
-                                                                        //         aria-expanded={openMenuComment ? 'true' : undefined}
-                                                                        //     >
-                                                                        //         <MoreVertIcon/>
-                                                                        //     </IconButton>
-                                                                        // }
-                                                                        title={`${replyCmt?.userComment?.fullname} (${replyCmt?.userComment?.username})`}
-                                                                        subheader={`Bình luận ngày ${new Date(replyCmt?.createdAt).getDate()}/${new Date(replyCmt?.createdAt).getMonth() + 1}/${new Date(replyCmt?.createdAt).getFullYear()}`}
-
-                                                                    />
-                                                                    <CardContent>
-                                                                        <p>{replyCmt.detail}</p>
-                                                                    </CardContent>
-                                                                </Card>
-                                                            )
-                                                        })
-                                                    }
-
-                                                </Grid>
-
-                                            </Card>}
                                         </Grid>
                                     )
                                 }
@@ -500,6 +523,12 @@ const Blog = () => {
             <ReportCommentDialog blogId={blogId} setOpenFormCommentReport={setOpenFormCommentReport}
                                  openFormCommentReport={openFormCommentReport}
                                  commentId={commentIdReport}
+            />
+            <FormEditDialog openEditBlog={openEditBlog}
+                            setOpenEditBlog={setOpenEditBlog}
+                            blogId={blogId}
+                            detail={blogDetail.detail}
+                            title={blogDetail.title}
             />
         </Grid>
     )
