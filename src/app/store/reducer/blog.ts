@@ -2,9 +2,9 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {
     addNewComment,
-    createBlog, createReplyComment, createReport, createReportComment,
+    createBlog, createReplyComment, createReport, createReportComment, editBlog,
     findOneBlog,
-    likeBlog,
+    likeBlog, removeBlog, removeCommentBlog,
     showAllBlog,
     showOneTopic,
     unlikeBlog
@@ -27,11 +27,17 @@ interface InitialState {
 
 
 var initialState: InitialState = {
-    newBlog: {},
+    newBlog: {
+        detail:"",
+        title:""
+    },
     isLoading: false,
     isError: false,
     isSuccess: false,
-    blogDetail: {},
+    blogDetail: {
+        detail:"",
+        title:""
+    },
     listBlog: {
         posts: [],
         maxPage: 1
@@ -232,8 +238,6 @@ const blogSlice = createSlice({
 
             //REPLY COMMENT
             .addCase(createReplyComment.fulfilled, (state, action) => {
-
-                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
                 // @ts-ignore
                 state.blogDetail = action.payload;
                 // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
@@ -246,6 +250,63 @@ const blogSlice = createSlice({
                 state.isError = false
             })
             .addCase(createReplyComment.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+        //EDIT COMMENT
+            .addCase(editBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(editBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(editBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+
+            //REMOVE BLOG
+            .addCase(removeBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.message=action.payload.message
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(removeBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(removeBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+
+            //REMOVE COMMENT BLOG
+            .addCase(removeCommentBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.blogDetail=action.payload
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(removeCommentBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(removeCommentBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false

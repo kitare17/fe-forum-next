@@ -4,10 +4,10 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_ADD_CMT, BLOG_FIND_ONE, BlOG_REPORT_COMMENT, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 import {ReplyCommentInterface} from "@/app/interface/ReplyCommentInterface";
+import {BlOG_COMMENT_REMOVE, BlOG_REMOVE} from "../../constant/ActionType";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -200,6 +200,80 @@ export const createReplyComment = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_REPLY_COMMENT);
+
+        }
+    }
+);
+
+
+export const editBlog = createAsyncThunk(
+    Types.BlOG_EDIT,
+    async ({
+               postId,
+               detail,
+               title
+           }:
+               {
+                   detail: string,
+                   postId: string,
+                   title: string
+               }) => {
+        try {
+
+            const response = await axios.put('http://localhost:3001/posts/editDetail', {
+                "postId": postId,
+                "detail": detail,
+                "title": title
+            });
+            console.log(response.data)
+            const data: BlogInterface = response.data.post;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_EDIT);
+
+        }
+    }
+);
+
+export const removeBlog = createAsyncThunk(
+    Types.BlOG_REMOVE,
+    async ({
+               blogId
+           }:
+               {
+                   blogId: string,
+               }) => {
+        try {
+            alert(blogId);
+            const response = await axios.delete(`http://localhost:3001/posts/${blogId}`);
+            console.log(response.data)
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_REMOVE);
+
+        }
+    }
+);
+
+
+export const removeCommentBlog = createAsyncThunk(
+    Types.BlOG_COMMENT_REMOVE,
+    async ({
+               blogId,
+               commentId
+
+           }:
+               {
+                   blogId: string,
+                   commentId: string
+               }) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/posts/${blogId}/comments/${commentId}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_COMMENT_REMOVE);
 
         }
     }
