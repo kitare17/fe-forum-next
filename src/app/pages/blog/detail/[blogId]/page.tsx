@@ -41,6 +41,8 @@ import ReportBlogDialog from "@/app/pages/blog/component/ReportBlogDialog";
 import ReportCommentDialog from "@/app/pages/blog/component/ReportCommentDialog";
 import FormEditDialog from "@/app/pages/blog/component/FormEdit";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FormRemoveDialog from "@/app/pages/blog/component/FormRemove";
 
 const Blog = () => {
 
@@ -83,8 +85,8 @@ const Blog = () => {
     }, [])
 
     useEffect(() => {
-        if (isLoading)
-            toast.info("Đang tải thông tin")
+        // if (isLoading)
+        //     toast.info("Đang tải thông tin")
         if (isError)
             toast.error("lỗi rồi")
         if (isSuccess)
@@ -147,14 +149,21 @@ const Blog = () => {
     //state edit blog
     const [openEditBlog, setOpenEditBlog] = useState<boolean>(false);
 
-    //Handle edit / report main post
+    //state remove blog
+    const [openRemoveBlog, setOpenRemoveBlog] = useState<boolean>(false);
+
+
+    //Handle edit / report main post/ remove post
     const handleEditMainPost = () => {
-        // alert("hanldEditMainPost ");
         setOpenEditBlog(true);
 
     }
     const handleReportMainPost = () => {
         setOpenFormBlogReport(true)
+    }
+
+    const handleDeleteMainPost = () => {
+        setOpenRemoveBlog(true);
     }
 
 
@@ -299,7 +308,7 @@ const Blog = () => {
                                         <Grid
                                             key={comment._id}
                                             item xs={11}
-                                            sx={{display:"flex" ,justifyContent:"center"}}
+                                            sx={{display: "flex", justifyContent: "center"}}
                                         >
                                             <Card sx={{width: "80%", boxShadow: 5}}>
                                                 <CardHeader
@@ -352,7 +361,7 @@ const Blog = () => {
                                                             style={{color: "#007bff"}}>Xem thêm bình luận ({comment.replyComment.length})</span>
                                                         </AccordionSummary>
                                                         <AccordionDetails>
-                                                            <Card sx={{width: "80%"}}>
+                                                            <Card sx={{width: "100%"}}>
                                                                 <Grid container
                                                                       direction="row"
                                                                       justifyContent="center"
@@ -365,7 +374,10 @@ const Blog = () => {
                                                                     {
                                                                         [...(comment.replyComment ?? [])].toReversed().map((replyCmt) => {
                                                                             return (
-                                                                                <Card sx={{width: "95%", marginBottom: "10px"}}
+                                                                                <Card sx={{
+                                                                                    width: "95%",
+                                                                                    marginBottom: "10px"
+                                                                                }}
                                                                                       key={replyCmt._id}>
                                                                                     <CardHeader
                                                                                         avatar={
@@ -490,6 +502,13 @@ const Blog = () => {
                     </ListItemIcon>
                     <ListItemText primary="Báo cáo"/>
                 </MenuItem>
+
+                <MenuItem onClick={handleDeleteMainPost}>
+                    <ListItemIcon>
+                        <DeleteIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Xóa bài viết"/>
+                </MenuItem>
             </Menu>
 
 
@@ -530,6 +549,13 @@ const Blog = () => {
                             detail={blogDetail.detail}
                             title={blogDetail.title}
             />
+            <FormRemoveDialog
+                blogId={blogId}
+                openRemoveBlog={openRemoveBlog}
+                setOpenRemoveBlog={setOpenRemoveBlog}
+            />
+
+
         </Grid>
     )
 }
