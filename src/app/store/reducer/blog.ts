@@ -4,7 +4,7 @@ import {
     addNewComment,
     createBlog, createReplyComment, createReport, createReportComment, editBlog,
     findOneBlog,
-    likeBlog, removeBlog,
+    likeBlog, removeBlog, removeCommentBlog,
     showAllBlog,
     showOneTopic,
     unlikeBlog
@@ -288,6 +288,25 @@ const blogSlice = createSlice({
                 state.isError = false
             })
             .addCase(removeBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+
+            //REMOVE COMMENT BLOG
+            .addCase(removeCommentBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.blogDetail=action.payload
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(removeCommentBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(removeCommentBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false

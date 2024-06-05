@@ -43,6 +43,7 @@ import FormEditDialog from "@/app/pages/blog/component/FormEdit";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FormRemoveDialog from "@/app/pages/blog/component/FormRemove";
+import FormRemoveCommentDialog from '../../component/FormCommentRemove';
 
 const Blog = () => {
 
@@ -152,6 +153,9 @@ const Blog = () => {
     //state remove blog
     const [openRemoveBlog, setOpenRemoveBlog] = useState<boolean>(false);
 
+    //state remove comment blog
+    const [openRemoveCommentBlog, setOpenRemoveCommentBlog] = useState<boolean>(false);
+
 
     //Handle edit / report main post/ remove post
     const handleEditMainPost = () => {
@@ -174,7 +178,13 @@ const Blog = () => {
 
     //Handle edit / report comment
     const handleEditComment = () => {
-        alert("hanldEditComment");
+        alert("handleEditComment");
+
+    }
+
+    const handleRemoveComment = () => {
+        handleMenuCommentClose()
+        setOpenRemoveCommentBlog(true);
 
     }
     const handleReportComment = () => {
@@ -534,6 +544,12 @@ const Blog = () => {
                     </ListItemIcon>
                     <ListItemText primary="Báo cáo"/>
                 </MenuItem>
+                <MenuItem onClick={handleRemoveComment}>
+                    <ListItemIcon>
+                        <DeleteIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Xóa bình luận"/>
+                </MenuItem>
             </Menu>
 
             <ReportBlogDialog blogId={blogId} openFormBlogReport={openFormBlogReport}
@@ -553,6 +569,13 @@ const Blog = () => {
                 blogId={blogId}
                 openRemoveBlog={openRemoveBlog}
                 setOpenRemoveBlog={setOpenRemoveBlog}
+            />
+
+            <FormRemoveCommentDialog
+                blogId={blogId}
+                commentId={commentIdReport}
+                openRemoveCommentBlog={openRemoveCommentBlog}
+                setOpenRemoveCommentBlog={setOpenRemoveCommentBlog}
             />
 
 

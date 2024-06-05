@@ -7,7 +7,7 @@ import {toast} from "react-toastify";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 import {ReplyCommentInterface} from "@/app/interface/ReplyCommentInterface";
-import {BlOG_REMOVE} from "../../constant/ActionType";
+import {BlOG_COMMENT_REMOVE, BlOG_REMOVE} from "../../constant/ActionType";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -206,7 +206,6 @@ export const createReplyComment = createAsyncThunk(
 );
 
 
-
 export const editBlog = createAsyncThunk(
     Types.BlOG_EDIT,
     async ({
@@ -248,10 +247,33 @@ export const removeBlog = createAsyncThunk(
             alert(blogId);
             const response = await axios.delete(`http://localhost:3001/posts/${blogId}`);
             console.log(response.data)
-            const data= response.data;
+            const data = response.data;
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_REMOVE);
+
+        }
+    }
+);
+
+
+export const removeCommentBlog = createAsyncThunk(
+    Types.BlOG_COMMENT_REMOVE,
+    async ({
+               blogId,
+               commentId
+
+           }:
+               {
+                   blogId: string,
+                   commentId: string
+               }) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/posts/${blogId}/comments/${commentId}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_COMMENT_REMOVE);
 
         }
     }
