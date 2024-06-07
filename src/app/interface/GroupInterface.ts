@@ -9,5 +9,5 @@ export interface GroupInterface {
     status?:string,
     createdAt?:string,
     updatedAt?:string,
-    slug?:string[]
+    slug:string
 }

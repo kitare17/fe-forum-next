@@ -39,6 +39,7 @@ export const LOGOUT="LOGOUT"
 
 //GROUP
 export const GROUP_SHOW_ALL="GROUP_SHOW_ALL"
+export const GROUP_SHOW_ONE="GROUP_SHOW_ONE"
 
 
 //SALE ACTION
