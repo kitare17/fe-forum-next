@@ -4,8 +4,13 @@ import Avatar from "@mui/material/Avatar";
 import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
 import Grid from "@mui/material/Grid";
 import {GroupInterface} from "@/app/interface/GroupInterface";
+import {useRouter} from "next/navigation";
 
 const CardGroup = ({array}:{array:GroupInterface[]}) => {
+    const router=useRouter();
+    const handleJoinGroup=({slug}:{slug:string})=>{
+        router.push(`/pages/group/detail/${slug}`);
+    }
     return (
         <Grid container spacing={3} p={6} mb={2}>
         {
@@ -23,7 +28,7 @@ const CardGroup = ({array}:{array:GroupInterface[]}) => {
                                 }
                                 action={
                                     <Tooltip title="Tham gia">
-                                    <IconButton aria-label="settings">
+                                    <IconButton aria-label="settings" onClick={()=>handleJoinGroup({slug:group.slug})}>
                                         <ElectricBoltIcon />
                                     </IconButton>
                                     </Tooltip>

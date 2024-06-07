@@ -44,7 +44,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FormRemoveDialog from "@/app/pages/blog/component/FormRemove";
 import FormRemoveCommentDialog from '../../component/FormCommentRemove';
-
+import CircularProgress from '@mui/material/CircularProgress';
 const Blog = () => {
 
     const router = useRouter();
@@ -76,7 +76,8 @@ const Blog = () => {
         isLoading,
         isError,
         isSuccess,
-        message
+        message,
+        isLoadAddComment
     } =
         useSelector((state: RootState) => state.blog);
     useEffect(() => {
@@ -93,7 +94,7 @@ const Blog = () => {
         if (isSuccess)
             toast.success(message)
 
-    }, [isLoading, isError, isSuccess])
+    }, [isLoading, isError, isSuccess,isLoadAddComment])
 
     const handleLikeState = () => {
 
@@ -301,10 +302,16 @@ const Blog = () => {
                                 >
                                 </CKEditor>
                             </div>
-
+                            {!isLoadAddComment?
                             <Button onClick={handleComment} variant="contained" endIcon={<SendIcon/>}>
                                 Bình luận
                             </Button>
+
+                            :
+                                <Button disabled  variant="contained" endIcon={<CircularProgress size="1rem" />}>
+                                    Bình luận
+                                </Button>
+                            }
                         </Grid>
                     </Grid>
                     <Grid container

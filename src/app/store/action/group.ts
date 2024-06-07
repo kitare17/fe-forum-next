@@ -19,3 +19,17 @@ export const findAllGroup = createAsyncThunk(
         }
     }
 );
+
+export const findOneGroup = createAsyncThunk(
+    Types.GROUP_SHOW_ONE,
+    async ({slug}:{slug:number}) => {
+        console.log(slug)
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${slug}`);
+            const data:GroupInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_SHOW_ONE);
+        }
+    }
+);
