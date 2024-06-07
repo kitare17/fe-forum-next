@@ -22,6 +22,7 @@ interface InitialState {
     listBlog: { posts: BlogInterface[], maxPage: number },
     isLike: boolean,
     isSuccess: boolean,
+    isLoadAddComment:boolean,
     message: string
 }
 
@@ -34,6 +35,8 @@ var initialState: InitialState = {
     isLoading: false,
     isError: false,
     isSuccess: false,
+    isLoadAddComment: false,
+
     blogDetail: {
         detail:"",
         title:""
@@ -98,11 +101,13 @@ const blogSlice = createSlice({
             .addCase(addNewComment.fulfilled, (state, action) => {
                 // @ts-ignore
                 state.blogDetail = action.payload;
+                state.isLoadAddComment=false;
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(addNewComment.pending, (state, action) => {
-                state.isSuccess = false
+                state.isSuccess = false;
+                state.isLoadAddComment=true;
                 state.isLoading = true;
                 state.isError = false
             })
