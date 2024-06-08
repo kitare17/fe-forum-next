@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 
 
 import Tabs from '@mui/material/Tabs';
@@ -52,7 +52,7 @@ const GroupDetail = () => {
     };
     return (
         <div>
-            <h3 style={{textAlign:"center"}}>Nhóm {groupDetail?.groupName} </h3>
+            <h3 style={{textAlign: "center"}}>Nhóm {groupDetail?.groupName} </h3>
             <Grid container spacing={2}>
                 <Grid item xs={12} sx={{display: "flex", justifyContent: "center"}}>
                     <div style={{width: "90%"}}>
@@ -64,7 +64,9 @@ const GroupDetail = () => {
                             </Tabs>
                         </Box>
                         <CustomTabPanel value={value} index={0}>
-                            <NotificationGroup/>
+                            <Suspense>
+                                <NotificationGroup/>
+                            </Suspense>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
                             <GroupJob/>

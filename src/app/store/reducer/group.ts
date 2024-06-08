@@ -1,15 +1,18 @@
-import {findAllGroup, findOneGroup} from "@/app/store/action/group";
+import {findAllGroup, findAllNotification, findOneGroup} from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {Group} from "next/dist/shared/lib/router/utils/route-regex";
 import {GroupInterface} from "@/app/interface/GroupInterface";
+import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 
 interface InitialState {
     listGroup: [GroupInterface]|[],
+    listNotification: [GroupNotificationInterface]|[],
     isLoading: boolean,
     isError: boolean,
     maxPage: number,
+    maxPageNotification: number,
     groupDetail?: GroupInterface,
     isJoin:boolean
 }
@@ -18,6 +21,8 @@ interface InitialState {
 
 var initialState:InitialState = {
     listGroup: [],
+    maxPageNotification:1,
+    listNotification:[],
     isLoading: false,
     isError: false,
     isJoin: false,
@@ -63,6 +68,25 @@ const groupSlice = createSlice({
                 state.isError = false
             })
             .addCase(findOneGroup.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //FIND ALL GROUP NOTIFICATION
+        builder.addCase(findAllNotification.fulfilled, (state, action) => {
+
+            // @ts-ignore
+            state.listNotification=action.payload.notifications
+            state.maxPageNotification=action.payload.maxPage
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(findAllNotification.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(findAllNotification.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
             })

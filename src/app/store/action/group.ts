@@ -4,6 +4,7 @@ import axios from "axios";
 import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
+import {GROUP_NOTIFICATION_SHOW_ALL} from "../../constant/ActionType";
 
 
 export const findAllGroup = createAsyncThunk(
@@ -30,6 +31,22 @@ export const findOneGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_SHOW_ONE);
+        }
+    }
+);
+
+
+export const findAllNotification = createAsyncThunk(
+    Types.GROUP_NOTIFICATION_SHOW_ALL,
+    async ({page,groupId}:{page:number,groupId:string}) => {
+        console.log("page dipatch",page)
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${groupId}/notifications?page=${page}`);
+
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_NOTIFICATION_SHOW_ALL);
         }
     }
 );
