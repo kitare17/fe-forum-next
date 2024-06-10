@@ -6,8 +6,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {findAllNotification} from "@/app/store/action/group";
 import {useRouter, useSearchParams} from "next/navigation";
+import FormCreateNotification from "@/app/pages/group/component/FormCreateNotification";
+import Button from "@mui/material/Button";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-const NotificationGroup = () => {
+const NotificationGroup = ({groupId}:{
+    groupId:string
+}) => {
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -17,15 +22,16 @@ const NotificationGroup = () => {
 
     const dipatch = useDispatch();
     useEffect(() => {
-        console.log("page noti",page)
+        console.log("page noti", page)
+        if(groupId)
         // @ts-ignore
-        dipatch(findAllNotification({page: page, groupId: "666460ca76b649da27f6ba23"}))
-    }, [page])
+        dipatch(findAllNotification({page: page, groupId: groupId}))
+    }, [page,groupId])
 
     const handlePaging = (event: any, value: number) => {
         var currentUrl: string = window.location.href;
         if (currentUrl.indexOf("?page=") >= 0) {
-            var pushUrl: string = currentUrl.substring(0,currentUrl.lastIndexOf("?page="));
+            var pushUrl: string = currentUrl.substring(0, currentUrl.lastIndexOf("?page="));
             // alert("da co page")
             // alert(`${pushUrl}?page=${value}`)
 
@@ -40,8 +46,18 @@ const NotificationGroup = () => {
 
     };
 
+    const [openCreateNotification, setOpenCreateNotificationForm] = React.useState(false);
+
     return (
         <>
+            <Grid container justifyContent="flex-end">
+                <Button variant="contained" onClick={()=>setOpenCreateNotificationForm(true)}><AddCircleOutlineIcon/></Button>
+            </Grid>
+            <FormCreateNotification openCreateNotification={openCreateNotification}
+                                    setOpenCreateNotificationForm={setOpenCreateNotificationForm}
+                                    groupId={groupId}/>
+
+
             {listNotification.map((notification, index) => {
                 return (
                     <CardNotification title={notification.title} detail={notification.detail} key={index}/>

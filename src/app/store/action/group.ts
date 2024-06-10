@@ -5,6 +5,7 @@ import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {GROUP_NOTIFICATION_SHOW_ALL} from "../../constant/ActionType";
+import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 
 
 export const findAllGroup = createAsyncThunk(
@@ -47,6 +48,26 @@ export const findAllNotification = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_NOTIFICATION_SHOW_ALL);
+        }
+    }
+);
+
+
+export const createNotification = createAsyncThunk(
+    Types.GROUP_CREATE_NOTIFICATION,
+    async ({title,detail,group}:{title:string,detail:string,group:string}) => {
+        console.log("create ne")
+        try {
+            const response = await axios.post(`http://localhost:3001/groups/notification`,{
+                "title":title,
+                "detail":detail,
+                "group":group
+            });
+
+            const data:GroupNotificationInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE_NOTIFICATION);
         }
     }
 );

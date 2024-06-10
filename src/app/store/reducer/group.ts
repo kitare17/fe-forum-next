@@ -1,4 +1,4 @@
-import {findAllGroup, findAllNotification, findOneGroup} from "@/app/store/action/group";
+import {createNotification, findAllGroup, findAllNotification, findOneGroup} from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
@@ -7,27 +7,26 @@ import {GroupInterface} from "@/app/interface/GroupInterface";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 
 interface InitialState {
-    listGroup: [GroupInterface]|[],
-    listNotification: [GroupNotificationInterface]|[],
+    listGroup: [GroupInterface] | [],
+    listNotification: [GroupNotificationInterface] | [],
     isLoading: boolean,
     isError: boolean,
     maxPage: number,
     maxPageNotification: number,
     groupDetail?: GroupInterface,
-    isJoin:boolean
+    isJoin: boolean
 }
 
 
-
-var initialState:InitialState = {
+var initialState: InitialState = {
     listGroup: [],
-    maxPageNotification:1,
-    listNotification:[],
+    maxPageNotification: 1,
+    listNotification: [],
     isLoading: false,
     isError: false,
     isJoin: false,
-    maxPage:1,
-    groupDetail:undefined
+    maxPage: 1,
+    groupDetail: undefined
 }
 const groupSlice = createSlice({
     name: "group",
@@ -39,8 +38,8 @@ const groupSlice = createSlice({
         builder.addCase(findAllGroup.fulfilled, (state, action) => {
 
             // @ts-ignore
-            state.listGroup=action.payload.groups;
-            state.maxPage=action.payload.maxPage
+            state.listGroup = action.payload.groups;
+            state.maxPage = action.payload.maxPage
             state.isLoading = false;
             state.isError = false;
         })
@@ -58,7 +57,7 @@ const groupSlice = createSlice({
         builder.addCase(findOneGroup.fulfilled, (state, action) => {
 
             // @ts-ignore
-            state.groupDetail=action.payload;
+            state.groupDetail = action.payload;
             state.isLoading = false;
             state.isError = false;
         })
@@ -76,8 +75,8 @@ const groupSlice = createSlice({
         builder.addCase(findAllNotification.fulfilled, (state, action) => {
 
             // @ts-ignore
-            state.listNotification=action.payload.notifications
-            state.maxPageNotification=action.payload.maxPage
+            state.listNotification = action.payload.notifications
+            state.maxPageNotification = action.payload.maxPage
             state.isLoading = false;
             state.isError = false;
         })
@@ -90,7 +89,23 @@ const groupSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
             })
+        //CREATE GROUP NOTIFICATION
+        builder.addCase(createNotification.fulfilled, (state, action) => {
 
+            // @ts-ignore
+            state.listNotification=[action.payload,...state.listNotification]
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createNotification.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createNotification.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
     }
 
 })

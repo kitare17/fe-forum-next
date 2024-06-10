@@ -20,7 +20,8 @@ import {createDayToString} from "@/app/constant/Fomart";
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
 }
-
+// @ts-ignore
+import DOMPurify from 'dompurify';
 const ExpandMore = styled((props: ExpandMoreProps) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
@@ -80,7 +81,10 @@ export default function CardNotification({title,detail}:{title:string,detail:str
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
                     <Typography paragraph>
-                        {detail}
+
+                        <div className="Container"
+                             dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(detail)}}></div>
+
                     </Typography>
                 </CardContent>
             </Collapse>
