@@ -3,7 +3,7 @@ import {
     findAllGroup,
     findAllNotification,
     findOneGroup,
-    getAllMember
+    getAllMember, removeMember
 } from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
@@ -22,7 +22,7 @@ interface InitialState {
     maxPageNotification: number,
     groupDetail?: GroupInterface,
     isJoin: boolean,
-    members?:[UserInterface]
+    members?: [UserInterface]
 }
 
 
@@ -134,6 +134,30 @@ const groupSlice = createSlice({
                 state.isError = true;
             })
 
+        //REMOVE MEMBER
+        builder.addCase(removeMember.fulfilled, (state, action) => {
+
+            console.log("data tra ve", action.payload)
+            if(action.payload.members.length>0)
+            // @ts-ignore
+            state.members = [...state.members.filter((member) => action.payload.members.includes(member._id) > 0)]
+            else{
+                // @ts-ignore
+                state.members=[];
+            }
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(removeMember.pending, (state, action) => {
+
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(removeMember.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
 
     }
 })

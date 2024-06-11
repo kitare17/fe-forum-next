@@ -8,7 +8,7 @@ import CardMember from "@/app/pages/group/component/CardMember";
 const MemberList = ({groupId}:{groupId:string}) => {
 
     const dipatch = useDispatch();
-    const {members, isLoading, isError} = useSelector((state: RootState) => state.group);
+    const {members,groupDetail, isLoading, isError} = useSelector((state: RootState) => state.group);
 
     useEffect(() => {
         if(groupId)
@@ -27,7 +27,7 @@ const MemberList = ({groupId}:{groupId:string}) => {
 
     return (
         <>
-            <CardMember members={members} />
+            <CardMember members={members} groupId={groupId} groupDetail={groupDetail} />
         </>
     );
 };
