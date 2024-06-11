@@ -9,8 +9,9 @@ import TextField from "@mui/material/TextField";
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Button from "@mui/material/Button";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
+import {joinGroup} from "@/app/store/action/group";
 
 const PassJoinGroup = () => {
 
@@ -32,12 +33,17 @@ const PassJoinGroup = () => {
     );
     const {errors} = formState;
 
+    const dipatch=useDispatch();
 
     const {groupDetail} = useSelector((state: RootState) => state.group);
 
 
     const handleJoinGroup = () => {
-
+        alert("join group for fun")
+        const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
+        const groupId =groupDetail?._id;
+        // @ts-ignore
+        dipatch(joinGroup({groupId:groupId, userId:user.userEmailId}))
 
     }
 
@@ -66,9 +72,8 @@ const PassJoinGroup = () => {
                         <h3 style={{textAlign: "center"}}>Tham gia nhóm {groupDetail?.groupName} </h3>
 
 
-
-                    <TextField
-                        id="title"
+                        <TextField
+                            id="title"
                             fullWidth
                             margin="normal"
                             required

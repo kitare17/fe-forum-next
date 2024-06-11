@@ -3,7 +3,7 @@ import {
     findAllGroup,
     findAllNotification,
     findOneGroup,
-    getAllMember, removeMember
+    getAllMember, joinGroup, removeMember
 } from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
@@ -62,14 +62,24 @@ const groupSlice = createSlice({
 
         //FIND ONE GROUP
         builder.addCase(findOneGroup.fulfilled, (state, action) => {
+            const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
+            if (action.payload?.members.includes(user.userEmailId) || action.payload?.adminGroup._id === user.userEmailId) {
+                // console.log("member",action.payload?.members)
+                // console.log("user id ",user.userEmailId)
+                // console.log("Check nhom truong",action.payload?.adminGroup._id===user.userEmailId)
+                // console.log("Check thanh vien",action.payload?.members.includes(user.userEmailId))
+                // console.log("thanh vien do")
+                state.isJoin = true
+            }
 
             // @ts-ignore
             state.groupDetail = action.payload;
             state.isLoading = false;
             state.isError = false;
+
         })
             .addCase(findOneGroup.pending, (state, action) => {
-
+                state.isJoin = false;
                 state.isLoading = true;
                 state.isError = false
             })
@@ -136,13 +146,13 @@ const groupSlice = createSlice({
         //REMOVE MEMBER
         builder.addCase(removeMember.fulfilled, (state, action) => {
 
-            console.log("data tra ve", action.payload)
-            if(action.payload.members.length>0)
-            // @ts-ignore
-            state.members = [...state.members.filter((member) => action.payload.members.includes(member._id) > 0)]
-            else{
+
+            if (action.payload.members.length > 0)
                 // @ts-ignore
-                state.members=[];
+                state.members = [...state.members.filter((member) => action.payload.members.includes(member._id) > 0)]
+            else {
+                // @ts-ignore
+                state.members = [];
             }
             state.isLoading = false;
             state.isError = false;
@@ -158,6 +168,27 @@ const groupSlice = createSlice({
                 state.isError = true;
             })
 
+        //JOIN GROUP
+
+        builder.addCase(joinGroup.fulfilled, (state, action) => {
+            const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
+
+            if (action.payload.members.includes(user.userEmailId)){
+                state.isJoin=true;
+            }
+
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(joinGroup.pending, (state, action) => {
+                state.isJoin=false;
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(joinGroup.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
     }
 })
 
