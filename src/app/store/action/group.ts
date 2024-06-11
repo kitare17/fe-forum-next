@@ -4,8 +4,9 @@ import axios from "axios";
 import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
-import {GROUP_NOTIFICATION_SHOW_ALL} from "../../constant/ActionType";
+import {GROUP_GET_ALL_MEMBER, GROUP_NOTIFICATION_SHOW_ALL} from "../../constant/ActionType";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
+import {UserInterface} from "@/app/interface/User";
 
 
 export const findAllGroup = createAsyncThunk(
@@ -68,6 +69,22 @@ export const createNotification = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_CREATE_NOTIFICATION);
+        }
+    }
+);
+
+export const getAllMember = createAsyncThunk(
+    Types.GROUP_GET_ALL_MEMBER,
+    async ({groupId}:{groupId:string}) => {
+        console.log("lay member ne"+ groupId)
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${groupId}/members`);
+
+            const data:UserInterface[] = response.data.members;
+            console.log("member",response.data.members)
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_GET_ALL_MEMBER);
         }
     }
 );

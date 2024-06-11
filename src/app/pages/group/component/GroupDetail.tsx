@@ -72,7 +72,7 @@ const GroupDetail = () => {
                             <GroupJob/>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            <MemberList/>
+                            <MemberList groupId={(groupDetail?._id)??""}/>
                         </CustomTabPanel>
 
                     </div>

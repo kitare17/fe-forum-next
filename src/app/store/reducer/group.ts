@@ -1,10 +1,17 @@
-import {createNotification, findAllGroup, findAllNotification, findOneGroup} from "@/app/store/action/group";
+import {
+    createNotification,
+    findAllGroup,
+    findAllNotification,
+    findOneGroup,
+    getAllMember
+} from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {Group} from "next/dist/shared/lib/router/utils/route-regex";
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
+import {UserInterface} from "@/app/interface/User";
 
 interface InitialState {
     listGroup: [GroupInterface] | [],
@@ -14,7 +21,8 @@ interface InitialState {
     maxPage: number,
     maxPageNotification: number,
     groupDetail?: GroupInterface,
-    isJoin: boolean
+    isJoin: boolean,
+    members?:[UserInterface]
 }
 
 
@@ -93,7 +101,7 @@ const groupSlice = createSlice({
         builder.addCase(createNotification.fulfilled, (state, action) => {
 
             // @ts-ignore
-            state.listNotification=[action.payload,...state.listNotification]
+            state.listNotification = [action.payload, ...state.listNotification]
             state.isLoading = false;
             state.isError = false;
         })
@@ -106,8 +114,28 @@ const groupSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
             })
-    }
 
+
+        //GET ALL MEMBER
+        builder.addCase(getAllMember.fulfilled, (state, action) => {
+
+            // @ts-ignore
+            state.members = action.payload
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(getAllMember.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getAllMember.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+
+    }
 })
 
 export default groupSlice.reducer;
