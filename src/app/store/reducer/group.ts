@@ -33,8 +33,7 @@ var initialState: InitialState = {
     isLoading: false,
     isError: false,
     isJoin: false,
-    maxPage: 1,
-    groupDetail: undefined
+    maxPage: 1
 }
 const groupSlice = createSlice({
     name: "group",

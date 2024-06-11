@@ -23,7 +23,7 @@ import {GroupInterface} from "@/app/interface/GroupInterface";
 const CardMember = ({groupId, members, groupDetail}: {
     groupId: string,
     members: [UserInterface] | undefined,
-    groupDetail: GroupInterface
+    groupDetail: GroupInterface | undefined
 }) => {
 
     const dipatch = useDispatch();
@@ -70,8 +70,8 @@ const CardMember = ({groupId, members, groupDetail}: {
                                     </IconButton>
                                 </Tooltip>
                             }
-                            title={groupDetail.adminGroup.fullname}
-                            subheader={groupDetail.adminGroup.username}
+                            title={groupDetail?.adminGroup.fullname}
+                            subheader={groupDetail?.adminGroup.username}
                         />
                     </Card>
                 </Grid>
