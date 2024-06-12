@@ -15,3 +15,9 @@ export function FormatCurrency(number:number) {
 
     return main + decimal + ' VND';
 }
+
+
+export function createDayToString(createdAt:string) {
+
+    return `Đăng ngày ${new Date(createdAt).getDate()}/${new Date(createdAt).getMonth() + 1}/${new Date(createdAt).getFullYear()}`;
+}

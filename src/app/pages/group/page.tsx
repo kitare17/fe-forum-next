@@ -46,27 +46,32 @@ const GroupPage = () => {
             <SearchGroup/>
 
             <CardGroup array={listGroup}/>
-
-            <Grid item xs={10}
+            <Grid container
                   sx={{
                       display: 'flex',
                       justifyContent: 'center'
                   }}
                   mb={2}
             >
-                <Pagination
-                    onChange={handlePaging}
-                    count={maxPage}
-                    defaultPage={1}
-                    siblingCount={1}
-                    size="large"
-                    showLastButton
-                    showFirstButton/>
+                <Grid item xs={10}
+                      sx={{
+                          display: 'flex',
+                          justifyContent: 'center'
+                      }}
+                >
+                    <Pagination
+                        onChange={handlePaging}
+                        count={maxPage}
+                        defaultPage={1}
+                        siblingCount={1}
+                        size="large"
+                        showLastButton
+                        showFirstButton/>
+                </Grid>
             </Grid>
         </>
     );
 };
-
 
 
 const GroupPageRender = () => {
