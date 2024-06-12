@@ -11,6 +11,7 @@ import {toast} from "react-toastify";
 import {findAllGroup, findAllGroupByName} from "@/app/store/action/group";
 
 import {useRouter, useSearchParams} from "next/navigation";
+import CreateModalGroup from "@/app/pages/group/component/ModalCreateGroup";
 
 const GroupPage = () => {
     const router = useRouter();
@@ -58,7 +59,7 @@ const GroupPage = () => {
     return (
         <>
             <SearchGroup />
-
+            <CreateModalGroup/>
             <CardGroup array={listGroup}/>
             <Grid container
                   sx={{

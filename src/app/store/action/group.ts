@@ -5,6 +5,7 @@ import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {
+    GROUP_CREATE,
     GROUP_FIND_BY_NAME,
     GROUP_GET_ALL_MEMBER,
     GROUP_JOIN,
@@ -144,6 +145,24 @@ export const joinGroup = createAsyncThunk(
             // @ts-ignore
             const errorData = error as AxiosError;
             return rejectWithValue({data: errorData.response?.data});
+        }
+    }
+);
+
+export const createGroup = createAsyncThunk(
+    Types.GROUP_CREATE,
+    async ({groupName, password, adminGroup}: { groupName: string, password: string, adminGroup: string }) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/groups`, {
+                "groupName":groupName,
+                "adminGroup":adminGroup,
+                "password":password
+            });
+
+            const data: GroupInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE);
         }
     }
 );

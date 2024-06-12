@@ -1,4 +1,5 @@
 import {
+    createGroup,
     createNotification,
     findAllGroup, findAllGroupByName,
     findAllNotification,
@@ -214,6 +215,24 @@ const groupSlice = createSlice({
 
                 // @ts-ignore
                 state.message = action.payload?.data?.message
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        builder.addCase(createGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listGroup = [action.payload, ...state.listGroup]
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createGroup.pending, (state, action) => {
+                state.message = ""
+                state.isJoin = false;
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createGroup.rejected, (state, action) => {
+
                 state.isLoading = false;
                 state.isError = true;
             })
