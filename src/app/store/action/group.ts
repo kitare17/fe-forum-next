@@ -113,12 +113,13 @@ export const removeMember = createAsyncThunk(
 
 export const joinGroup = createAsyncThunk(
     Types.GROUP_JOIN,
-    async ({groupId, userId}: { groupId: string, userId: string }) => {
+    async ({groupId, userId,password}: { groupId: string, userId: string,password:string }, {rejectWithValue}) => {
 
         try {
             const response = await axios.put(`http://localhost:3001/groups/${groupId}/members`,
                 {
-                    userId: userId
+                    userId: userId,
+                    password:password
                 }
             );
 
@@ -126,6 +127,9 @@ export const joinGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_JOIN);
+            // @ts-ignore
+            const errorData = error as AxiosError;
+            return rejectWithValue({data: errorData.response?.data});
         }
     }
 );

@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Controller, useForm} from "react-hook-form";
 import {BlogInterface} from "@/app/interface/Blog";
 import Grid from "@mui/material/Grid";
@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {joinGroup} from "@/app/store/action/group";
+import {toast} from "react-toastify";
 
 const PassJoinGroup = () => {
 
@@ -33,17 +34,21 @@ const PassJoinGroup = () => {
     );
     const {errors} = formState;
 
-    const dipatch=useDispatch();
+    const dipatch = useDispatch();
 
-    const {groupDetail} = useSelector((state: RootState) => state.group);
+    const {groupDetail, message} = useSelector((state: RootState) => state.group);
 
+    useEffect(() => {
+        if (message)
+            toast.error(message)
+    }, [message])
 
     const handleJoinGroup = () => {
-        alert("join group for fun")
         const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
-        const groupId =groupDetail?._id;
+        const groupId = groupDetail?._id;
+        const password = getValues("password");
         // @ts-ignore
-        dipatch(joinGroup({groupId:groupId, userId:user.userEmailId}))
+        dipatch(joinGroup({groupId: groupId, userId: user.userEmailId, password: password}))
 
     }
 

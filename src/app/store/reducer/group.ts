@@ -22,7 +22,8 @@ interface InitialState {
     maxPageNotification: number,
     groupDetail?: GroupInterface,
     isJoin: boolean,
-    members?: [UserInterface]
+    members?: [UserInterface],
+    message?:string
 }
 
 
@@ -181,11 +182,15 @@ const groupSlice = createSlice({
             state.isError = false;
         })
             .addCase(joinGroup.pending, (state, action) => {
+                state.message=""
                 state.isJoin=false;
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(joinGroup.rejected, (state, action) => {
+
+                // @ts-ignore
+                state.message=action.payload?.data?.message
                 state.isLoading = false;
                 state.isError = true;
             })
