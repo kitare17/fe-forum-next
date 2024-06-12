@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-const DialogComponent=()=>{
+const DialogComponent = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -13,7 +13,7 @@ const DialogComponent=()=>{
     const handleClose = () => {
         setAnchorEl(null);
     };
-    return(
+    return (
         <>
             <Button
                 id="basic-button"

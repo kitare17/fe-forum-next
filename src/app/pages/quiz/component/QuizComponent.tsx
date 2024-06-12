@@ -1,13 +1,14 @@
-"use client";
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { Box, TextField, Button, Grid, Typography, Checkbox, FormControlLabel } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { Box, TextField, Button, Grid, Typography, Checkbox, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { QuizInterface } from "@/app/interface/Quizz";
+import { createQuiz } from "@/app/store/action/quiz";
 
 const QuizComponent = () => {
     const router = useRouter();
-
+    const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
@@ -19,10 +20,10 @@ const QuizComponent = () => {
             questions: [
                 { name: "", answers: [{ answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }] }
             ],
-            deckId: "",
-            deckName: "",
+            deckName: "fdg",
             regionType: "",
-            deckOwner: "",
+            deckOwner: "60d0fe4f5311236168a109ca",
+            deckId: ""
         },
     });
 
@@ -31,17 +32,8 @@ const QuizComponent = () => {
         name: "questions",
     });
 
-    const handleCreateQuiz = () => {
-        const newQuiz = {
-            questions: getValues("questions"),
-            deckId: getValues("deckId"),
-            deckName: getValues("deckName"),
-            regionType: getValues("regionType"),
-            deckOwner: getValues("deckOwner"),
-        };
-        console.log(newQuiz);
-        // Dispatch createQuiz action or handle API call here
-        router.replace("/");
+    const handleCreateQuiz = (data: QuizInterface) => {
+        dispatch(createQuiz(data));
     };
 
     return (
@@ -51,17 +43,7 @@ const QuizComponent = () => {
                     <Box onSubmit={handleSubmit(handleCreateQuiz)} component="form" noValidate autoComplete="off">
                         <Typography variant="h4" sx={{ textAlign: "center" }}>Tạo Flashcard mới</Typography>
                         <h4>Chủ đề</h4>
-                        <TextField
-                            id="deckId"
-                            fullWidth
-                            margin="normal"
-                            required
-                            label="Deck ID"
-                            variant="outlined"
-                            {...register("deckId", { required: "Phải nhập Deck ID" })}
-                            error={!!errors.deckId}
-                            helperText={errors.deckId?.message}
-                        />
+
                         <TextField
                             id="deckName"
                             fullWidth
@@ -70,14 +52,23 @@ const QuizComponent = () => {
                             variant="outlined"
                             {...register("deckName")}
                         />
-                        <TextField
-                            id="regionType"
-                            fullWidth
-                            margin="normal"
-                            label="Region Type"
-                            variant="outlined"
-                            {...register("regionType")}
-                        />
+                        <FormControl component="fieldset" fullWidth margin="normal" required>
+                            <FormLabel component="legend">Riêng tư hoặc công khai</FormLabel>
+                            <RadioGroup
+                                {...register("regionType", { required: "Phải chọn loại vùng" })}
+                            >
+                                <FormControlLabel
+                                    value="private"
+                                    control={<Radio />}
+                                    label="Riêng tư"
+                                />
+                                <FormControlLabel
+                                    value="public"
+                                    control={<Radio />}
+                                    label="Công khai"
+                                />
+                            </RadioGroup>
+                        </FormControl>
                         <h4>Tạo Câu Hỏi</h4>
 
                         {questionFields.map((question, questionIndex) => (
@@ -85,7 +76,7 @@ const QuizComponent = () => {
                                 <TextField
                                     fullWidth
                                     margin="normal"
-                                    label={`Question ${questionIndex + 1}`}
+                                    label={`Câu hỏi ${questionIndex + 1}`}
                                     variant="outlined"
                                     {...register(`questions.${questionIndex}.name`, { required: "Phải nhập câu hỏi" })}
                                     error={!!errors.questions?.[questionIndex]?.name}
@@ -100,7 +91,7 @@ const QuizComponent = () => {
                                                     <TextField
                                                         fullWidth
                                                         margin="normal"
-                                                        label={`Answer ${answerIndex + 1}`}
+                                                        label={`trả lời ${answerIndex + 1}`}
                                                         variant="outlined"
                                                         {...register(`questions.${questionIndex}.answers.${answerIndex}.answerName`, { required: "Phải nhập câu trả lời" })}
                                                         error={!!errors.questions?.[questionIndex]?.answers?.[answerIndex]?.answerName}
@@ -108,7 +99,7 @@ const QuizComponent = () => {
                                                     />
                                                     <FormControlLabel
                                                         control={<Checkbox {...register(`questions.${questionIndex}.answers.${answerIndex}.isAnswer`)} />}
-                                                        label="Is Correct Answer"
+                                                        label="Đáp án đúng"
                                                     />
                                                 </Box>
                                             ))}

@@ -7,6 +7,8 @@ import blog from "./reducer/blog"
 import topic from "@/app/store/reducer/topic";
 import group from "@/app/store/reducer/group";
 import sale from "@/app/store/reducer/sale";
+import quiz from "@/app/store/reducer/quiz";
+
 export const index =
     configureStore({
             reducer: {
@@ -16,7 +18,8 @@ export const index =
                 topic:topic,
                 auth: auth,
                 group: group,
-                sale: sale
+                sale: sale,
+                quiz:  quiz
             }
         }
     )

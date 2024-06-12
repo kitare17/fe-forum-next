@@ -15,7 +15,7 @@ const Header = () => {
             }}
         >
             <Button
-                onClick={() => router.push(`/page/quiz/createDeck`)}
+                onClick={() => router.push(`/pages/quiz/createDeck`)}
                 size="small"
                 color="inherit"
                 variant="outlined"
@@ -24,7 +24,7 @@ const Header = () => {
                 Tạo chủ đề
             </Button>
             <Button
-                onClick={() => router.push(`/page/quiz/createQuiz`)}
+                onClick={() => router.push(`/pages/quiz/createQuiz`)}
                 size="small"
                 color="inherit"
                 variant="outlined"

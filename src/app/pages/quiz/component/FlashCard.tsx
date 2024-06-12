@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardContent, Typography, List, ListItem, ListItemText } from '@mui/material';
-import { QuizInterface } from "@/app/interface/Quizz";
+import { FlashCardInterface, Question } from "@/app/interface/Quizz";
 
 interface Props {
-    flashcard: QuizInterface; // Specify the type of the flashcard prop
+    question: Question; // Specify the type of the flashcard prop
     showAnswer: boolean; // State to manage the visibility of the answer
     setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>; // Function to set the visibility of the answer
 }
 
-const FlashCard: React.FC<Props> = ({ flashcard, showAnswer, setShowAnswer }) => {
-
+const FlashCard: React.FC<Props> = ({ question, showAnswer, setShowAnswer }) => {
     const handleToggle = () => {
         setShowAnswer(!showAnswer);
     };
 
-    const correctAnswer = flashcard.questions[0].answers.find(answer => answer.isAnswer);
+    const correctAnswer = question.answers.find(answer => answer.isAnswer);
 
     return (
         <Card
@@ -30,6 +29,7 @@ const FlashCard: React.FC<Props> = ({ flashcard, showAnswer, setShowAnswer }) =>
                         gutterBottom
                         sx={{
                             display: 'flex',
+                            height: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
                         }}
@@ -39,10 +39,10 @@ const FlashCard: React.FC<Props> = ({ flashcard, showAnswer, setShowAnswer }) =>
                 ) : (
                     <>
                         <Typography variant="h5" component="h3" gutterBottom>
-                            {flashcard.questions[0].name}
+                            {question.name}
                         </Typography>
                         <List>
-                            {flashcard.questions[0].answers.map((answer, index) => (
+                            {question.answers.map((answer, index) => (
                                 <ListItem key={index}>
                                     <ListItemText
                                         primary={answer.answerName}
@@ -54,7 +54,6 @@ const FlashCard: React.FC<Props> = ({ flashcard, showAnswer, setShowAnswer }) =>
                     </>
                 )}
             </CardContent>
-
         </Card>
     );
 };

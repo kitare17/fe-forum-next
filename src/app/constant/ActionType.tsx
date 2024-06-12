@@ -41,6 +41,11 @@ export const GROUP_SHOW_ALL = "GROUP_SHOW_ALL"
 export const QUIZ_CREATE = 'QUIZ_CREATE';
 export const QUIZ_FIND_ONE = 'QUIZ_FIND_ONE';
 export const QUIZ_SHOW_ALL = 'QUIZ_SHOW_ALL';
+// Deck 
+export const DECK_CREATE = 'DECK_CREATE';
+export const DECK_SHOW_ALL = 'DECK_SHOW_ALL';
+
+
 
 
 //SALE ACTION

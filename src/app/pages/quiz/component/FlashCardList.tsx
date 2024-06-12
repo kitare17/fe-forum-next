@@ -1,70 +1,134 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FlashCard from './FlashCard';
-import { Grid, Button, Box } from '@mui/material';
+import ListCard from './ListCard';
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/store";
+import { showAllQuizzes } from "@/app/store/action/quiz";
 
-const FlashCardList = () => {
+import { Grid, Button, Box, IconButton } from '@mui/material';
+import { useRouter } from "next/navigation";
+import { ArrowForward, ArrowBack } from '@mui/icons-material';
+import { FlashCardInterface } from '@/app/interface/Quizz';
+
+const FlashCardList = (deckId: any) => {
+    const router = useRouter();
     const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
-    const flashcards = [
-        {
-            questions: [
-                {
-                    name: "What is the capital of France?",
-                    answers: [
-                        { answerName: "Paris", isAnswer: true },
-                        { answerName: "London", isAnswer: false },
-                        { answerName: "Mascova", isAnswer: false },
-                        { answerName: "Berlin", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113562",
-            deckName: "Europe Capitals",
-            regionType: "Geography",
-            deckOwner: "John Doe"
-        },
-        {
-            questions: [
-                {
-                    name: "What is the capital of Japan?",
-                    answers: [
-                        { answerName: "Tokyo", isAnswer: true },
-                        { answerName: "Beijing", isAnswer: false },
-                        { answerName: "Seoul", isAnswer: false },
-                        { answerName: "Bangkok", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113563",
-            deckName: "Asia Capitals",
-            regionType: "Geography",
-            deckOwner: "Jane Doe"
-        }
-    ];
+
+    const dipatch = useDispatch();
+    const { listFlashCard, isLoading, isError } = useSelector((state: RootState) => state.quiz);
+
+    useEffect(() => {
+        // @ts-ignore
+        dipatch(showAllQuizzes());
+
+    }, [])
+
+    const flashCardDetail: FlashCardInterface | undefined = listFlashCard.find(card => card.deckId._id == deckId.deckId);
 
     const handleNext = () => {
-        setCurrentFlashcardIndex((prevIndex) => (prevIndex + 1) % flashcards.length);
+        setCurrentFlashcardIndex((prevIndex) => (prevIndex + 1) % listFlashCard[0].questions.length);
         setShowAnswer(false); // Reset showAnswer state to false
     };
 
     const handleBack = () => {
-        setCurrentFlashcardIndex((prevIndex) => (prevIndex - 1 + flashcards.length) % flashcards.length);
+        setCurrentFlashcardIndex((prevIndex) => (prevIndex - 1 + listFlashCard[0].questions.length) % listFlashCard[0].questions.length);
         setShowAnswer(false); // Reset showAnswer state to false
     };
 
+
     return (
-        <Box>
-            <Grid container justifyContent="center">
-                <Grid sx={{ padding: '20px' }} item xs={12} sm={6} md={4} lg={6}>
-                    <FlashCard flashcard={flashcards[currentFlashcardIndex]} showAnswer={showAnswer} setShowAnswer={setShowAnswer} />
-                </Grid>
-            </Grid>
-            <Box display="flex" justifyContent="center" mt={2}>
-                <Button variant="contained" onClick={handleBack} sx={{ mr: 2 }}>Back</Button>
-                <Button variant="contained" onClick={handleNext}>Next</Button>
+        <>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: '17px',
+                    padding: '20px',
+                    gap: '10px'
+                }}
+            >
+
+                <Button
+                    onClick={() => router.push(`/pages/quiz/testExam`)}
+                    size="small"
+                    color="inherit"
+                    variant="outlined"
+                >
+                    Kiểm tra
+                </Button>
+                <Button
+                    onClick={() => router.push(`/page/test`)}
+                    size="small"
+                    color="inherit"
+                    variant="outlined"
+                >
+                    Lịch sử kiểm tra
+                </Button>
             </Box>
-        </Box>
-    ); 
+
+            <Box>
+
+                <Grid container justifyContent="center">
+                    <Grid sx={{ padding: '20px' }} item xs={12} sm={6} md={4} lg={6}>
+                        {flashCardDetail &&
+                            <FlashCard question={flashCardDetail.questions[currentFlashcardIndex]} showAnswer={showAnswer} setShowAnswer={setShowAnswer} />
+                        }
+                    </Grid>
+                </Grid>
+
+                <Box display="flex" justifyContent="center" mb={6}>
+                    <IconButton
+                        onClick={handleBack}
+                        sx={{
+                            padding: '10px',
+                            borderRadius: '50%',
+                            backgroundColor: 'lightgray',
+                            '&:hover': {
+                                backgroundColor: 'gray',
+                            },
+                            mr: 2
+                        }}
+                    >
+                        <ArrowBack />
+                    </IconButton>
+                    <IconButton
+                        onClick={handleNext}
+                        sx={{
+                            padding: '10px',
+                            borderRadius: '50%',
+                            backgroundColor: 'lightgray',
+                            '&:hover': {
+                                backgroundColor: 'gray',
+                            },
+                        }}
+                    >
+                        <ArrowForward />
+                    </IconButton>
+                </Box>
+
+
+
+                <Grid container
+                    direction="row"
+                    alignItems="center"
+                    justifyContent='center'
+                    spacing={2}
+                    mb={9}
+                    p={2}
+                >
+
+                    {flashCardDetail?.questions.map((question, index) => (
+                        <Grid item key={index} >
+                            <ListCard question={question} />
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+        </>
+
+    );
 }
 
 export default FlashCardList;

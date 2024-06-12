@@ -1,101 +1,27 @@
-import React from 'react'
+
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDecks } from "@/app/store/action/quiz";
+import { RootState } from "@/app/store";
+
 import DeckCard from './DeckCard';
 import Header from './Header';
+import Link from "next/link";
 
 import { Grid, Box } from '@mui/material';
 import { useRouter } from "next/navigation";
 
 const DeckComponent = () => {
     const router = useRouter();
-    const Decks = [
-        {
-            questions: [
-                {
-                    name: "Math",
-                    answers: [
-                        { answerName: "Paris", isAnswer: true },
-                        { answerName: "London", isAnswer: false },
-                        { answerName: "Mascova", isAnswer: false },
-                        { answerName: "Berlin", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113562",
-            deckName: "Europe Capitals",
-            regionType: "Geography",
-            deckOwner: "John Doe"
-        },
-        {
-            questions: [
-                {
-                    name: "Geographic",
-                    answers: [
-                        { answerName: "Tokyo", isAnswer: true },
-                        { answerName: "Beijing", isAnswer: false },
-                        { answerName: "Seoul", isAnswer: false },
-                        { answerName: "Bangkok", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113563",
-            deckName: "Asia Capitals",
-            regionType: "Geography",
-            deckOwner: "Jane Doe"
-        },
-        {
-            questions: [
-                {
-                    name: "History",
-                    answers: [
-                        { answerName: "Tokyo", isAnswer: true },
-                        { answerName: "Beijing", isAnswer: false },
-                        { answerName: "Seoul", isAnswer: false },
-                        { answerName: "Bangkok", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113563",
-            deckName: "Asia Capitals",
-            regionType: "Geography",
-            deckOwner: "Jane Doe"
-        },
-        {
-            questions: [
-                {
-                    name: "English",
-                    answers: [
-                        { answerName: "Tokyo", isAnswer: true },
-                        { answerName: "Beijing", isAnswer: false },
-                        { answerName: "Seoul", isAnswer: false },
-                        { answerName: "Bangkok", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113563",
-            deckName: "Asia Capitals",
-            regionType: "Geography",
-            deckOwner: "Jane Doe"
-        },
-        {
-            questions: [
-                {
-                    name: "Physic",
-                    answers: [
-                        { answerName: "Tokyo", isAnswer: true },
-                        { answerName: "Beijing", isAnswer: false },
-                        { answerName: "Seoul", isAnswer: false },
-                        { answerName: "Bangkok", isAnswer: false }
-                    ]
-                }
-            ],
-            deckId: "665217cb50eea828b6113563",
-            deckName: "Asia Capitals",
-            regionType: "Geography",
-            deckOwner: "Jane Doe"
-        },
+    const dipatch = useDispatch();
 
-    ];
+    const { listDeck, isLoading, isError } = useSelector((state: RootState) => state.quiz);
 
+    console.log(listDeck)
+    useEffect(() => {
+        // @ts-ignore
+        dipatch(getDecks());
+    }, [])
 
     return (
         <>
@@ -110,9 +36,9 @@ const DeckComponent = () => {
                     p={2}
                 >
 
-                    {Decks.map((flashcard, index) => (
+                    {listDeck.map((deck, index) => (
                         <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-                            <DeckCard flashcard={flashcard} />
+                            <Link href={`/pages/quiz/flashCardList/${deck._id}`}><DeckCard deck={deck} /></Link>
                         </Grid>
                     ))}
                 </Grid>
