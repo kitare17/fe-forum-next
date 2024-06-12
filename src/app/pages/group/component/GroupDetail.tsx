@@ -65,7 +65,7 @@ const GroupDetail = () => {
                         </Box>
                         <CustomTabPanel value={value} index={0}>
                             <Suspense>
-                                <NotificationGroup groupId={(groupDetail?._id)??""}/>
+                                <NotificationGroup  groupDetail={groupDetail}/>
                             </Suspense>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>

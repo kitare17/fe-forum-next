@@ -29,7 +29,10 @@ const CardMember = ({groupId, members, groupDetail}: {
     const dipatch = useDispatch();
     const [openRemoveAccept, setOpenRemoveAccept] = useState(false)
     const [userIdRemove, setUserIdRemove] = useState<string>("");
+    const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
 
+    var checkAdmin: boolean = userId === groupDetail?.adminGroup._id;
+    // console.log("userid", )
     const handleRemoveMember = ({userId}: { userId: string }) => {
         setOpenRemoveAccept(true);
         setUserIdRemove(userId)
@@ -51,7 +54,7 @@ const CardMember = ({groupId, members, groupDetail}: {
     return (<>
             <h4>Trưởng nhóm </h4>
             <Grid container spacing={3} p={6} mb={2}>
-                <Grid  item lg={4} xs={12} md={6}>
+                <Grid item lg={4} xs={12} md={6}>
                     <Card>
                         <CardHeader
                             avatar={
@@ -64,7 +67,7 @@ const CardMember = ({groupId, members, groupDetail}: {
                             action={
                                 <Tooltip title="Trưỏng nhóm">
                                     <IconButton aria-label="settings"
-                                                // onClick={() => handleRemoveMember({userId: user._id})}
+                                        // onClick={() => handleRemoveMember({userId: user._id})}
                                     >
                                         ⭐
                                     </IconButton>
@@ -92,13 +95,20 @@ const CardMember = ({groupId, members, groupDetail}: {
                                             </Avatar>
                                         }
                                         action={
+
                                             <Tooltip title="Xoá thành viên">
-                                                <IconButton aria-label="settings"
-                                                            onClick={() => handleRemoveMember({userId: user._id})}
-                                                >
-                                                    <RemoveIcon/>
-                                                </IconButton>
+                                                {checkAdmin ?
+                                                    <IconButton aria-label="settings"
+                                                                onClick={() => handleRemoveMember({userId: user._id})}
+                                                    >
+                                                        <RemoveIcon/>
+                                                    </IconButton> :
+                                                    <></>
+                                                }
+
                                             </Tooltip>
+
+
                                         }
                                         title={user.fullname}
                                         subheader={user.username}
@@ -129,10 +139,13 @@ const CardMember = ({groupId, members, groupDetail}: {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={handleCloseRemoveAccept}>Hủy</Button>
+                        onClick={handleCloseRemoveAccept}>
+                        Hủy
+                    </Button>
                     <Button type="button"
-                            onClick={() => hanldeRemoveMember()}
-                    >Xóa</Button>
+                            onClick={() => hanldeRemoveMember()}>
+                        Xóa
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>

@@ -9,24 +9,32 @@ import {useRouter, useSearchParams} from "next/navigation";
 import FormCreateNotification from "@/app/pages/group/component/FormCreateNotification";
 import Button from "@mui/material/Button";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import {GroupInterface} from "@/app/interface/GroupInterface";
 
-const NotificationGroup = ({groupId}:{
-    groupId:string
-}) => {
+const NotificationGroup = (
+    {groupDetail}:
+        {
+            groupDetail: GroupInterface | undefined
+        }) => {
 
     const router = useRouter();
     const searchParams = useSearchParams();
     const page = searchParams.get('page') ?? 1;
+    var groupId = groupDetail?._id
 
     const {listNotification, maxPageNotification, isLoading, isError} = useSelector((state: RootState) => state.group);
+    const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
+
+    var checkAdmin: boolean = userId === groupDetail?.adminGroup._id;
+
 
     const dipatch = useDispatch();
     useEffect(() => {
         console.log("page noti", page)
-        if(groupId)
-        // @ts-ignore
-        dipatch(findAllNotification({page: page, groupId: groupId}))
-    }, [page,groupId])
+        if (groupId)
+            // @ts-ignore
+            dipatch(findAllNotification({page: page, groupId: groupId}))
+    }, [page, groupId])
 
     const handlePaging = (event: any, value: number) => {
         var currentUrl: string = window.location.href;
@@ -50,9 +58,14 @@ const NotificationGroup = ({groupId}:{
 
     return (
         <>
-            <Grid container justifyContent="flex-end">
-                <Button variant="contained" onClick={()=>setOpenCreateNotificationForm(true)}><AddCircleOutlineIcon/></Button>
-            </Grid>
+            {checkAdmin ?
+                <Grid container justifyContent="flex-end">
+                    <Button variant="contained"
+                            onClick={() => setOpenCreateNotificationForm(true)}><AddCircleOutlineIcon/></Button>
+                </Grid>
+                :
+                <></>
+            }
             <FormCreateNotification openCreateNotification={openCreateNotification}
                                     setOpenCreateNotificationForm={setOpenCreateNotificationForm}
                                     groupId={groupId}/>

@@ -60,7 +60,7 @@ export const findAllNotification = createAsyncThunk(
 
 export const createNotification = createAsyncThunk(
     Types.GROUP_CREATE_NOTIFICATION,
-    async ({title, detail, group}: { title: string, detail: string, group: string }) => {
+    async ({title, detail, group}: { title: string, detail: string, group: string|undefined }) => {
         try {
             const response = await axios.post(`http://localhost:3001/groups/notification`, {
                 "title": title,

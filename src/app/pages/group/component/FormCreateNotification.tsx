@@ -27,7 +27,7 @@ const FormCreateNotification = (
         setOpenCreateNotificationForm
     }
         : {
-        groupId:string,
+        groupId:string|undefined,
         openCreateNotification: boolean,
         setOpenCreateNotificationForm: React.Dispatch<React.SetStateAction<boolean>>
     }
