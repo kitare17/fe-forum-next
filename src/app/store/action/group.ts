@@ -5,6 +5,7 @@ import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {
+    GROUP_FIND_BY_NAME,
     GROUP_GET_ALL_MEMBER,
     GROUP_JOIN,
     GROUP_NOTIFICATION_SHOW_ALL,
@@ -23,6 +24,19 @@ export const findAllGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_SHOW_ALL);
+        }
+    }
+);
+
+export const findAllGroupByName = createAsyncThunk(
+    Types.GROUP_FIND_BY_NAME,
+    async ({page,groupName}: { page: number,groupName:string }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/query/find?groupName=${groupName}&page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_FIND_BY_NAME);
         }
     }
 );

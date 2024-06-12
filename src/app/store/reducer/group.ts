@@ -1,6 +1,6 @@
 import {
     createNotification,
-    findAllGroup,
+    findAllGroup, findAllGroupByName,
     findAllNotification,
     findOneGroup,
     getAllMember, joinGroup, removeMember
@@ -23,7 +23,7 @@ interface InitialState {
     groupDetail?: GroupInterface,
     isJoin: boolean,
     members?: [UserInterface],
-    message?:string
+    message?: string
 }
 
 
@@ -174,23 +174,46 @@ const groupSlice = createSlice({
         builder.addCase(joinGroup.fulfilled, (state, action) => {
             const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
 
-            if (action.payload.members.includes(user.userEmailId)){
-                state.isJoin=true;
+            if (action.payload.members.includes(user.userEmailId)) {
+                state.isJoin = true;
             }
 
             state.isLoading = false;
             state.isError = false;
         })
             .addCase(joinGroup.pending, (state, action) => {
-                state.message=""
-                state.isJoin=false;
+                state.message = ""
+                state.isJoin = false;
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(joinGroup.rejected, (state, action) => {
 
                 // @ts-ignore
-                state.message=action.payload?.data?.message
+                state.message = action.payload?.data?.message
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //FIND GROUP
+
+        builder.addCase(findAllGroupByName.fulfilled, (state, action) => {
+
+            state.listGroup = action.payload.groups;
+            state.maxPage = action.payload.maxPage>0?action.payload.maxPage:1;
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(findAllGroupByName.pending, (state, action) => {
+                state.message = ""
+                state.isJoin = false;
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(findAllGroupByName.rejected, (state, action) => {
+
+                // @ts-ignore
+                state.message = action.payload?.data?.message
                 state.isLoading = false;
                 state.isError = true;
             })
