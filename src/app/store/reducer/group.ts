@@ -1,10 +1,11 @@
 import {
+    createDocGroup,
     createGroup,
     createNotification,
     findAllGroup, findAllGroupByName,
     findAllNotification,
     findOneGroup,
-    getAllMember, joinGroup, removeMember
+    getAllMember, getDocGroup, joinGroup, removeMember
 } from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
@@ -13,6 +14,7 @@ import {Group} from "next/dist/shared/lib/router/utils/route-regex";
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 import {UserInterface} from "@/app/interface/User";
+import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
 
 interface InitialState {
     listGroup: [GroupInterface] | [],
@@ -24,12 +26,14 @@ interface InitialState {
     groupDetail?: GroupInterface,
     isJoin: boolean,
     members?: [UserInterface],
-    message?: string
+    message?: string,
+    listDoc?: [DocGroupInterface]| []
 }
 
 
 var initialState: InitialState = {
     listGroup: [],
+    listDoc:[],
     maxPageNotification: 1,
     listNotification: [],
     isLoading: false,
@@ -201,7 +205,7 @@ const groupSlice = createSlice({
         builder.addCase(findAllGroupByName.fulfilled, (state, action) => {
 
             state.listGroup = action.payload.groups;
-            state.maxPage = action.payload.maxPage>0?action.payload.maxPage:1;
+            state.maxPage = action.payload.maxPage > 0 ? action.payload.maxPage : 1;
             state.isLoading = false;
             state.isError = false;
         })
@@ -219,6 +223,7 @@ const groupSlice = createSlice({
                 state.isError = true;
             })
 
+        //Create group
         builder.addCase(createGroup.fulfilled, (state, action) => {
             //@ts-ignore
             state.listGroup = [action.payload, ...state.listGroup]
@@ -232,6 +237,41 @@ const groupSlice = createSlice({
                 state.isError = false
             })
             .addCase(createGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //Create doc group
+        builder.addCase(createDocGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listDoc = [action.payload, ...state.listDoc]
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createDocGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createDocGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+        //Get  doc group
+        builder.addCase(getDocGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listDoc = action.payload
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(getDocGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getDocGroup.rejected, (state, action) => {
 
                 state.isLoading = false;
                 state.isError = true;

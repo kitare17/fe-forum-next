@@ -5,7 +5,7 @@ import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {
-    GROUP_CREATE,
+    GROUP_CREATE, GROUP_CREATE_DOC,
     GROUP_FIND_BY_NAME,
     GROUP_GET_ALL_MEMBER,
     GROUP_JOIN,
@@ -14,6 +14,7 @@ import {
 } from "../../constant/ActionType";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 import {UserInterface} from "@/app/interface/User";
+import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
 
 
 export const findAllGroup = createAsyncThunk(
@@ -163,6 +164,40 @@ export const createGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_CREATE);
+        }
+    }
+);
+
+
+export const createDocGroup = createAsyncThunk(
+    Types.GROUP_CREATE_DOC,
+    async ({docName, link, group}: { docName: string, link: string, group: string }) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/groups/docs/add`, {
+                "docName": docName,
+                "link":link,
+                "group":group
+            });
+
+            const data: DocGroupInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE_DOC);
+        }
+    }
+);
+
+
+export const getDocGroup = createAsyncThunk(
+    Types.GROUP_GET_DOC,
+    async ({groupId}: { groupId: string }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${groupId}/docs/get`);
+
+            const data: [DocGroupInterface] = response.data.docs;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_GET_DOC);
         }
     }
 );
