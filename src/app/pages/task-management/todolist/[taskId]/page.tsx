@@ -4,7 +4,7 @@ import Image from "next/image";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import {
   Box,
   Button,
@@ -65,7 +65,7 @@ const ToDoList = () => {
   const router = useRouter();
   //text fiel modal
   const [startDate, setStartDate] = useState(dayjs(""));
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs(""));
+  const [endDate, setEndDate] = useState(dayjs(""));
   const [detail, setDetail] = useState("");
   const [label, setLabel] = useState("");
   const [prioritize, setPrioritize] = useState("");
@@ -660,6 +660,7 @@ var formattedEndDate = endDate.startOf('day').format("DD/MM/YYYY");
                     
                       label="Ngày bắt đầu"
                       value={startDate}
+                       // @ts-ignore
                       onChange={(newValue) => setStartDate(newValue)}
                     />
                   </DemoContainer>
@@ -671,6 +672,7 @@ var formattedEndDate = endDate.startOf('day').format("DD/MM/YYYY");
                     <DatePicker
                       label="Ngày kết thúc"
                       value={endDate}
+                       // @ts-ignore
                       onChange={(newValue) => setEndDate(newValue)}
                     />
                   </DemoContainer>
