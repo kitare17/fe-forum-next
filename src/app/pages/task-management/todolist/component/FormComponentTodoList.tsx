@@ -266,6 +266,7 @@ const FormComponentTodoList = ({
               label="Ngày bắt đầu"
               value={value ? dayjs(value) : null} // Convert to dayjs object
               onChange={(newValue) => onChange(newValue)} // Handle onChange
+               // @ts-ignore
               renderInput={(params: any) => (
                 <TextField
                   {...params}
@@ -292,6 +293,7 @@ const FormComponentTodoList = ({
               label="Ngày kết thúc"
               value={value ? dayjs(value) : null} // Convert to dayjs object
               onChange={(newValue) => onChange(newValue)} // Handle onChange
+ // @ts-ignore
               renderInput={(params: any) => (
                 <TextField
                   {...params}
