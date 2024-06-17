@@ -30,7 +30,7 @@ const Login = () => {
     (state: RootState) => state.auth
   );
 
-
+console.log("login lid", user)
   useEffect(() => {
     if(isError){
       toast.error(message);

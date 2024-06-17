@@ -50,4 +50,41 @@ export const GROUP_JOIN="GROUP_JOIN"
 
 export const SAlE_SHOW_ALL="GROUP_SHOW_ALL"
 
+//=================================================================================
+
+//CREATE TASK MANAGERMENT
+export const CREATE_TASK="CREATE_TASK" 
+
+//SHOW TASK MANAGERMENT
+export const SHOW_TASK="SHOW_TASK"
+
+//SHOW DETAIL TASK MANAGERMENT
+export const SHOW_DETAIL_TASK="SHOW_DETAIL_TASK"
+
+//DELETE TASK MANAGERMENT
+export const DELETE_TASK="DELETE_TASK"
+
+//UPDATE TASK MANAGERMENT
+export const UPDATE_TASK="UPDATE_TASK"
+
+//=================================================================================
+
+//CREATE TODO LIST
+export const CREATE_TODOLIST="CREATE_TODOLIST" 
+
+//SHOW TODO LIST
+export const SHOW_TODOLIST="SHOW_TODOLIST"
+
+//SHOW DETAIL TODO LIST
+export const SHOW_DETAIL_TODOLIST="SHOW_DETAIL_TODOLIST"
+
+//DELETE TODO LIST
+export const DELETE_TODOLIST="DELETE_TODOLIST"
+
+//UPDATE TODO LIST
+export const UPDATE_TODOLIST="UPDATE_TODOLIST"
+
+//=================================================================================
+
+
 
