@@ -32,7 +32,7 @@ export const findAllGroup = createAsyncThunk(
 
 export const findAllGroupByName = createAsyncThunk(
     Types.GROUP_FIND_BY_NAME,
-    async ({page,groupName}: { page: number,groupName:string }) => {
+    async ({page, groupName}: { page: number, groupName: string }) => {
         try {
             const response = await axios.get(`http://localhost:3001/groups/query/find?groupName=${groupName}&page=${page}`);
             const data = response.data;
@@ -76,7 +76,7 @@ export const findAllNotification = createAsyncThunk(
 
 export const createNotification = createAsyncThunk(
     Types.GROUP_CREATE_NOTIFICATION,
-    async ({title, detail, group}: { title: string, detail: string, group: string|undefined }) => {
+    async ({title, detail, group}: { title: string, detail: string, group: string | undefined }) => {
         try {
             const response = await axios.post(`http://localhost:3001/groups/notification`, {
                 "title": title,
@@ -129,13 +129,13 @@ export const removeMember = createAsyncThunk(
 
 export const joinGroup = createAsyncThunk(
     Types.GROUP_JOIN,
-    async ({groupId, userId,password}: { groupId: string, userId: string,password:string }, {rejectWithValue}) => {
+    async ({groupId, userId, password}: { groupId: string, userId: string, password: string }, {rejectWithValue}) => {
 
         try {
             const response = await axios.put(`http://localhost:3001/groups/${groupId}/members`,
                 {
                     userId: userId,
-                    password:password
+                    password: password
                 }
             );
 
@@ -155,9 +155,9 @@ export const createGroup = createAsyncThunk(
     async ({groupName, password, adminGroup}: { groupName: string, password: string, adminGroup: string }) => {
         try {
             const response = await axios.post(`http://localhost:3001/groups`, {
-                "groupName":groupName,
-                "adminGroup":adminGroup,
-                "password":password
+                "groupName": groupName,
+                "adminGroup": adminGroup,
+                "password": password
             });
 
             const data: GroupInterface = response.data;
@@ -175,8 +175,8 @@ export const createDocGroup = createAsyncThunk(
         try {
             const response = await axios.post(`http://localhost:3001/groups/docs/add`, {
                 "docName": docName,
-                "link":link,
-                "group":group
+                "link": link,
+                "group": group
             });
 
             const data: DocGroupInterface = response.data;
@@ -198,6 +198,21 @@ export const getDocGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_GET_DOC);
+        }
+    }
+);
+
+
+export const deleteDocGroup = createAsyncThunk(
+    Types.GROUP_DELETE_DOC,
+    async ({docId, groupId}: { groupId: string, docId: string }) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/groups/${groupId}/docs/${docId}`);
+
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_DELETE_DOC);
         }
     }
 );

@@ -1,7 +1,7 @@
 import {
     createDocGroup,
     createGroup,
-    createNotification,
+    createNotification, deleteDocGroup,
     findAllGroup, findAllGroupByName,
     findAllNotification,
     findOneGroup,
@@ -27,13 +27,13 @@ interface InitialState {
     isJoin: boolean,
     members?: [UserInterface],
     message?: string,
-    listDoc?: [DocGroupInterface]| []
+    listDoc?: [DocGroupInterface] | []
 }
 
 
 var initialState: InitialState = {
     listGroup: [],
-    listDoc:[],
+    listDoc: [],
     maxPageNotification: 1,
     listNotification: [],
     isLoading: false,
@@ -269,9 +269,29 @@ const groupSlice = createSlice({
             .addCase(getDocGroup.pending, (state, action) => {
 
                 state.isLoading = true;
+                state.message = ""
                 state.isError = false
             })
             .addCase(getDocGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+        //Delete doc group
+        builder.addCase(deleteDocGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.message = action.payload.message
+            //@ts-ignore
+            state.listDoc = action.payload.docs
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(deleteDocGroup.pending, (state, action) => {
+                state.message = ""
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(deleteDocGroup.rejected, (state, action) => {
 
                 state.isLoading = false;
                 state.isError = true;
