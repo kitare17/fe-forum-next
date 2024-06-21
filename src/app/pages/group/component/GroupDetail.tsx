@@ -71,13 +71,13 @@ const GroupDetail = () => {
                             </Suspense>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
-                            <GroupJob/>
+                            <GroupJob groupId={(groupDetail?._id)??""}/>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
                             <MemberList groupId={(groupDetail?._id)??""}/>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <FormUploadDocument  groupId={(groupDetail?._id)??""}/>
+                            <FormUploadDocument  groupId={(groupDetail?._id)??""} admin={groupDetail?.adminGroup._id??""}/>
                         </CustomTabPanel>
                     </div>
 

@@ -1,11 +1,11 @@
 import {
     createDocGroup,
     createGroup,
-    createNotification, deleteDocGroup,
+    createNotification, createTaskGroup, deleteDocGroup,
     findAllGroup, findAllGroupByName,
     findAllNotification,
     findOneGroup,
-    getAllMember, getDocGroup, joinGroup, removeMember
+    getAllMember, getDocGroup, getTaskGroup, joinGroup, removeMember
 } from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
@@ -15,6 +15,7 @@ import {GroupInterface} from "@/app/interface/GroupInterface";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 import {UserInterface} from "@/app/interface/User";
 import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
+import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
 
 interface InitialState {
     listGroup: [GroupInterface] | [],
@@ -27,7 +28,12 @@ interface InitialState {
     isJoin: boolean,
     members?: [UserInterface],
     message?: string,
-    listDoc?: [DocGroupInterface] | []
+    listDoc?: [DocGroupInterface] | [],
+    listTodoTask: [GroupTaskInterface] | [],
+    listPending: [GroupTaskInterface] | [],
+    listDone: [GroupTaskInterface] | [],
+    listCancel: [GroupTaskInterface] | []
+
 }
 
 
@@ -39,7 +45,11 @@ var initialState: InitialState = {
     isLoading: false,
     isError: false,
     isJoin: false,
-    maxPage: 1
+    maxPage: 1,
+    listTodoTask: [],
+    listPending: [],
+    listDone: [],
+    listCancel: []
 }
 const groupSlice = createSlice({
     name: "group",
@@ -292,6 +302,46 @@ const groupSlice = createSlice({
                 state.isError = false
             })
             .addCase(deleteDocGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+        //CREATE GROUP TASK
+        builder.addCase(createTaskGroup.fulfilled, (state, action) => {
+
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createTaskGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createTaskGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //SHOW GROUP TASK
+        builder.addCase(getTaskGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listTodoTask=action.payload.filter((task)=>task?.status==="Đã giao")
+            //@ts-ignore
+            state.listPending=action.payload.filter((task)=>task?.status==="Đang làm")
+            //@ts-ignore
+            state.listDone=action.payload.filter((task)=>task?.status==="Hoàn thành")
+            //@ts-ignore
+            state.listCancel=action.payload.filter((task)=>task?.status==="Hủy")
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(getTaskGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getTaskGroup.rejected, (state, action) => {
 
                 state.isLoading = false;
                 state.isError = true;

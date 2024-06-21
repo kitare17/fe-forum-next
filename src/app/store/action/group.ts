@@ -5,16 +5,17 @@ import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {
-    GROUP_CREATE, GROUP_CREATE_DOC,
+    GROUP_CREATE, GROUP_CREATE_DOC, GROUP_CREATE_TASK,
     GROUP_FIND_BY_NAME,
     GROUP_GET_ALL_MEMBER,
     GROUP_JOIN,
     GROUP_NOTIFICATION_SHOW_ALL,
-    GROUP_REMOVE_MEMBER
+    GROUP_REMOVE_MEMBER, GROUP_SHOW_TASK
 } from "../../constant/ActionType";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 import {UserInterface} from "@/app/interface/User";
 import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
+import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
 
 
 export const findAllGroup = createAsyncThunk(
@@ -213,6 +214,45 @@ export const deleteDocGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_DELETE_DOC);
+        }
+    }
+);
+
+
+export const createTaskGroup = createAsyncThunk(
+    Types.GROUP_CREATE_TASK,
+    async ({title, detail,startDay,endDay,level,assignee,groupId}: { title:string, detail:string,startDay:string,endDay:string,level:string,assignee:string[],groupId:string|undefined}) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/groups/${groupId}/tasks`,{
+                title,
+                detail,
+                startDate:startDay,
+                endDate: endDay,
+                level,
+                assignee,
+                group:groupId
+            });
+
+            console.log(response.data);
+            const data:GroupTaskInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE_TASK);
+        }
+    }
+);
+
+
+export const getTaskGroup = createAsyncThunk(
+    Types.GROUP_SHOW_TASK,
+    async ({groupId}: { groupId:string|undefined}) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${groupId}/tasks`,);
+            console.log(response.data);
+            const data: GroupTaskInterface[] = response.data?.tasks;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_SHOW_TASK);
         }
     }
 );

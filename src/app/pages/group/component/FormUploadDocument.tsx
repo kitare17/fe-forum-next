@@ -22,7 +22,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 
 
-const FormUploadDocument = ({groupId}: { groupId: string }) => {
+const FormUploadDocument = ({groupId,admin}: { groupId: string,admin:string }) => {
     const {listDoc, isLoading, isError,message} = useSelector((state: RootState) => state.group);
 
     const dipatch = useDispatch();

@@ -21,3 +21,8 @@ export function createDayToString(createdAt:string) {
 
     return `Đăng ngày ${new Date(createdAt).getDate()}/${new Date(createdAt).getMonth() + 1}/${new Date(createdAt).getFullYear()}`;
 }
+
+export function createDayToStringTask(createdAt:string) {
+
+    return `Tạo ${new Date(createdAt).getDate()}/${new Date(createdAt).getMonth() + 1}/${new Date(createdAt).getFullYear()}`;
+}
