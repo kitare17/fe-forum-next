@@ -10,6 +10,7 @@ import MemberList from "@/app/pages/group/component/MemberList";
 import NotificationGroup from "@/app/pages/group/component/NotificationGroup";
 import {useSelector} from "react-redux";
 import {RootState} from "@/app/store";
+import FormUploadDocument from "@/app/pages/group/component/FormUploadDocument";
 
 
 interface TabPanelProps {
@@ -61,6 +62,7 @@ const GroupDetail = () => {
                                 <Tab label="Thông báo 📣 📣 📣" {...a11yProps(0)} />
                                 <Tab label="Công việc 📚 📚 📚" {...a11yProps(1)} />
                                 <Tab label="Thành viên 💼 💼 💼" {...a11yProps(2)} />
+                                <Tab label="Tài liệu💼 💼 💼" {...a11yProps(3)} />
                             </Tabs>
                         </Box>
                         <CustomTabPanel value={value} index={0}>
@@ -69,12 +71,14 @@ const GroupDetail = () => {
                             </Suspense>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
-                            <GroupJob/>
+                            <GroupJob groupId={(groupDetail?._id)??""}/>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
                             <MemberList groupId={(groupDetail?._id)??""}/>
                         </CustomTabPanel>
-
+                        <CustomTabPanel value={value} index={3}>
+                            <FormUploadDocument  groupId={(groupDetail?._id)??""} admin={groupDetail?.adminGroup._id??""}/>
+                        </CustomTabPanel>
                     </div>
 
                 </Grid>

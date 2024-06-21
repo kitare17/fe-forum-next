@@ -7,7 +7,7 @@ export interface GroupInterface {
     "groupDescription"?: string,
     "adminGroup": UserInterface,
     status?:string,
-    members:[string]
+    members:[UserInterface]
     createdAt?:string,
     updatedAt?:string,
     slug:string

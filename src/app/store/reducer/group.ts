@@ -1,9 +1,11 @@
 import {
-    createNotification,
-    findAllGroup,
+    createDocGroup,
+    createGroup,
+    createNotification, createTaskGroup, deleteDocGroup,
+    findAllGroup, findAllGroupByName,
     findAllNotification,
     findOneGroup,
-    getAllMember, joinGroup, removeMember
+    getAllMember, getDocGroup, getTaskGroup, joinGroup, removeMember
 } from "@/app/store/action/group";
 import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
@@ -12,6 +14,8 @@ import {Group} from "next/dist/shared/lib/router/utils/route-regex";
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 import {UserInterface} from "@/app/interface/User";
+import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
+import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
 
 interface InitialState {
     listGroup: [GroupInterface] | [],
@@ -23,18 +27,29 @@ interface InitialState {
     groupDetail?: GroupInterface,
     isJoin: boolean,
     members?: [UserInterface],
-    message?:string
+    message?: string,
+    listDoc?: [DocGroupInterface] | [],
+    listTodoTask: [GroupTaskInterface] | [],
+    listPending: [GroupTaskInterface] | [],
+    listDone: [GroupTaskInterface] | [],
+    listCancel: [GroupTaskInterface] | []
+
 }
 
 
 var initialState: InitialState = {
     listGroup: [],
+    listDoc: [],
     maxPageNotification: 1,
     listNotification: [],
     isLoading: false,
     isError: false,
     isJoin: false,
-    maxPage: 1
+    maxPage: 1,
+    listTodoTask: [],
+    listPending: [],
+    listDone: [],
+    listCancel: []
 }
 const groupSlice = createSlice({
     name: "group",
@@ -174,23 +189,160 @@ const groupSlice = createSlice({
         builder.addCase(joinGroup.fulfilled, (state, action) => {
             const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
 
-            if (action.payload.members.includes(user.userEmailId)){
-                state.isJoin=true;
+            if (action.payload.members.includes(user.userEmailId)) {
+                state.isJoin = true;
             }
 
             state.isLoading = false;
             state.isError = false;
         })
             .addCase(joinGroup.pending, (state, action) => {
-                state.message=""
-                state.isJoin=false;
+                state.message = ""
+                state.isJoin = false;
                 state.isLoading = true;
                 state.isError = false
             })
             .addCase(joinGroup.rejected, (state, action) => {
 
                 // @ts-ignore
-                state.message=action.payload?.data?.message
+                state.message = action.payload?.data?.message
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //FIND GROUP
+
+        builder.addCase(findAllGroupByName.fulfilled, (state, action) => {
+
+            state.listGroup = action.payload.groups;
+            state.maxPage = action.payload.maxPage > 0 ? action.payload.maxPage : 1;
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(findAllGroupByName.pending, (state, action) => {
+                state.message = ""
+                state.isJoin = false;
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(findAllGroupByName.rejected, (state, action) => {
+
+                // @ts-ignore
+                state.message = action.payload?.data?.message
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //Create group
+        builder.addCase(createGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listGroup = [action.payload, ...state.listGroup]
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createGroup.pending, (state, action) => {
+                state.message = ""
+                state.isJoin = false;
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //Create doc group
+        builder.addCase(createDocGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listDoc = [action.payload, ...state.listDoc]
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createDocGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createDocGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+        //Get  doc group
+        builder.addCase(getDocGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listDoc = action.payload
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(getDocGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.message = ""
+                state.isError = false
+            })
+            .addCase(getDocGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+        //Delete doc group
+        builder.addCase(deleteDocGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.message = action.payload.message
+            //@ts-ignore
+            state.listDoc = action.payload.docs
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(deleteDocGroup.pending, (state, action) => {
+                state.message = ""
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(deleteDocGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+        //CREATE GROUP TASK
+        builder.addCase(createTaskGroup.fulfilled, (state, action) => {
+
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(createTaskGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createTaskGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //SHOW GROUP TASK
+        builder.addCase(getTaskGroup.fulfilled, (state, action) => {
+            //@ts-ignore
+            state.listTodoTask=action.payload.filter((task)=>task?.status==="Đã giao")
+            //@ts-ignore
+            state.listPending=action.payload.filter((task)=>task?.status==="Đang làm")
+            //@ts-ignore
+            state.listDone=action.payload.filter((task)=>task?.status==="Hoàn thành")
+            //@ts-ignore
+            state.listCancel=action.payload.filter((task)=>task?.status==="Hủy")
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(getTaskGroup.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getTaskGroup.rejected, (state, action) => {
+
                 state.isLoading = false;
                 state.isError = true;
             })

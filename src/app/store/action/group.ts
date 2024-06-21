@@ -5,13 +5,17 @@ import {BlogInterface} from "@/app/interface/Blog";
 
 import {GroupInterface} from "@/app/interface/GroupInterface";
 import {
+    GROUP_CREATE, GROUP_CREATE_DOC, GROUP_CREATE_TASK,
+    GROUP_FIND_BY_NAME,
     GROUP_GET_ALL_MEMBER,
     GROUP_JOIN,
     GROUP_NOTIFICATION_SHOW_ALL,
-    GROUP_REMOVE_MEMBER
+    GROUP_REMOVE_MEMBER, GROUP_SHOW_TASK
 } from "../../constant/ActionType";
 import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInterface";
 import {UserInterface} from "@/app/interface/User";
+import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
+import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
 
 
 export const findAllGroup = createAsyncThunk(
@@ -23,6 +27,19 @@ export const findAllGroup = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.GROUP_SHOW_ALL);
+        }
+    }
+);
+
+export const findAllGroupByName = createAsyncThunk(
+    Types.GROUP_FIND_BY_NAME,
+    async ({page, groupName}: { page: number, groupName: string }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/query/find?groupName=${groupName}&page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_FIND_BY_NAME);
         }
     }
 );
@@ -60,7 +77,7 @@ export const findAllNotification = createAsyncThunk(
 
 export const createNotification = createAsyncThunk(
     Types.GROUP_CREATE_NOTIFICATION,
-    async ({title, detail, group}: { title: string, detail: string, group: string|undefined }) => {
+    async ({title, detail, group}: { title: string, detail: string, group: string | undefined }) => {
         try {
             const response = await axios.post(`http://localhost:3001/groups/notification`, {
                 "title": title,
@@ -113,13 +130,13 @@ export const removeMember = createAsyncThunk(
 
 export const joinGroup = createAsyncThunk(
     Types.GROUP_JOIN,
-    async ({groupId, userId,password}: { groupId: string, userId: string,password:string }, {rejectWithValue}) => {
+    async ({groupId, userId, password}: { groupId: string, userId: string, password: string }, {rejectWithValue}) => {
 
         try {
             const response = await axios.put(`http://localhost:3001/groups/${groupId}/members`,
                 {
                     userId: userId,
-                    password:password
+                    password: password
                 }
             );
 
@@ -130,6 +147,112 @@ export const joinGroup = createAsyncThunk(
             // @ts-ignore
             const errorData = error as AxiosError;
             return rejectWithValue({data: errorData.response?.data});
+        }
+    }
+);
+
+export const createGroup = createAsyncThunk(
+    Types.GROUP_CREATE,
+    async ({groupName, password, adminGroup}: { groupName: string, password: string, adminGroup: string }) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/groups`, {
+                "groupName": groupName,
+                "adminGroup": adminGroup,
+                "password": password
+            });
+
+            const data: GroupInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE);
+        }
+    }
+);
+
+
+export const createDocGroup = createAsyncThunk(
+    Types.GROUP_CREATE_DOC,
+    async ({docName, link, group}: { docName: string, link: string, group: string }) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/groups/docs/add`, {
+                "docName": docName,
+                "link": link,
+                "group": group
+            });
+
+            const data: DocGroupInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE_DOC);
+        }
+    }
+);
+
+
+export const getDocGroup = createAsyncThunk(
+    Types.GROUP_GET_DOC,
+    async ({groupId}: { groupId: string }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${groupId}/docs/get`);
+
+            const data: [DocGroupInterface] = response.data.docs;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_GET_DOC);
+        }
+    }
+);
+
+
+export const deleteDocGroup = createAsyncThunk(
+    Types.GROUP_DELETE_DOC,
+    async ({docId, groupId}: { groupId: string, docId: string }) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/groups/${groupId}/docs/${docId}`);
+
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_DELETE_DOC);
+        }
+    }
+);
+
+
+export const createTaskGroup = createAsyncThunk(
+    Types.GROUP_CREATE_TASK,
+    async ({title, detail,startDay,endDay,level,assignee,groupId}: { title:string, detail:string,startDay:string,endDay:string,level:string,assignee:string[],groupId:string|undefined}) => {
+        try {
+            const response = await axios.post(`http://localhost:3001/groups/${groupId}/tasks`,{
+                title,
+                detail,
+                startDate:startDay,
+                endDate: endDay,
+                level,
+                assignee,
+                group:groupId
+            });
+
+            console.log(response.data);
+            const data:GroupTaskInterface = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_CREATE_TASK);
+        }
+    }
+);
+
+
+export const getTaskGroup = createAsyncThunk(
+    Types.GROUP_SHOW_TASK,
+    async ({groupId}: { groupId:string|undefined}) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/groups/${groupId}/tasks`,);
+            console.log(response.data);
+            const data: GroupTaskInterface[] = response.data?.tasks;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.GROUP_SHOW_TASK);
         }
     }
 );
