@@ -9,7 +9,7 @@ export interface QuestionInterface {
 }
 
 export interface QuizInterface {
-  deckName: string;
+  deckName?: string;
   regionType: string;
   questions: QuestionInterface[];
   deckOwner?: string;
@@ -46,12 +46,55 @@ export interface Question {
 }
 
 
-
 export interface FlashCardInterface {
+  _id: string;
+  questions: QuestionInterface[]; // Array of QuestionInterface
+  deck: DeckInterface; // Assuming deckId should be replaced with the entire DeckInterface
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface TestInterfaceRequest {
+  testOwner: string;
+  deckId: string;
+  score: number;
+  numberCorrectAnswer: number;
+  totalQuestionTest: number;
+  durationInMinutes: number;
+}
+
+export interface QuestionRequest {
+  deck: string;
+  answers: AnswerInterface[];
+  name: string;
+}
+
+export interface QuestionResponse {
     _id: string;
-    questions: Question[]; // This should correctly represent the array of questions
-    deckId: DeckInterface;
+    name: string;
+    answers: AnswerInterface[];
+    deck: string;
     createdAt: string;
     updatedAt: string;
+    __v: number;
+}
+
+export interface AnswerResponse {
+    _id: string;
+    answerName: string;
+    isAnswer: boolean;
+}
+
+export interface TestResponse {
+    _id: string;
+    testOwner: string;
+    deckId: DeckInterface;
+    score: number;
+    numberCorrectAnswer: number;
+    totalQuestionTest: number;
+    durationInMinutes: number;
+    createdAt: string; // Alternatively, you can use Date type if you will parse it into Date object
+    updatedAt: string; // Alternatively, you can use Date type if you will parse it into Date object
     __v: number;
 }

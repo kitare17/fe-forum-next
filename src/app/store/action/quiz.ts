@@ -1,8 +1,9 @@
+import {QuestionResponse } from './../../interface/Quizz';
 import { chatEnglish } from '@/app/store/action/chat';
 import * as Types from "../../constant/ActionType"
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from "axios";
-import { DeckInterface, QuizInterface} from "@/app/interface/Quizz";
+import { DeckInterface, QuestionRequest, QuizInterface} from "@/app/interface/Quizz";
 import { toast } from "react-toastify";
 
 // Region Deck
@@ -12,7 +13,6 @@ export const getDecks = createAsyncThunk(
         try {
             const response = await axios.get(`http://localhost:5000/deck`);
             const data: any = response.data;
-            console.log('deck ne ', data)
             return data;
         } catch (error) {
             console.error("Error: " + Types.DECK_SHOW_ALL, error);
@@ -20,6 +20,8 @@ export const getDecks = createAsyncThunk(
         }
     }
 );
+
+
 
 export const createDeck = createAsyncThunk(
   Types.DECK_CREATE,
@@ -51,28 +53,72 @@ export const createQuiz = createAsyncThunk(
     Types.QUIZ_CREATE,
     async (newQuiz: QuizInterface) => {
         try {
-            console.log("Creating quiz with questions:", newQuiz);
-            const response = await axios.post('http://localhost:5000/deck', newQuiz);
-            // const response = await axios.post('http://localhost:5000/quizzes', newQuiz);
-            const data = response.data ;
-            toast.success("Tạo bài kiểm tra thành công");
-            return data ; // Assuming you want to return the created quiz data
+            console.log("newQuiz" , newQuiz)
+            const response = await axios.post('http://localhost:5000/quizzes', {
+                questions: newQuiz.questions,
+                deckName: newQuiz.deckName,
+                regionType: newQuiz.regionType,
+                deckOwner: newQuiz.deckOwner,
+                deckId: newQuiz.deckId
+            });
+
+            console.log("response",response);
+            const data = response.data;
+            toast.success("Quiz created successfully");
+            return data;
         } catch (error) {
-            console.error("Error: " + Types.QUIZ_CREATE, error);
+            console.error("Error creating quiz:", error);
+            throw error;
+        }
+    }
+);
+export const editQuestion = createAsyncThunk(
+  Types.QUESTION_EDIT,
+    async ({ id, newQuestion }: { id: string, newQuestion: QuestionResponse }) => {
+        try {
+            console.log("newQuestion", newQuestion);
+            const response = await axios.put(`http://localhost:5000/quizzes/${id}`, {
+                deck: newQuestion.deck,
+                answers: newQuestion.answers,
+                name: newQuestion.name,
+            });
+
+            console.log("response", response);
+            const data = response.data;
+            toast.success("Update question successfully");
+            return data;
+        } catch (error) {
+            console.error("Error question quiz:", error);
             throw error;
         }
     }
 );
 
-export const findOneQuiz = createAsyncThunk(
-    Types.QUIZ_FIND_ONE,
-    async (quizId: string) => {
+export const deleteQuestion = createAsyncThunk(
+    Types.QUESTION_DELETE,
+    async (questionId: String) => {
         try {
-            const response = await axios.get(`http://localhost:3000/quizzes/${quizId}`);
-            const data: QuizInterface = response.data;
+            const response = await axios.delete(`http://localhost:5000/quizzes/${questionId}`);
+            const data: QuestionResponse = response.data;
+            toast.success("Delete question successfully");
+            return response;
+        } catch (error) {
+            console.error("Error Delete question :", error);
+            throw error;
+        }
+    }
+);
+
+export const getQuestion = createAsyncThunk(
+    Types.QUESTION_GET,
+    async (questionId: string) => {
+        try {
+            console.log("In Connect DB ", questionId);
+            const response = await axios.get(`http://localhost:5000/quizzes/${questionId}`);
+            const data: QuestionResponse = response.data;
             return data;
         } catch (error) {
-            console.error("Error: " + Types.QUIZ_FIND_ONE, error);
+            console.error("Error: " + Types.QUESTION_GET, error);
             throw error;
         }
     }
@@ -84,6 +130,7 @@ export const showAllQuizzes = createAsyncThunk(
         try {
             const response = await axios.get(`http://localhost:5000/quizzes`);
             const data: any = response.data;
+            console.log('data from response' , data)
             return data;
         } catch (error) {
             console.error("Error: " + Types.QUIZ_SHOW_ALL, error);
@@ -91,5 +138,4 @@ export const showAllQuizzes = createAsyncThunk(
         }
     }
 );
-// end Region Quiz
 

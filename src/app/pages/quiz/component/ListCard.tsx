@@ -1,31 +1,52 @@
-import React, { useState } from 'react';
-import { Card, CardContent, Typography, List, ListItem, ListItemText, Divider } from '@mui/material';
-import { FlashCardInterface, QuizInterface, Question } from "@/app/interface/Quizz";
+import React from 'react';
+import { Card, CardContent, Typography, List, ListItem, ListItemText, IconButton, Box } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Answer, Question } from "@/app/interface/Quizz";
 
 interface Props {
     question: Question;
+    onEdit: (questionId: string) => void;
+    onDelete: (questionId: string) => void;
 }
 
-const ListCard: React.FC<Props> = ({ question }) => {
-
-
-    const correctAnswer = question.answers.find(answer => answer.isAnswer);
+const ListCard: React.FC<Props> = ({ question, onEdit, onDelete }) => {
+    const correctAnswers: Answer[] | undefined = question?.answers.filter(answer => answer.isAnswer);
 
     return (
-        <Card
-            variant="outlined"
-        >
+        <Card variant="outlined" sx={{ position: 'relative', width: '1000px', height: '350px' }}>
+            <IconButton
+                onClick={() => onEdit(question._id)}
+                sx={{
+                    position: 'absolute',
+                    right: 48,
+                }}
+                size="small"
+                color="primary"
+            >
+                <EditIcon />
+            </IconButton>
+            <IconButton
+                onClick={() => onDelete(question._id)}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                }}
+                size="small"
+                color="secondary"
+            >
+                <DeleteIcon />
+            </IconButton>
             <CardContent
-                style={{ height: '300px', width: '1000px' }}
                 sx={{
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    alignItems: 'center',  // Align items vertically in the center
+                    alignItems: 'center',
+                    height: '100%',
                 }}
-
             >
-                <div style={{ width: '50%' }}>
+                <Box sx={{ width: '50%' }}>
                     <Typography variant="h5" component="h3" gutterBottom>
                         {question.name}
                     </Typography>
@@ -39,27 +60,31 @@ const ListCard: React.FC<Props> = ({ question }) => {
                             </ListItem>
                         ))}
                     </List>
-                </div>
-                <Typography
-
-                    variant="h5"
-                    component="h3"
-                    gutterBottom
+                </Box>
+                <Box
                     sx={{
-                        backgroundColor: '#e6e6e6',  // Set background color (light blue with transparency)
-                        padding: '8px',  // Add some padding for better appearance
-                        borderRadius: '4px',  // Optional: add rounded corners
+                        backgroundColor: '#e6e6e6',
+                        borderRadius: '4px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        height: '100%',  // Ensure it takes the full height for alignment
+                        height: '90%',
                         width: '50%',
                     }}
                 >
-                    {correctAnswer ? correctAnswer.answerName : 'No correct answer provided'}
-                </Typography>
+                    {correctAnswers && correctAnswers.length > 0 ? (
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            {correctAnswers.map((answer, index) => (
+                                <Typography key={index}>
+                                    {answer.answerName}
+                                </Typography>
+                            ))}
+                        </Box>
+                    ) : (
+                        <Typography variant="body1">No correct answers provided</Typography>
+                    )}
+                </Box>
             </CardContent>
-
         </Card>
     );
 };

@@ -39,11 +39,18 @@ export const GROUP_SHOW_ALL = "GROUP_SHOW_ALL"
 
 // Quiz
 export const QUIZ_CREATE = 'QUIZ_CREATE';
-export const QUIZ_FIND_ONE = 'QUIZ_FIND_ONE';
+export const QUESTION_EDIT = 'QUESTION_EDIT';
+export const QUESTION_GET = 'QUESTION_GET';
+export const QUESTION_DELETE = 'QUESTION_DELETE';
+
 export const QUIZ_SHOW_ALL = 'QUIZ_SHOW_ALL';
 // Deck 
 export const DECK_CREATE = 'DECK_CREATE';
 export const DECK_SHOW_ALL = 'DECK_SHOW_ALL';
+
+// TestExam 
+export const TEST_CREATE = 'TEST_CREATE';
+export const TEST_LIST_RESULT = 'TEST_LIST_RESULT';
 
 
 

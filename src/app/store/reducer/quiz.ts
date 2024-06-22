@@ -1,9 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 import {
-    getDecks, showAllQuizzes, createDeck, createQuiz
+    getDecks, showAllQuizzes, createDeck, createQuiz, editQuestion, deleteQuestion,
+    getQuestion
 } from "@/app/store/action/quiz";
-import {DeckInterface, FlashCardInterface, QuizInterface} from "@/app/interface/Quizz";
+import {DeckInterface, FlashCardInterface, QuestionRequest, QuestionResponse, QuizInterface} from "@/app/interface/Quizz";
 
 
 interface InitialState {
@@ -13,6 +14,8 @@ interface InitialState {
     isError: boolean;
     listFlashCard: FlashCardInterface[];
     newQuiz: QuizInterface;
+    newQuestion: QuestionRequest;
+    question: QuestionResponse;
     isLike: boolean,
     isSuccess: boolean,
     message: string
@@ -31,6 +34,20 @@ var initialState: InitialState = {
         regionType: "",
         questions: [],
         deckOwner: ""
+    },
+    newQuestion: {
+        deck: "",
+        answers: [],
+        name: ""
+    },
+    question: {
+        _id: "",
+        name: "",
+        answers: [],
+        deck: "",
+        createdAt: "",
+        updatedAt: "",
+        __v: 0
     },
     message: "",
     isLike: false
@@ -105,7 +122,57 @@ const quizSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false
             })
-            
+
+            // EDIT Question 
+            .addCase(editQuestion.fulfilled, (state, action) => {
+                state.newQuestion = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(editQuestion.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(editQuestion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+            //DELETE Question 
+            .addCase(deleteQuestion.fulfilled, (state, action) => {
+                state.question = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(deleteQuestion.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(deleteQuestion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+           // GET QUESTION BY ID 
+              .addCase(getQuestion.fulfilled, (state, action) => {
+                state.question = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getQuestion.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getQuestion.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
     }
 
 })
