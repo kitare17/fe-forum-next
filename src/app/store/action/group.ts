@@ -222,13 +222,14 @@ export const deleteDocGroup = createAsyncThunk(
 export const createTaskGroup = createAsyncThunk(
     Types.GROUP_CREATE_TASK,
     async ({title, detail,startDay,endDay,level,assignee,groupId}: { title:string, detail:string,startDay:string,endDay:string,level:string,assignee:string[],groupId:string|undefined}) => {
+        console.log(level)
         try {
             const response = await axios.post(`http://localhost:3001/groups/${groupId}/tasks`,{
                 title,
                 detail,
                 startDate:startDay,
                 endDate: endDay,
-                level,
+                label:level,
                 assignee,
                 group:groupId
             });

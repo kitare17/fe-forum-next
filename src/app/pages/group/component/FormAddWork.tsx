@@ -34,7 +34,7 @@ const FormCreateWork = (
     }
 ) => {
 
-    const router = useRouter();
+
     const {groupDetail, isLoading, isError} = useSelector((state: RootState) => state.group);
 
     const handleClickCloseForm = () => {
@@ -67,12 +67,8 @@ const FormCreateWork = (
         }
     )
     const {errors} = formState;
-    ///text edit field
-    const [text, setText] = useState<string>("");
-    const onChangeText = (event: any, editor: any) => {
-        setText(editor.getData())
-        console.log(editor.getData())
-    }
+
+
 
     useEffect(() => {
 
@@ -127,9 +123,6 @@ const FormCreateWork = (
             "assignee": assignId,
             "groupId": groupDetail?._id
         }
-       // alert(JSON.stringify(work))
-
-
         // @ts-ignore
         dipatch(createTaskGroup(
             {
@@ -143,20 +136,9 @@ const FormCreateWork = (
             }
         ))
 
-        // if (text) {
-        //     // @ts-ignore
-        //     dipatch(createNotification({
-        //         title: getValues("title"),
-        //         detail: text,
-        //         group: groupId
-        //     }));
-        //     handleClickCloseForm();
-        //     setText("");
-        //     reset();
-        //
-        // } else {
-        //     toast.error("Vui lòng nhập nội dung")
-        // }
+        reset();
+        handleClickCloseForm();
+
     }
 
     return (
