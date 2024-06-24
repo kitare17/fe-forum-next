@@ -6,7 +6,7 @@ export interface GroupTaskInterface {
     "_id"?: string,
     "detail": string,
     "group"?: GroupInterface,
-    "assignee"?: UserInterface
+    "assignee"?: [UserInterface],
     createdAt?: string,
     updatedAt?: string,
     "label": string,

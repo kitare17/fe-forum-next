@@ -5,9 +5,9 @@ import {
     findAllGroup, findAllGroupByName,
     findAllNotification,
     findOneGroup,
-    getAllMember, getDocGroup, getTaskGroup, joinGroup, removeMember
+    getAllMember, getDocGroup, getTaskGroup, joinGroup, removeMember, updateTask
 } from "@/app/store/action/group";
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, current} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {Group} from "next/dist/shared/lib/router/utils/route-regex";
@@ -16,11 +16,13 @@ import {GroupNotificationInterface} from "@/app/interface/GroupNotificationInter
 import {UserInterface} from "@/app/interface/User";
 import {DocGroupInterface} from "@/app/interface/DocGroupInterface";
 import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
+import {useDispatch} from "react-redux";
 
 interface InitialState {
     listGroup: [GroupInterface] | [],
     listNotification: [GroupNotificationInterface] | [],
     isLoading: boolean,
+    isUpdate: boolean,
     isError: boolean,
     maxPage: number,
     maxPageNotification: number,
@@ -32,7 +34,7 @@ interface InitialState {
     listTodoTask: [GroupTaskInterface] | [],
     listPending: [GroupTaskInterface] | [],
     listDone: [GroupTaskInterface] | [],
-    listCancel: [GroupTaskInterface] | []
+    listCancel: [GroupTaskInterface] | [],
 
 }
 
@@ -49,7 +51,8 @@ var initialState: InitialState = {
     listTodoTask: [],
     listPending: [],
     listDone: [],
-    listCancel: []
+    listCancel: [],
+    isUpdate: false
 }
 const groupSlice = createSlice({
     name: "group",
@@ -80,11 +83,6 @@ const groupSlice = createSlice({
         builder.addCase(findOneGroup.fulfilled, (state, action) => {
             const user = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}
             if (action.payload?.members.includes(user.userEmailId) || action.payload?.adminGroup._id === user.userEmailId) {
-                // console.log("member",action.payload?.members)
-                // console.log("user id ",user.userEmailId)
-                // console.log("Check nhom truong",action.payload?.adminGroup._id===user.userEmailId)
-                // console.log("Check thanh vien",action.payload?.members.includes(user.userEmailId))
-                // console.log("thanh vien do")
                 state.isJoin = true
             }
 
@@ -309,7 +307,9 @@ const groupSlice = createSlice({
         //CREATE GROUP TASK
         builder.addCase(createTaskGroup.fulfilled, (state, action) => {
             //@ts-ignore
-            state.listTodoTask=[action.payload,...state.listTodoTask]
+            state.listTodoTask = [action.payload, ...state.listTodoTask]
+            //@ts-ignore
+            state.listTask = [action.payload, ...state.listTask]
             state.isLoading = false;
             state.isError = false;
         })
@@ -327,13 +327,13 @@ const groupSlice = createSlice({
         //SHOW GROUP TASK
         builder.addCase(getTaskGroup.fulfilled, (state, action) => {
             //@ts-ignore
-            state.listTodoTask=action.payload.filter((task)=>task?.status==="Đã giao")
+            state.listTodoTask = action.payload.filter((task) => task?.status === "Đã giao")
             //@ts-ignore
-            state.listPending=action.payload.filter((task)=>task?.status==="Đang làm")
+            state.listPending = action.payload.filter((task) => task?.status === "Đang làm")
             //@ts-ignore
-            state.listDone=action.payload.filter((task)=>task?.status==="Hoàn thành")
+            state.listDone = action.payload.filter((task) => task?.status === "Hoàn thành")
             //@ts-ignore
-            state.listCancel=action.payload.filter((task)=>task?.status==="Hủy")
+            state.listCancel = action.payload.filter((task) => task?.status === "Hủy")
             state.isLoading = false;
             state.isError = false;
         })
@@ -343,6 +343,26 @@ const groupSlice = createSlice({
                 state.isError = false
             })
             .addCase(getTaskGroup.rejected, (state, action) => {
+
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //UPDATE GROUP TASK
+        builder.addCase(updateTask.fulfilled, (state, action) => {
+            state.isUpdate = false;
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(updateTask.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false;
+                state.isUpdate = true;
+
+
+            })
+            .addCase(updateTask.rejected, (state, action) => {
 
                 state.isLoading = false;
                 state.isError = true;

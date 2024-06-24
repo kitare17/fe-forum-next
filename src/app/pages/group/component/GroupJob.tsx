@@ -14,6 +14,8 @@ import {RootState} from "@/app/store";
 import {createDayToStringTask} from "@/app/constant/Fomart";
 import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
 
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import FormEditWork from './FormEditWork';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -46,34 +48,41 @@ const GroupJob = ({groupId}: { groupId: string }) => {
         setTaskDetail(undefined)
     }
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        //@ts-ignore
-        dispatch(getTaskGroup({groupId}));
-    }, []);
-
-
     const {
         listTodoTask,
         listCancel,
         listDone,
         listPending,
         isLoading,
-        isError
+        isError,
+        isUpdate
     } = useSelector((state: RootState) => state.group);
+    useEffect(() => {
+        //@ts-ignore
+        dispatch(getTaskGroup({groupId}));
+    }, [isUpdate]);
+
+
+
 
     //state create work
 
     const [openCreateWork, setOpenCreateWordForm] = React.useState(false);
+    const [openEditWork, setOpenEditWorkForm] = React.useState(false);
     const handleOpenAddWork = () => {
         setOpenCreateWordForm(true);
+
+    };
+    const handleOpenEditWork = (task: GroupTaskInterface | undefined) => {
+        setOpenEditWorkForm(true);
+        setTaskDetail(task)
 
     };
 
     //priority of task
 
 
-    const PriorityTask = ({priority}:{priority:string}) => {
+    const PriorityTask = ({priority}: { priority: string }) => {
         var colorPriority = "#FFFF00";
 
         switch (priority) {
@@ -91,8 +100,8 @@ const GroupJob = ({groupId}: { groupId: string }) => {
         return (
             <span
                 className="badge text-dark mb-2 ml-2"
-            style={{backgroundColor:colorPriority}}
-                >{priority}</span>
+                style={{backgroundColor: colorPriority}}
+            >{priority}</span>
         )
     }
 
@@ -121,30 +130,25 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                 {/*<span*/}
                                                 {/*    className="badge bg-warning text-dark mb-2 ml-2">Độ ưu tiên: {task.label}</span>*/}
                                                 <PriorityTask priority={task.label}/>
-                                                <div className="card-text small ">Ngày bắt
-                                                    đầu: {createDayToStringTask(task.startDate)}</div>
-                                                <div className="card-text small">Ngày kết
-                                                    thúc: {createDayToStringTask(task.endDate)}</div>
+                                                <div className="card-text small ">
+                                                    <b>Ngày bắt đầu:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.startDate)}
+                                                </div>
+                                                <div className="card-text small">
+                                                    <b>Ngày kết thúc:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.endDate)}
+                                                </div>
                                                 {/*<div className="card-text text-muted small">Được tạo bởi: </div>*/}
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=7yVMtODDHoSU&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=FkQHNSmqWQWH&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=Zyo5wDjgJxRW&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
 
+                                                <Button
+                                                    variant="contained"
+                                                    startIcon={<EditCalendarIcon/>}
+                                                    onClick={()=>handleOpenEditWork(task)}
+                                                >
+
+                                                </Button>
                                             </div>
                                         </div>
                                     )
@@ -172,29 +176,23 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                 <h5 className="card-title"
                                                     onClick={() => handleOpenDetailToDo(task)}>{task.title}</h5>
                                                 <PriorityTask priority={task.label}/>
-                                                <div className="card-text small ">Ngày bắt
-                                                    đầu: {createDayToStringTask(task.startDate)}</div>
-                                                <div className="card-text small">Ngày kết
-                                                    thúc: {createDayToStringTask(task.endDate)}</div>
-                                                {/*<div className="card-text text-muted small">Được tạo bởi: </div>*/}
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=7yVMtODDHoSU&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=FkQHNSmqWQWH&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=Zyo5wDjgJxRW&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
+                                                <div className="card-text small ">
+                                                    <b>Ngày bắt đầu:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.startDate)}
+                                                </div>
+                                                <div className="card-text small">
+                                                    <b>Ngày kết thúc:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.endDate)}
+                                                </div>
+                                                <Button
+                                                    variant="contained"
+                                                    startIcon={<EditCalendarIcon/>}
+                                                    onClick={()=>handleOpenEditWork(task)}
+                                                >
+
+                                                </Button>
 
                                             </div>
                                         </div>
@@ -220,31 +218,24 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                 <h5 className="card-title"
                                                     onClick={() => handleOpenDetailToDo(task)}>{task.title}</h5>
 
-                                                  <PriorityTask priority={task.label}/>
-                                                <div className="card-text small ">Ngày bắt
-                                                    đầu: {createDayToStringTask(task.startDate)}</div>
-                                                <div className="card-text small">Ngày kết
-                                                    thúc: {createDayToStringTask(task.endDate)}</div>
-                                                {/*<div className="card-text text-muted small">Được tạo bởi: </div>*/}
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=7yVMtODDHoSU&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=FkQHNSmqWQWH&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=Zyo5wDjgJxRW&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
+                                                <PriorityTask priority={task.label}/>
+                                                <div className="card-text small ">
+                                                    <b>Ngày bắt đầu:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.startDate)}
+                                                </div>
+                                                <div className="card-text small">
+                                                    <b>Ngày kết thúc:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.endDate)}
+                                                </div>
+                                                <Button
+                                                    variant="contained"
+                                                    startIcon={<EditCalendarIcon/>}
+                                                    onClick={()=>handleOpenEditWork(task)}
+                                                >
 
+                                                </Button>
                                             </div>
                                         </div>
                                     )
@@ -268,29 +259,23 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                 <h5 className="card-title"
                                                     onClick={() => handleOpenDetailToDo(task)}>{task.title}</h5>
                                                 <PriorityTask priority={task.label}/>
-                                                <div className="card-text small ">Ngày bắt
-                                                    đầu: {createDayToStringTask(task.startDate)}</div>
-                                                <div className="card-text small">Ngày kết
-                                                    thúc: {createDayToStringTask(task.endDate)}</div>
-                                                {/*<div className="card-text text-muted small">Được tạo bởi: </div>*/}
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=7yVMtODDHoSU&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=FkQHNSmqWQWH&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
-                                                <Image
-                                                    src="https://img.icons8.com/?size=100&id=Zyo5wDjgJxRW&format=png&color=000000"
-                                                    width={20}
-                                                    height={20}
-                                                    alt="Picture of the author"
-                                                />
+                                                <div className="card-text small ">
+                                                    <b>Ngày bắt đầu:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.startDate)}
+                                                </div>
+                                                <div className="card-text small">
+                                                    <b>Ngày kết thúc:</b>
+                                                    <br/>
+                                                    {createDayToStringTask(task.endDate)}
+                                                </div>
+                                                <Button
+                                                    variant="contained"
+                                                    startIcon={<EditCalendarIcon/>}
+                                                    onClick={()=>handleOpenEditWork(task)}
+                                                >
+
+                                                </Button>
 
                                             </div>
                                         </div>
@@ -318,6 +303,9 @@ const GroupJob = ({groupId}: { groupId: string }) => {
             </Modal>
             <FormCreateWork openCreateWork={openCreateWork} groupId={groupId}
                             setOpenCreateWordForm={setOpenCreateWordForm}/>
+            <FormEditWork openEditWork={openEditWork} groupId={groupId}
+                          taskDetail={taskDetail}
+                          setOpenEditWorkForm={setOpenEditWorkForm}/>
         </div>
     );
 }

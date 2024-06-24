@@ -191,23 +191,23 @@ const ChatEnglish = () => {
                         </Typography>
                     </Toolbar>
                     <Divider/>
-                    <List>
-                        {['Inbox', 'Starred', 'Drafts0', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton sx={{background: "#ede7e6"}}>
-                                    <ChatItem
-                                        id="1"
-                                        avatar={'https://png.pngtree.com/png-vector/20230416/ourmid/pngtree-avatar-ninja-symbol-icon-vector-png-image_6709524.png'}
-                                        alt={'Reactjs'}
-                                        title={'Facebook'}
-                                        subtitle={'What are you doing?'}
-                                        date={new Date()}
-                                        unread={1}
-                                    />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {/*<List>*/}
+                    {/*    {['Inbox', 'Starred', 'Drafts0', 'Send email', 'Drafts'].map((text, index) => (*/}
+                    {/*        <ListItem key={text} disablePadding>*/}
+                    {/*            <ListItemButton sx={{background: "#ede7e6"}}>*/}
+                    {/*                <ChatItem*/}
+                    {/*                    id="1"*/}
+                    {/*                    avatar={'https://png.pngtree.com/png-vector/20230416/ourmid/pngtree-avatar-ninja-symbol-icon-vector-png-image_6709524.png'}*/}
+                    {/*                    alt={'Reactjs'}*/}
+                    {/*                    title={'Facebook'}*/}
+                    {/*                    subtitle={'What are you doing?'}*/}
+                    {/*                    date={new Date()}*/}
+                    {/*                    unread={1}*/}
+                    {/*                />*/}
+                    {/*            </ListItemButton>*/}
+                    {/*        </ListItem>*/}
+                    {/*    ))}*/}
+                    {/*</List>*/}
                     <Divider/>
 
                 </Drawer>
