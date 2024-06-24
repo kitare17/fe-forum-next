@@ -24,5 +24,13 @@ export function createDayToString(createdAt:string) {
 
 export function createDayToStringTask(createdAt:string) {
 
-    return `Tạo ${new Date(createdAt).getDate()}/${new Date(createdAt).getMonth() + 1}/${new Date(createdAt).getFullYear()}`;
+    var hour=new Date(createdAt).getHours();
+    var minute=new Date(createdAt).getMinutes();
+    var second=new Date(createdAt).getSeconds();
+    var date=new Date(createdAt).getDate();
+    var month=new Date(createdAt).getMonth();
+    var year=new Date(createdAt).getFullYear();
+
+    return `${hour}:${minute}:${second} ${date}/${month + 1}/${year}`;
 }
+

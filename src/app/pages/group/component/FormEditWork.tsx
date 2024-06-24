@@ -1,36 +1,32 @@
 "use client"
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import {removeBlog} from "@/app/store/action/blog";
-import {toast} from "react-toastify";
-import {useRouter} from "next/navigation";
 import {Controller, useForm} from "react-hook-form";
-import {BlogInterface} from "@/app/interface/Blog";
-import {createNotification, createTaskGroup} from "@/app/store/action/group";
 import Grid from "@mui/material/Grid";
 import {Autocomplete, Box} from "@mui/material";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import {CKEditor} from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import {RootState} from "@/app/store";
+import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
+import {updateTask} from "@/app/store/action/group";
 
-const FormCreateWork = (
+const FormEditWork = (
     {
         groupId,
-        openCreateWork,
-        setOpenCreateWordForm
+        taskDetail,
+        openEditWork,
+        setOpenEditWorkForm
     }
         : {
         groupId: string | undefined,
-        openCreateWork: boolean,
-        setOpenCreateWordForm: React.Dispatch<React.SetStateAction<boolean>>
+        openEditWork: boolean,
+        taskDetail: GroupTaskInterface | undefined
+        setOpenEditWorkForm: React.Dispatch<React.SetStateAction<boolean>>
     }
 ) => {
 
@@ -38,7 +34,7 @@ const FormCreateWork = (
     const {groupDetail, isLoading, isError} = useSelector((state: RootState) => state.group);
 
     const handleClickCloseForm = () => {
-        setOpenCreateWordForm(false);
+        setOpenEditWorkForm(false);
     };
 
 
@@ -61,19 +57,40 @@ const FormCreateWork = (
                 "detail": "",
                 "startDay": "",
                 "endDay": "",
-                "level": "",
-                "assignee": []
+                "level": {},
+                "assignee": [""],
+                "status": {}
             }
         }
     )
     const {errors} = formState;
+    const defaultValueMember = (): any[] => {
 
-
+        var defaultMember: any[] =
+            [taskDetail?.assignee].flat().map((ass) => {
+                return {
+                    label: ass?.username,
+                    id: ass?._id
+                }
+            })
+        return defaultMember;
+    }
 
     useEffect(() => {
-
-
-    }, [])
+        setValue("title", taskDetail?.title ?? "")
+        setValue("detail", taskDetail?.detail ?? "")
+        setValue("startDay", taskDetail?.startDate ?? "")
+        setValue("endDay", taskDetail?.endDate ?? "")
+        setValue("level", {
+            label: taskDetail?.label ?? "",
+            id: "2"
+        })
+        setValue("assignee", defaultValueMember() ?? [])
+        setValue("status", {
+            label: taskDetail?.status ?? "",
+            id: "2"
+        })
+    }, [taskDetail])
 
 
     const listLevelOption = [
@@ -90,10 +107,31 @@ const FormCreateWork = (
             id: "3"
         }
     ]
+
+
+    const listStatusOption = [
+        {
+            label: "Đã giao",
+            id: "1"
+        },
+        {
+            label: "Đang làm",
+            id: "2"
+        },
+        {
+            label: "Hoàn thành",
+            id: "3"
+        },
+        {
+            label: "Hủy",
+            id: "4"
+        }
+    ]
     const [listMember, setListMember] = useState([{
         label: "None",
         id: "1"
     }]);
+
     useEffect(() => {
         if (groupDetail) {
             var filterList = groupDetail.members.map(mem => {
@@ -111,7 +149,7 @@ const FormCreateWork = (
 
         var assignee = getValues("assignee");
         // @ts-ignore
-        var assignId:string[] = assignee.map(item => item.id);
+        var assignId: string[] = assignee.map(item => item.id);
 
         const work = {
             "title": getValues("title"),
@@ -119,20 +157,27 @@ const FormCreateWork = (
             "startDay": getValues("startDay"),
             "endDay": getValues("endDay"),
             // @ts-ignore
-            "level": getValues("level")?.label.toString(),
+            "level": getValues("level")?.label,
             "assignee": assignId,
-            "groupId": groupDetail?._id
+            "groupId": groupDetail?._id,
+            // @ts-ignore
+            "status": getValues("status")?.label,
+            "taskId": taskDetail?._id
         }
-        // @ts-ignore
-        dipatch(createTaskGroup(
+
+
+        //@ts-ignore
+        dipatch(updateTask(
             {
                 title: work.title,
-                detail:work.detail,
+                detail: work.detail,
                 startDay: work.startDay,
                 endDay: work.endDay,
                 level: work.level,
                 assignee: work.assignee,
-                groupId: work.groupId
+                groupId: work.groupId,
+                status: work.status,
+                taskId: work.taskId,
             }
         ))
 
@@ -141,11 +186,12 @@ const FormCreateWork = (
 
     }
 
+
     return (
         <React.Fragment>
 
             <Dialog
-                open={openCreateWork}
+                open={openEditWork}
                 onClose={handleClickCloseForm}
                 sx={{
                     "& .MuiDialog-container": {
@@ -157,7 +203,7 @@ const FormCreateWork = (
                 }}
                 maxWidth="lg"
             >
-                <DialogTitle>Tạo công việc mới </DialogTitle>
+                <DialogTitle>Chỉnh sửa công việc </DialogTitle>
                 <DialogContent>
                     <Grid container
                           direction="row"
@@ -269,6 +315,10 @@ const FormCreateWork = (
                                                 sx={{
                                                     mt: 2
                                                 }}
+                                                defaultValue={{
+                                                    label: taskDetail?.label ?? "",
+                                                    id: "2"
+                                                }}
                                                 onBlur={async () => {
                                                     await trigger("level")
                                                 }}
@@ -317,13 +367,12 @@ const FormCreateWork = (
                                                 sx={{
                                                     mt: 2
                                                 }}
+                                                defaultValue={defaultValueMember()}
                                                 multiple
                                                 onBlur={async () => {
                                                     await trigger("assignee")
                                                 }}
-                                                getOptionLabel={(option) => {
-                                                    return option.label
-                                                }}
+
                                                 options={listMember}
 
                                                 renderInput={(params) => (
@@ -334,8 +383,14 @@ const FormCreateWork = (
 
                                                     />
                                                 )}
+                                                // defaultValue={ {
+                                                //     label: (taskDetail?.assignee[0]?.username.toString())??"",
+                                                //     id: "2"
+                                                // }}
+
                                                 isOptionEqualToValue={(option, value) => {
-                                                    return option.label === value.label
+
+                                                    return option.label === value.label;
                                                 }
                                                 }
                                                 onChange={async (e, value) => {
@@ -349,10 +404,57 @@ const FormCreateWork = (
                                     }}
                                 />
 
+                                <Controller
+                                    control={control}
+                                    name={"status"}
+                                    rules={{required: true}}
 
+                                    render={({field: {onChange, value}}) => {
+                                        return (
+                                            <Autocomplete
+                                                sx={{
+                                                    mt: 2
+                                                }}
+                                                defaultValue={{
+                                                    label: taskDetail?.status ?? "",
+                                                    id: "2"
+                                                }}
+                                                onBlur={async () => {
+                                                    await trigger("status")
+                                                }}
+                                                getOptionLabel={(option) => {
+                                                    return option.label
+                                                }}
+                                                options={listStatusOption}
+
+                                                renderInput={(params) => (
+                                                    <TextField {...params} label="Trạng thái"
+                                                               error={!!errors.status}
+                                                               helperText={errors.status && "Vui lòng chọn trạng thái"}
+                                                               required
+
+                                                    />
+                                                )}
+                                                isOptionEqualToValue={(option, value) => {
+                                                    return option.label === value.label
+                                                }
+                                                }
+                                                onChange={async (e, value) => {
+                                                    if (!value) {
+                                                        // @ts-ignore
+                                                        setValue('status', {id: "", label: ""});
+                                                        await trigger("status")
+                                                        return ""
+                                                    }
+                                                    // @ts-ignore
+                                                    setValue('status', {id: value.id, label: value.label});
+                                                }}
+                                            />
+
+                                        )
+                                    }}
+                                />
                             </Box>
-
-
                         </Grid>
                     </Grid>
                 </DialogContent>
@@ -365,4 +467,4 @@ const FormCreateWork = (
     );
 }
 
-export default FormCreateWork;
+export default FormEditWork;
