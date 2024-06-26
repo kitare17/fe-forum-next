@@ -4,10 +4,11 @@ import axios from "axios";
 
 import {BlogInterface} from "@/app/interface/Blog";
 import {toast} from "react-toastify";
-import {BLOG_ADD_CMT, BLOG_FIND_ONE, BlOG_REPORT_COMMENT, BLOG_UNLIKE, TOPIC_FIND_ONE} from "../../constant/ActionType";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 import {ReplyCommentInterface} from "@/app/interface/ReplyCommentInterface";
+import {BlOG_COMMENT_REMOVE, BlOG_REMOVE} from "../../constant/ActionType";
+import {MessageEnglish} from "@/app/interface/ChatInterface";
 
 export const createBlog = createAsyncThunk(
     Types.BLOG_CREATE,
@@ -50,6 +51,120 @@ export const addNewComment = createAsyncThunk(
     Types.BLOG_ADD_CMT,
     async ({blogId, detail, userComment}: { blogId: string, detail: string, userComment: string }) => {
         try {
+
+
+
+
+            const thread_id = "thread_Iqfi07NdUSTH3jd0jdVsoIVd";
+            const assistant_id = "asst_s8hvI7xIs6UzKhmVt2ddInGk"
+
+            const messageDataDetail: string = detail;
+            const headers = {
+                'Authorization': 'Bearer sk-proj-JopMVzpkJno9HrWS6kJMT3BlbkFJCMyYUdHopZ9xSK0YINJ0',
+                'OpenAI-Beta': 'assistants=v1'
+            };
+
+            var run_id = ""
+            var dataChatResponse: MessageEnglish = {
+                id: "ts",
+                role: true,
+                text: "Đây chỉ là một phiên bản test " + Math.floor(Math.random() * 20) + 1
+            }
+
+            //Set message
+            await axios.post
+            (`https://api.openai.com/v1/threads/${thread_id}/messages`,
+                {
+                    "role": "user",
+                    "content": messageDataDetail
+                },
+                {headers}
+            )
+                .then(response => {
+                    console.log("Set message successfull")
+                })
+                .catch(error => {
+                    console.error('Error set message');
+                });
+
+
+            //Run thread
+            await axios.post
+            (`https://api.openai.com/v1/threads/${thread_id}/runs`,
+                {
+                    "assistant_id": assistant_id
+                },
+                {headers}
+            )
+                .then(response => {
+                    console.log("Run thread successfull")
+                    run_id = response.data.id;
+                })
+                .catch(error => {
+                    console.error('Error Run thread');
+                });
+
+            var check = true
+            //Run thread status
+            while (check){
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+
+                await axios.get(`https://api.openai.com/v1/threads/${thread_id}/runs/${run_id}`, {
+                    headers:headers,
+                    timeout:3000
+                })
+                    .then(response => {
+                        console.log("Run thread status successfull "+response.data.status )
+
+                        if(response.data.status=="completed") check=false;
+
+                    })
+                    .catch(error => {
+                        console.error('Error Run thread status');
+                    });
+
+            }
+
+            //Get message
+            await axios.get(`https://api.openai.com/v1/threads/${thread_id}/messages`, {
+                headers: {
+                    'OpenAI-Beta': 'assistants=v1',
+                    'Authorization': 'Bearer sk-proj-JopMVzpkJno9HrWS6kJMT3BlbkFJCMyYUdHopZ9xSK0YINJ0',
+                }
+            })
+                .then(response => {
+                    console.log("Get message successfull")
+                    console.log(response.data.data[0]);
+
+                    var botMessage = response.data.data[0];
+                    console.log("Data tra ve",botMessage.content[0].text.value)
+                    // dataChatResponse = {
+                    //     id: botMessage.id,
+                    //     role: true,
+                    //     text: botMessage.content[0].text.value
+                    // }
+                    detail=botMessage.content[0].text.value;
+                })
+                .catch(error => {
+                    console.error('Error Get message');
+                    console.error({error});
+
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             console.log({blogId, detail})
             // const userComment = "65f6aa46e21e50bbf7cf0e1c"
             const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`, {
@@ -200,6 +315,80 @@ export const createReplyComment = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.BlOG_REPLY_COMMENT);
+
+        }
+    }
+);
+
+
+export const editBlog = createAsyncThunk(
+    Types.BlOG_EDIT,
+    async ({
+               postId,
+               detail,
+               title
+           }:
+               {
+                   detail: string,
+                   postId: string,
+                   title: string
+               }) => {
+        try {
+
+            const response = await axios.put('http://localhost:3001/posts/editDetail', {
+                "postId": postId,
+                "detail": detail,
+                "title": title
+            });
+            console.log(response.data)
+            const data: BlogInterface = response.data.post;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_EDIT);
+
+        }
+    }
+);
+
+export const removeBlog = createAsyncThunk(
+    Types.BlOG_REMOVE,
+    async ({
+               blogId
+           }:
+               {
+                   blogId: string,
+               }) => {
+        try {
+            alert(blogId);
+            const response = await axios.delete(`http://localhost:3001/posts/${blogId}`);
+            console.log(response.data)
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_REMOVE);
+
+        }
+    }
+);
+
+
+export const removeCommentBlog = createAsyncThunk(
+    Types.BlOG_COMMENT_REMOVE,
+    async ({
+               blogId,
+               commentId
+
+           }:
+               {
+                   blogId: string,
+                   commentId: string
+               }) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/posts/${blogId}/comments/${commentId}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_COMMENT_REMOVE);
 
         }
     }

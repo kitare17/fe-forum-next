@@ -4,7 +4,11 @@ import userReducer from "./reducer/user"
 import auth from "./reducer/auth"
 import chatEnglishReducer from "./reducer/chat"
 import blog from "./reducer/blog"
+import task from './reducer/task'
 import topic from "@/app/store/reducer/topic";
+import group from "@/app/store/reducer/group";
+import sale from "@/app/store/reducer/sale";
+import todoList from './reducer/todoList'
 export const index =
     configureStore({
             reducer: {
@@ -12,7 +16,11 @@ export const index =
                 chatEnglish:chatEnglishReducer,
                 blog:blog,
                 topic:topic,
-                auth: auth
+                auth: auth,
+                group: group,
+                sale: sale,
+                task: task,
+                todoList: todoList
             }
         }
     )

@@ -19,6 +19,9 @@ export const BlOG_SHOW_ALL="BLOG_SHOW_ALL"
 export const BlOG_REPORT="BlOG_REPORT"
 export const BlOG_REPORT_COMMENT="BlOG_REPORT_COMMENT"
 export const BlOG_REPLY_COMMENT="BlOG_REPLY_COMMENT"
+export const BlOG_EDIT="BlOG_EDIT"
+export const BlOG_REMOVE="BlOG_REMOVE"
+export const BlOG_COMMENT_REMOVE="BlOG_COMMENT_REMOVE"
 
 //TOPIC ACION
 export const TOPIC_FIND_ALL="TOPIC_FIND_ALL"
@@ -32,6 +35,64 @@ export const REGISTER="REGISTER"
 
 // LOGOUT
 export const LOGOUT="LOGOUT"
+
+
+//GROUP
+export const GROUP_SHOW_ALL="GROUP_SHOW_ALL"
+export const GROUP_SHOW_ONE="GROUP_SHOW_ONE"
+export const GROUP_NOTIFICATION_SHOW_ALL="GROUP_NOTIFICATION_SHOW_ALL"
+export const GROUP_CREATE_NOTIFICATION="GROUP_CREATE_NOTIFICATION"
+export const GROUP_GET_ALL_MEMBER="GROUP_GET_ALL_MEMBER"
+export const GROUP_REMOVE_MEMBER="GROUP_REMOVE_MEMBER"
+export const GROUP_JOIN="GROUP_JOIN"
+export const GROUP_FIND_BY_NAME="GROUP_FIND_BY_NAME"
+export const GROUP_CREATE="GROUP_CREATE"
+export const GROUP_CREATE_DOC="GROUP_CREATE_DOC"
+export const GROUP_GET_DOC="GROUP_GET_DOC"
+export const GROUP_DELETE_DOC="GROUP_DELETE_DOC"
+export const GROUP_CREATE_TASK="GROUP_CREATE_TASK"
+export const GROUP_SHOW_TASK="GROUP_SHOW_TASK"
+export const GROUP_UPDATE_TASK="GROUP_UPDATE_TASK"
+
+//SALE ACTION
+
+export const SAlE_SHOW_ALL="GROUP_SHOW_ALL"
+
+//=================================================================================
+
+//CREATE TASK MANAGERMENT
+export const CREATE_TASK="CREATE_TASK" 
+
+//SHOW TASK MANAGERMENT
+export const SHOW_TASK="SHOW_TASK"
+
+//SHOW DETAIL TASK MANAGERMENT
+export const SHOW_DETAIL_TASK="SHOW_DETAIL_TASK"
+
+//DELETE TASK MANAGERMENT
+export const DELETE_TASK="DELETE_TASK"
+
+//UPDATE TASK MANAGERMENT
+export const UPDATE_TASK="UPDATE_TASK"
+
+//=================================================================================
+
+//CREATE TODO LIST
+export const CREATE_TODOLIST="CREATE_TODOLIST" 
+
+//SHOW TODO LIST
+export const SHOW_TODOLIST="SHOW_TODOLIST"
+
+//SHOW DETAIL TODO LIST
+export const SHOW_DETAIL_TODOLIST="SHOW_DETAIL_TODOLIST"
+
+//DELETE TODO LIST
+export const DELETE_TODOLIST="DELETE_TODOLIST"
+
+//UPDATE TODO LIST
+export const UPDATE_TODOLIST="UPDATE_TODOLIST"
+
+//=================================================================================
 
 
 

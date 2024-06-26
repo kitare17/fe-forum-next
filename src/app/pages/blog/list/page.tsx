@@ -73,6 +73,7 @@ const ListBlog = () => {
         // @ts-ignore
         dipatch(showAllBlog({page:currentPage}));
     }, [currentPage])
+    
     useEffect(() => {
         if (isLoading)
             toast.info("Đang tải thông tin")
