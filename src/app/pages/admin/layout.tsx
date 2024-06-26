@@ -1,7 +1,7 @@
 import Navitem from "@/app/component/Navitem";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
+import "../../../../public/css/admin.css"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +22,10 @@ export default function RootLayout({
     // @ts-ignore
     return (
         <>
-         <div className="g-sidenav-show  bg-gray-100">
+            <div className="g-sidenav-show  bg-gray-100">
                 <Navitem />
-          
-            {children}
+
+                {children}
             </div>
         </>
 
