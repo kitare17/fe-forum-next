@@ -1,9 +1,27 @@
 "use client"
 import CarouselComponent from "@/app/component/Carousel";
 import Image from "next/image";
-
+import {useParams, useRouter} from "next/navigation";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from 'react';
+import {RootState} from "@/app/store";
+import {getOneSalePost} from "@/app/store/action/sale"; //import dispatch o day
+ 
+ //Get param
+ 
 const SaleDetail = () => {
+    const dipatch = useDispatch();
+ const {saleId}: { saleId: string } = useParams();
+    // alert(saleId)
+    const {
+        saleDetail
+    } =
+        useSelector((state: RootState) => state.sale);
+    useEffect(() => {
+        //@ts-ignore
+        dipatch(getOneSalePost(saleId)); // ddooir
 
+    }, [])
     return (
         <>
             <style jsx>{`
@@ -33,8 +51,8 @@ const SaleDetail = () => {
                                 {/*    style={{borderRadius: '50%', width: '100%'}}/>*/}
                             </div>
                             <div className="col-9">
-                                <h5>Nguyễn Minh Quang</h5>
-                                <p>21-03-2024 10h30</p>
+                                <h5>{saleDetail?.creator?.username}</h5>
+                                <p>{saleDetail?.createdAt}</p>
                             </div>
                         </div>
                     </div>
@@ -53,26 +71,21 @@ const SaleDetail = () => {
                     <div className="col-md-5">
                         <div className="row">
                             <div className="col-md-12">
-                                <h4>Đồng hồ orient mặt 40mm màu vàng hồng còn mới 98% dùng siêu lướt</h4>
+                                <h4>{saleDetail?.title}</h4>
                                 <p className="text-danger fw-bolder fs-4">250.0000 đ</p>
                                 <hr/>
                                 <div><i className="fa-regular fa-clock"></i> Đăng 12 ngày trước</div>
-                                <div><i className="fa-solid fa-location-dot"></i> 03 Hoàng Văn Thụ, Đại học FPT lỏ</div>
-                                <div><i className="fa-solid fa-plane"></i> Xuất xứ : Nhật bủn</div>
-                                <div><i className="fa-solid fa-wand-magic-sparkles"></i> Tình trạng : Mới 99%</div>
+                                <div><i className="fa-solid fa-location-dot"></i> {saleDetail?.address}</div>
+                                <div><i className="fa-solid fa-plane"></i> Xuất xứ :{saleDetail?.origin}</div>
+                                <div><i className="fa-solid fa-wand-magic-sparkles"></i> Thương hiệu : {saleDetail?.brand}</div>
                                 <hr/>
                                 <h4>Mô tả chi tiết</h4>
-                                <p>lahd laks dlkas dk asd la ngajlfnlasnd à kabf jkaf asndjl asnd nasflkaksnf jlafn
-                                    alsna sndka nsd asd sad asjd sad
-                                    sdjashdashd lasjd salfj laksdja lksf kasfn lkfnaslaksjf ksalj lksajd ajd lkasjd kas
-                                    djasjdsa
-                                    asd hasdhalfh ak fjeiowefaeidghu ag hafu haofhalfhw hahf odf sf af asd asd asasd
-                                    asdsdasddsada
+                                <p>{saleDetail?.title}
                                 </p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>  
                 <hr/>
                 <div className="row">
                     <div className="col-md-6">

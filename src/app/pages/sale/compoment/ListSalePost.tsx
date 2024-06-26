@@ -52,9 +52,7 @@ const ListSalePost = ({array}: { array: SaleInterface[] }) => {
                             })}
 
 
-
-
-                </div>
+            </div>
             </div>
         </>
     );

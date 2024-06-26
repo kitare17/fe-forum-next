@@ -1,3 +1,4 @@
+import exp from "constants";
 
 
 export const  GET_RESPONSE_CHAT_GPT="GET_RESPONSE_CHAT_GPT";
@@ -42,8 +43,14 @@ export const GROUP_SHOW_ALL="GROUP_SHOW_ALL"
 export const GROUP_SHOW_ONE="GROUP_SHOW_ONE"
 
 
-//SALE ACTION
+//SALE ACTION q
 
-export const SAlE_SHOW_ALL="GROUP_SHOW_ALL"
+export const SAlE_SHOW_ALL="SALE_SHOW_ALL"
+
+export const SAlE_SHOW_ONE="SALE_SHOW_ONE"
+
+//category action
+export const CATEGORY_SHOW_ALL = "CATEGORY_SHOW_ALL"
+
 
 
