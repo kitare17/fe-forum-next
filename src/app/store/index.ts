@@ -9,6 +9,7 @@ import topic from "@/app/store/reducer/topic";
 import group from "@/app/store/reducer/group";
 import sale from "@/app/store/reducer/sale";
 import todoList from './reducer/todoList'
+import dashboard from './reducer/dashboard'
 export const index =
     configureStore({
             reducer: {
@@ -20,7 +21,8 @@ export const index =
                 group: group,
                 sale: sale,
                 task: task,
-                todoList: todoList
+                todoList: todoList,
+                dashboard: dashboard
             }
         }
     )
