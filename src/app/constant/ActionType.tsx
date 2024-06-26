@@ -95,4 +95,14 @@ export const UPDATE_TODOLIST="UPDATE_TODOLIST"
 //=================================================================================
 
 
+//DASHBOARD
+export const DASHBOARD_USER_COUNT="DASHBOARD_USER_COUNT"
+export const DASHBOARD_BLOG_MONTH_COUNT="DASHBOARD_BLOG_MONTH_COUNT"
+export const DASHBOARD_REPORT_COUNT="DASHBOARD_REPORT_COUNT"
+
+
+
+
+
+
 
