@@ -308,8 +308,7 @@ const groupSlice = createSlice({
         builder.addCase(createTaskGroup.fulfilled, (state, action) => {
             //@ts-ignore
             state.listTodoTask = [action.payload, ...state.listTodoTask]
-            //@ts-ignore
-            state.listTask = [action.payload, ...state.listTask]
+
             state.isLoading = false;
             state.isError = false;
         })
