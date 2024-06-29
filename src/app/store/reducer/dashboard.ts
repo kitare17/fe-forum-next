@@ -3,12 +3,13 @@ import {createSlice} from "@reduxjs/toolkit";
 import {fetchUsers} from "@/app/store/action/user";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
-import {getAmountBlogMonth, getTotalReport, getTotalUser} from "@/app/store/action/dashboard";
+import {getAmountBlogMonth, getTotalReport, getTotalUser,showAllBlog} from "@/app/store/action/dashboard";
 
 interface InitialState {
     totalUser:number,
     totalBlogMonth:number,
     totalReport:number,
+    listBlog?: { posts: BlogInterface[], maxPage: number },
     isLoading:boolean,
     isError:boolean
 
@@ -78,6 +79,23 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
             })
+// GET POST MANAGE
+builder.addCase(showAllBlog.fulfilled, (state, action) => {
+
+    // @ts-ignore
+    state.listBlog=action.payload;
+    state.isLoading = false;
+    state.isError = false;
+})
+    .addCase(showAllBlog.pending, (state, action) => {
+
+        state.isLoading = true;
+        state.isError = false
+    })
+    .addCase(showAllBlog.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+    })
 
     }
 })
