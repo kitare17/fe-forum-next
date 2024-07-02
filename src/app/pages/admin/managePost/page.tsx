@@ -1,5 +1,5 @@
 "use client"
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Suspense} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {findBlog, showAllBlog} from "@/app/store/action/dashboard";
 import BuildIcon from '@mui/icons-material/Build';
@@ -259,4 +259,14 @@ const ManagePost: React.FC = () => {
     );
 };
 
-export default ManagePost;
+
+const ManagePostRender = () => {
+    return (
+        // You could have a loading skeleton as the `fallback` too
+        <Suspense>
+            <ManagePost/>
+        </Suspense>
+    )
+};
+export default ManagePostRender;
+
