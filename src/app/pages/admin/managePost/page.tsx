@@ -1,8 +1,8 @@
 "use client"
 import React, {useState, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {showAllBlog} from "@/app/store/action/dashboard";
-
+import {findBlog, showAllBlog} from "@/app/store/action/dashboard";
+import BuildIcon from '@mui/icons-material/Build';
 import {
     Table,
     TableBody,
@@ -31,78 +31,79 @@ import {
 } from "@mui/icons-material";
 import {RootState} from "@/app/store";
 import {BlogInterface} from "@/app/interface/Blog";
-
-interface Post {
-    id: number;
-    title: string;
-    content: string;
-    creator: string; // New field for creator
-    status: string;
-}
+import Link from "next/link";
+import Grid from "@mui/material/Grid";
+import Pagination from "@mui/material/Pagination";
+import {useRouter, useSearchParams} from "next/navigation";
+import InputBase from "@mui/material/InputBase";
+import {useForm} from "react-hook-form";
+import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
 
 
 const ManagePost: React.FC = () => {
-
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const page = searchParams.get('page') ?? 1;
+    const searchBlogTitle = searchParams.get('searchBlogTitle') ?? "";
     const {
-        listBlog
+        listBlog,isUpdate,isLoading
     } =
         useSelector((state: RootState) => state.dashboard);
-
-
     const dispatch = useDispatch();
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState,
+        control,
+        trigger,
+        setValue,
+        getValues
+    } = useForm<any>(
+        {
+            defaultValues: {
+                "searchBlogTitle": searchBlogTitle,
+            }
+        }
+    )
+
     useEffect(() => {
 
-        // @ts-ignore
-        dispatch(showAllBlog({page: 1}));
-    }, [])
+        if (searchBlogTitle) {
+            // @ts-ignore
 
+            dispatch(findBlog({page: page, searchBlogTitle: searchBlogTitle}));
+        } else {
+            // @ts-ignore
+            dispatch(showAllBlog({page: page}));
+        }
 
+    }, [page, searchBlogTitle,isUpdate]);
 
-    const [showEditModal, setShowEditModal] = useState<boolean>(false);
-    const [showViewModal, setShowViewModal] = useState<boolean>(false); // State for view modal
-    const [selectedPost, setSelectedPost] = useState<BlogInterface | null>(null);
-
-    const handleEdit = (post: BlogInterface) => {
-        setSelectedPost(post);
-        setShowEditModal(true);
+    const handlePaging = (event: any, value: number) => {
+        if (searchBlogTitle)
+            router.push(`/pages/admin/managePost?page=${value}&searchBlogTitle=${searchBlogTitle}`);
+        else
+            router.push(`/pages/admin/managePost?page=${value}`)
     };
+    const handleFindGroup = () => {
+        var searchBlogTitle = getValues("searchBlogTitle")
+        router.push(`/pages/admin/managePost?page=1&searchBlogTitle=${searchBlogTitle}`);
+    }
 
-    const handleCloseEditModal = () => {
-        setShowEditModal(false);
-        setSelectedPost(null);
-    };
 
-    const handleSaveEdit = () => {
-        // Perform save logic here
-        // For example, update the post information in the state or make an API call
-        // After saving, close the modal
-        setShowEditModal(false);
-        setSelectedPost(null);
-    };
+    //handle modal edit open
+    const [open, setOpen] = React.useState(false);
+    const [blogPick, setBlogPick] = React.useState<BlogInterface | undefined>(undefined);
+    const handleOpenModalEdit = (blog: BlogInterface) => {
+        setOpen(true);
+        setBlogPick(blog);
+    }
 
-    const handleView = (post: BlogInterface) => {
-        setSelectedPost(post);
-        setShowViewModal(true);
-    };
-
-    const handleCloseViewModal = () => {
-        setShowViewModal(false);
-        setSelectedPost(null);
-    };
-
-    // const handleStatusChange = (id: number) => {
-    //     const updatedPosts = posts.map((post) => {
-    //         if (post.id === id) {
-    //             post.status = post.status === "Draft" ? "Published" : "Draft";
-    //         }
-    //         return post;
-    //     });
-    //     setPosts(updatedPosts);
-    // };
 
     return (
         <>
-            <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
+            <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg p-2 mb-3">
                 <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
                      id="navbarBlur">
                     <div className="container-fluid py-1 px-3">
@@ -116,6 +117,7 @@ const ManagePost: React.FC = () => {
                                 </li>
                             </ol>
                             <h6 className="font-weight-bolder mb-0">Quản lý bài viết</h6>
+
                         </nav>
                         <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                             <div className="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -150,19 +152,40 @@ const ManagePost: React.FC = () => {
 
                 <div className="container-fluid py-4">
                     <Paper className="card mb-4">
-                        <div className="card-header pb-4">
+                        <div className="card-header pb-4 d-flex justify-content-between">
                             <Typography variant="h5">Quản lý bài viết</Typography>
+                            <Paper
+                                component="form"
+                                sx={
+                                    {p: '2px 4px', display: 'flex', alignItems: 'center', width: 400}
+                                }
+
+                            >
+
+                                <InputBase
+                                    sx={{ml: 1, flex: 1}}
+                                    placeholder="Tìm kiếm group"
+                                    inputProps={{'aria-label': 'Tìm kiếm group'}}
+                                    {...register(
+                                        'searchBlogTitle'
+                                    )}
+                                />
+                                <IconButton type="button" sx={{p: '10px'}} aria-label="search">
+                                    <SearchIcon onClick={() => handleFindGroup()}/>
+                                </IconButton>
+                            </Paper>
                         </div>
                         <TableContainer>
                             <Table>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>STT</TableCell>
-                                        <TableCell>Chủ đề</TableCell>
-
+                                        <TableCell>Tiêu đề </TableCell>
+                                        <TableCell>Chủ đề </TableCell>
+                                        <TableCell align="center">Lượt thích</TableCell>
                                         <TableCell>Tác giả</TableCell>
                                         <TableCell align="center">Xem</TableCell>
-                                        <TableCell align="center">Publish/Unpublish</TableCell>
+                                        <TableCell align="center">Hành động</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -172,23 +195,29 @@ const ManagePost: React.FC = () => {
                                             <TableCell>
                                                 <Typography variant="body2">{post.title}</Typography>
                                             </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body2">{post?.topic?.title}</Typography>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Typography
+                                                    variant="body2">{[...(post.likes ?? [])].length}</Typography>
+                                            </TableCell>
 
                                             <TableCell>
                                                 <Typography variant="body2">{post?.creator?.username}</Typography>
                                             </TableCell>
                                             <TableCell align="center">
 
-                                                <IconButton onClick={() => handleView(post)}>
+                                                <Link href={`/pages/blog/detail/${post._id}`} rel="noopener noreferrer"
+                                                      target="_blank">
                                                     <ViewIcon/>
-                                                </IconButton>
+                                                </Link>
+
                                             </TableCell>
                                             <TableCell align="center">
-                                                {/*<IconButton*/}
-                                                {/*    onClick={() => handleStatusChange(post._id)}*/}
-                                                {/*    color={post.status === "Draft" ? "secondary" : "primary"}*/}
-                                                {/*>*/}
-                                                {/*    {post.statusPost === "Draft" ? <UnlockIcon/> : <LockIcon/>}*/}
-                                                {/*</IconButton>*/}
+                                                <IconButton onClick={() => handleOpenModalEdit(post)}>
+                                                    <BuildIcon/>
+                                                </IconButton>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -198,35 +227,33 @@ const ManagePost: React.FC = () => {
                     </Paper>
                 </div>
 
-                {/* View Modal */}
-                <Dialog open={showViewModal} onClose={handleCloseViewModal}>
-                    <DialogTitle>Chi tiết bài viết</DialogTitle>
-                    <DialogContent>
-                        {selectedPost && (
-                            <div>
-                                <Typography variant="body2">
-                                    <strong>Chủ đề:</strong> {selectedPost.title}
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>Nội dung:</strong> {selectedPost.detail}
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>Tác giả:</strong> {selectedPost?.creator?.username}
-                                </Typography>
-                                <Typography variant="body2">
-                                    <strong>Trạng thái:</strong> {selectedPost?.statusPost}
-                                </Typography>
-                            </div>
-                        )}
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleCloseViewModal} color="primary">
-                            Đóng
-                        </Button>
-                    </DialogActions>
-                </Dialog>
 
+                <Grid container
+                      sx={{
+                          display: 'flex',
+                          justifyContent: 'center'
+                      }}
+                      mb={5}
+                >
+                    <Grid item xs={10}
+                          sx={{
+                              display: 'flex',
+                              justifyContent: 'center'
+                          }}
+                    >
+                        <Pagination
+                            onChange={handlePaging}
+                            count={listBlog?.maxPage}
+                            defaultPage={1}
+                            siblingCount={1}
+                            // page={Number(page)??1}
+                            size="large"
 
+                            showLastButton
+                            showFirstButton/>
+                    </Grid>
+                </Grid>
+                <ModalEditStatusPost openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
             </main>
         </>
     );

@@ -2,7 +2,12 @@ import * as Types from "../../constant/ActionType"
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from "axios";
 import {UserInterface} from "@/app/interface/userinterface";
-import {DASHBOARD_REPORT_COUNT} from "../../constant/ActionType";
+import {
+    DASHBOARD_BLOG_FIND,
+    DASHBOARD_BLOG_SHOW,
+    DASHBOARD_BLOG_UPDATE_STATUS,
+    DASHBOARD_REPORT_COUNT
+} from "../../constant/ActionType";
 
 export const getTotalUser = createAsyncThunk(
     Types.DASHBOARD_USER_COUNT,
@@ -45,14 +50,42 @@ export const getTotalReport = createAsyncThunk(
 );
 
 export const showAllBlog = createAsyncThunk(
-    Types.BlOG_SHOW_ALL,
+    Types.DASHBOARD_BLOG_SHOW,
     async ({page}: { page: number }) => {
         try {
-            const response = await axios.get(`http://localhost:3001/posts?page=${page}`);
+            const response = await axios.get(`http://localhost:3001/dashboard/getAll/blog?page=${page}`);
             const data: any = response.data;
             return data;
         } catch (error) {
-            console.log("Error: " + Types.BlOG_SHOW_ALL);
+            console.log("Error: " + Types.DASHBOARD_BLOG_SHOW);
+
+        }
+    }
+);
+export const findBlog = createAsyncThunk(
+    Types.DASHBOARD_BLOG_FIND,
+    async ({page, searchBlogTitle}: { page: number, searchBlogTitle: string }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/dashboard/find/blog?page=${page}&searchBlogTitle=${searchBlogTitle}`);
+            const data: any = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_BLOG_FIND);
+
+        }
+    }
+);
+export const updateBlogStatus = createAsyncThunk(
+    Types.DASHBOARD_BLOG_UPDATE_STATUS,
+    async ({status, postId}: { status: string, postId: string }) => {
+        try {
+            const response = await axios.put(`http://localhost:3001/dashboard/edit/blog/${postId}`, {
+                status: status
+            });
+            const data: any = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_BLOG_UPDATE_STATUS);
 
         }
     }
