@@ -90,3 +90,17 @@ export const updateBlogStatus = createAsyncThunk(
         }
     }
 );
+
+export const getBlog7Day = createAsyncThunk(
+    Types.DASHBOARD_BLOG_7_DATE,
+    async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/dashboard/getAmount7Months`);
+            const data: [] = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_BLOG_7_DATE);
+
+        }
+    }
+);

@@ -5,7 +5,7 @@ import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {
     findBlog,
-    getAmountBlogMonth,
+    getAmountBlogMonth, getBlog7Day,
     getTotalReport,
     getTotalUser,
     showAllBlog,
@@ -20,6 +20,7 @@ interface InitialState {
     isLoading: boolean,
     isError: boolean,
     isUpdate: boolean,
+    blog7Months: number[],
 
 }
 
@@ -33,7 +34,8 @@ var initialState: InitialState = {
     listBlog: {
         posts: [],
         maxPage: 1
-    }
+    },
+    blog7Months: [0, 0, 0, 0, 0, 0, 0]
 }
 const userSlice = createSlice({
     name: "dashboard",
@@ -141,6 +143,26 @@ const userSlice = createSlice({
 
             })
             .addCase(updateBlogStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isUpdate = false;
+            })
+
+        // 7 DATE BLOG MANAGE
+        builder.addCase(getBlog7Day.fulfilled, (state, action) => {
+            // @ts-ignore
+            state.blog7Months = action.payload.totalBlog7Day;
+            state.isError = false;
+            state.isUpdate = false;
+        })
+            .addCase(getBlog7Day.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isUpdate = true;
+
+
+            })
+            .addCase(getBlog7Day.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isUpdate = false;
