@@ -16,6 +16,8 @@ import {GroupTaskInterface} from "@/app/interface/GroupTaskInterface";
 
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import FormEditWork from './FormEditWork';
+import ReportIcon from '@mui/icons-material/Report';
+import {IconButton, Tooltip} from '@mui/material';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -61,8 +63,6 @@ const GroupJob = ({groupId}: { groupId: string }) => {
         //@ts-ignore
         dispatch(getTaskGroup({groupId}));
     }, [isUpdate]);
-
-
 
 
     //state create work
@@ -139,13 +139,22 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                     <b>Ngày kết thúc:</b>
                                                     <br/>
                                                     {createDayToStringTask(task.endDate)}
+                                                    {
+                                                        new Date(task.endDate) < new Date() ?
+                                                            <Tooltip title="Task quá thời hạn">
+                                                                <IconButton>
+                                                                    <ReportIcon style={{color: "red"}}/>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            : <></>
+                                                    }
                                                 </div>
                                                 {/*<div className="card-text text-muted small">Được tạo bởi: </div>*/}
 
                                                 <Button
                                                     variant="contained"
                                                     startIcon={<EditCalendarIcon/>}
-                                                    onClick={()=>handleOpenEditWork(task)}
+                                                    onClick={() => handleOpenEditWork(task)}
                                                 >
 
                                                 </Button>
@@ -185,14 +194,25 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                     <b>Ngày kết thúc:</b>
                                                     <br/>
                                                     {createDayToStringTask(task.endDate)}
+                                                    {
+                                                        new Date(task.endDate) < new Date() ?
+                                                            <Tooltip title="Task quá thời hạn">
+                                                                <IconButton>
+                                                                    <ReportIcon style={{color: "red"}}/>
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            : <></>
+                                                    }
+
                                                 </div>
                                                 <Button
                                                     variant="contained"
                                                     startIcon={<EditCalendarIcon/>}
-                                                    onClick={()=>handleOpenEditWork(task)}
+                                                    onClick={() => handleOpenEditWork(task)}
                                                 >
 
                                                 </Button>
+
 
                                             </div>
                                         </div>
@@ -232,7 +252,7 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                 <Button
                                                     variant="contained"
                                                     startIcon={<EditCalendarIcon/>}
-                                                    onClick={()=>handleOpenEditWork(task)}
+                                                    onClick={() => handleOpenEditWork(task)}
                                                 >
 
                                                 </Button>
@@ -272,7 +292,7 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                                                 <Button
                                                     variant="contained"
                                                     startIcon={<EditCalendarIcon/>}
-                                                    onClick={()=>handleOpenEditWork(task)}
+                                                    onClick={() => handleOpenEditWork(task)}
                                                 >
 
                                                 </Button>
@@ -297,7 +317,15 @@ const GroupJob = ({groupId}: { groupId: string }) => {
                         {taskDetail?.title} ({createDayToStringTask(taskDetail?.startDate ?? "")} - {createDayToStringTask(taskDetail?.endDate ?? "")})
                     </Typography>
                     <Typography id="modal-modal-description" sx={{mt: 2}}>
-                        {taskDetail?.detail}
+                        <b>Chi tiết:</b> {taskDetail?.detail}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{mt: 2}}>
+                        <b>Người được giao:</b>
+                        {[...(taskDetail?.assignee??[])].map(item => (
+                        <li key={item._id}>
+                            <b>{item.username}</b>
+                        </li>
+                    ))}
                     </Typography>
                 </Box>
             </Modal>

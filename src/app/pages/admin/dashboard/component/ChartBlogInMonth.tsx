@@ -22,7 +22,7 @@ const ChartBlogInMonth = () => {
 
     return (
         <LineChart
-            width={1000}
+            width={800}
             height={400}
             series={[
                 { data: blog7Months, label: 'Bài viết' },
