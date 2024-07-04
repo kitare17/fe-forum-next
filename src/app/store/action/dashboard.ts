@@ -5,7 +5,7 @@ import {UserInterface} from "@/app/interface/userinterface";
 import {
     DASHBOARD_BLOG_FIND,
     DASHBOARD_BLOG_SHOW,
-    DASHBOARD_BLOG_UPDATE_STATUS,
+    DASHBOARD_BLOG_UPDATE_STATUS, DASHBOARD_GET_ALL_REPORT, DASHBOARD_GET_ALL_REPORT_COMMENT,
     DASHBOARD_REPORT_COUNT
 } from "../../constant/ActionType";
 
@@ -100,6 +100,32 @@ export const getBlog7Day = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.DASHBOARD_BLOG_7_DATE);
+
+        }
+    }
+);
+export const getAllReport = createAsyncThunk(
+    Types.DASHBOARD_GET_ALL_REPORT,
+    async ({page}: { page: number }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/report-blog?page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT);
+
+        }
+    }
+);
+export const getAllReportComment = createAsyncThunk(
+    Types.DASHBOARD_GET_ALL_REPORT_COMMENT,
+    async ({page}: { page: number }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/report-comment?page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT_COMMENT);
 
         }
     }

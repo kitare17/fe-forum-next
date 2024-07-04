@@ -4,19 +4,23 @@ import {fetchUsers} from "@/app/store/action/user";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {
-    findBlog,
+    findBlog, getAllReport, getAllReportComment,
     getAmountBlogMonth, getBlog7Day,
     getTotalReport,
     getTotalUser,
     showAllBlog,
     updateBlogStatus
 } from "@/app/store/action/dashboard";
+import {ReportBlogInterface} from "@/app/interface/ReportBlog";
+import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 
 interface InitialState {
     totalUser: number,
     totalBlogMonth: number,
     totalReport: number,
     listBlog?: { posts: BlogInterface[] | [], maxPage: number },
+    listReportBlog?: { reports: ReportBlogInterface[] | [], maxPage: number },
+    listReportCommentBlog?: { reports: ReportCommentInterface[] | [], maxPage: number },
     isLoading: boolean,
     isError: boolean,
     isUpdate: boolean,
@@ -163,6 +167,45 @@ const userSlice = createSlice({
 
             })
             .addCase(getBlog7Day.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isUpdate = false;
+            })
+        //GET ALL REPORT BLOG MANAGE
+        builder.addCase(getAllReport.fulfilled, (state, action) => {
+            // @ts-ignore
+            state.listReportBlog = action.payload
+            state.isError = false;
+            state.isUpdate = false;
+        })
+            .addCase(getAllReport.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isUpdate = true;
+
+
+            })
+            .addCase(getAllReport.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isUpdate = false;
+            })
+
+        //GET ALL REPORT COMMENT BLOG MANAGE
+        builder.addCase(getAllReportComment.fulfilled, (state, action) => {
+            // @ts-ignore
+            state.listReportCommentBlog = action.payload
+            state.isError = false;
+            state.isUpdate = false;
+        })
+            .addCase(getAllReportComment.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isUpdate = true;
+
+
+            })
+            .addCase(getAllReportComment.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isUpdate = false;
