@@ -6,4 +6,5 @@ export interface UserInterface{
     admin?:boolean
     _id:string,
     fullname?:string
+    avatar?:string
 }

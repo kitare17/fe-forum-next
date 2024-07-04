@@ -57,8 +57,6 @@ const TaskManagement = () => {
     message,
   } = useSelector((state: RootState) => state.auth);
 
-  console.log("nguyen diep hoang", user)
-
   const {
     listTask,
     isLoading: isTaskLoading,

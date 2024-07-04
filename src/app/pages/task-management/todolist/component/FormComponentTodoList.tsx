@@ -70,15 +70,6 @@ const FormComponentTodoList = ({
     getValues,
   } = useForm({
     defaultValues: {
-      //  _id: "",
-      // title: "",
-      // detail: "",
-      // startDate: "",
-      // endDate: "",
-      // label: "",
-      // status: "",
-      // prioritize: "",
-
       title: changeTodoList?.title,
       detail: changeTodoList?.detail,
       startDate: changeTodoList?.startDate,
@@ -97,8 +88,6 @@ const FormComponentTodoList = ({
     setValue("status", changeTodoList?.status);
     setValue("prioritize", changeTodoList?.prioritize);
   }, [changeTodoList]);
-
-  console.log("todilist page", changeTodoList);
 
   const { errors } = formState;
 
