@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import {
     addNewComment,
     createBlog, createReplyComment, createReport, createReportComment, editBlog,
-    findOneBlog,
+    findOneBlog, getOneBlogCheck,
     likeBlog, removeBlog, removeCommentBlog,
     showAllBlog,
     showOneTopic,
@@ -12,6 +12,8 @@ import {
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+
 
 interface InitialState {
     newBlog: BlogInterface;
@@ -315,6 +317,34 @@ const blogSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false
+            })
+
+            //FIND ONE BLOG CHECK
+            .addCase(getOneBlogCheck.fulfilled, (state, action) => {
+
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                // @ts-ignore
+                if ([...(action.payload.likes ?? [])].includes(userId)) {
+                    state.isLike = true
+                }
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getOneBlogCheck.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getOneBlogCheck.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                // @ts-ignore
+                toast.error(action.payload?.data?.message);
+
             })
     }
 
