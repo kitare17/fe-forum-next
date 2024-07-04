@@ -152,21 +152,6 @@ export const addNewComment = createAsyncThunk(
 
                 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            console.log({blogId, detail})
-            // const userComment = "65f6aa46e21e50bbf7cf0e1c"
             const response = await axios.put(`http://localhost:3001/posts/${blogId}/comments`, {
                 commentPost: {
                     "detail": detail,
