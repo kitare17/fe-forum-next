@@ -38,7 +38,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import InputBase from "@mui/material/InputBase";
 import {useForm} from "react-hook-form";
 import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
-
+import Image from 'next/image'
 
 const ManagePost: React.FC = () => {
     const router = useRouter();
@@ -46,7 +46,7 @@ const ManagePost: React.FC = () => {
     const page = searchParams.get('page') ?? 1;
     const searchBlogTitle = searchParams.get('searchBlogTitle') ?? "";
     const {
-        listBlog,isUpdate,isLoading
+        listBlog, isUpdate, isLoading
     } =
         useSelector((state: RootState) => state.dashboard);
     const dispatch = useDispatch();
@@ -78,7 +78,7 @@ const ManagePost: React.FC = () => {
             dispatch(showAllBlog({page: page}));
         }
 
-    }, [page, searchBlogTitle,isUpdate]);
+    }, [page, searchBlogTitle, isUpdate]);
 
     const handlePaging = (event: any, value: number) => {
         if (searchBlogTitle)
@@ -100,6 +100,25 @@ const ManagePost: React.FC = () => {
         setBlogPick(blog);
     }
 
+
+    const StatusBlogNoti = ({statusPost}: { statusPost: string | undefined }) => {
+
+        var hrefStatus = "https://img.icons8.com/ios-filled/50/40C057/ok--v1.png";
+        if (statusPost === "Đang hoạt động") {
+            hrefStatus = "https://img.icons8.com/ios-filled/50/40C057/ok--v1.png";
+        } else {
+            hrefStatus = "https://img.icons8.com/sf-black/64/FA5252/cancel-2.png";
+        }
+        return (
+            <Image
+                src={hrefStatus}
+                width={24}
+                height={24}
+                alt="none"
+            />
+
+        )
+    }
 
     return (
         <>
@@ -218,6 +237,7 @@ const ManagePost: React.FC = () => {
                                                 <IconButton onClick={() => handleOpenModalEdit(post)}>
                                                     <BuildIcon/>
                                                 </IconButton>
+                                                <StatusBlogNoti statusPost={post?.statusPost}/>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -253,7 +273,7 @@ const ManagePost: React.FC = () => {
                             showFirstButton/>
                     </Grid>
                 </Grid>
-                <ModalEditStatusPost openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
+                <ModalEditStatusPost openEditStatusBlog={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
             </main>
         </>
     );

@@ -38,6 +38,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import InputBase from "@mui/material/InputBase";
 import {useForm} from "react-hook-form";
 import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
+import ModalEditReport from "@/app/pages/admin/manageReportPost/component/ModalEditReport";
 
 
 const ManagePost: React.FC = () => {
@@ -97,7 +98,7 @@ const ManagePost: React.FC = () => {
     //handle modal edit open
     const [open, setOpen] = React.useState(false);
     const [blogPick, setBlogPick] = React.useState<BlogInterface | undefined>(undefined);
-    const handleOpenModalEdit = (blog: BlogInterface) => {
+    const handleOpenModalEdit = (blog: BlogInterface|undefined) => {
         setOpen(true);
         setBlogPick(blog);
     }
@@ -129,28 +130,13 @@ const ManagePost: React.FC = () => {
 
                 <div className="container-fluid py-4">
                     <Paper className="card mb-4">
-                        <div className="card-header pb-4 d-flex justify-content-between">
+                        <div className="card-header  d-flex justify-content-between">
                             <Typography variant="h5">Quản lý report blog</Typography>
-                            {/*<Paper*/}
-                            {/*    component="form"*/}
-                            {/*    sx={*/}
-                            {/*        {p: '2px 4px', display: 'flex', alignItems: 'center', width: 400}*/}
-                            {/*    }*/}
+                        </div>
+                        <div className="card-header d-flex ">
 
-                            {/*>*/}
-
-                            {/*    <InputBase*/}
-                            {/*        sx={{ml: 1, flex: 1}}*/}
-                            {/*        placeholder="Tìm kiếm group"*/}
-                            {/*        inputProps={{'aria-label': 'Tìm kiếm group'}}*/}
-                            {/*        {...register(*/}
-                            {/*            'searchBlogTitle'*/}
-                            {/*        )}*/}
-                            {/*    />*/}
-                            {/*    <IconButton type="button" sx={{p: '10px'}} aria-label="search">*/}
-                            {/*        <SearchIcon onClick={() => handleFindGroup()}/>*/}
-                            {/*    </IconButton>*/}
-                            {/*</Paper>*/}
+                            <Button sx={{mx: 2}} variant="contained"> Hiện chưa xử lí</Button>
+                            <Button sx={{mx: 2}} variant="contained"> Hiện đã xử lí</Button>
                         </div>
                         <TableContainer>
                             <Table>
@@ -176,16 +162,17 @@ const ManagePost: React.FC = () => {
 
                                             <TableCell align="center">
 
-                                                <Link href={`/pages/blog/detail/${report?.blogId?._id}`} rel="noopener noreferrer"
+                                                <Link href={`/pages/blog/detail/${report?.blogId?._id}`}
+                                                      rel="noopener noreferrer"
                                                       target="_blank">
                                                     <ViewIcon/>
                                                 </Link>
 
                                             </TableCell>
                                             <TableCell align="center">
-                                                {/*<IconButton onClick={() => handleOpenModalEdit(post)}>*/}
-                                                {/*    <BuildIcon/>*/}
-                                                {/*</IconButton>*/}
+                                                <IconButton onClick={() => handleOpenModalEdit(report?.blogId)}>
+                                                    <BuildIcon/>
+                                                </IconButton>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -221,7 +208,7 @@ const ManagePost: React.FC = () => {
                             showFirstButton/>
                     </Grid>
                 </Grid>
-                <ModalEditStatusPost openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
+                <ModalEditReport openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
             </main>
         </>
     );
