@@ -7,4 +7,5 @@ export interface UserInterface{
     _id:string,
     fullname?:string
     avatar?:string
+    status?: boolean
 }

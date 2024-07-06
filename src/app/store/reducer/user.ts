@@ -1,7 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import { fetchUserProfile } from "../action/user";
 import { UserInterface } from "@/app/interface/User";
-// import {fetchUsers} from "@/app/store/action/user";
 
 interface InitialState {
     detailUser: UserInterface,

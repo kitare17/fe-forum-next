@@ -48,7 +48,8 @@ export const fetchRegister = createAsyncThunk(
                     username: userRegister.username,
                     fullname: "",
                     phone:"",
-                    avatar: ""
+                    avatar: "", 
+                    statusUser: true
                 }
             );
             const data: RegisterInterface = response.data;

@@ -17,9 +17,9 @@ import { updateTodoList } from "@/app/store/action/todoList";
 import { UserInterface } from "@/app/interface/User";
 import { RootState } from "@/app/store";
 import { updateProfile } from "@/app/store/action/user";
-import { getBase64 } from '../../../../../utils'
-import {Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons'
+import { getBase64 } from "../../../../../utils";
+import { Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 const style = {
   position: "absolute",
@@ -54,7 +54,7 @@ const FormComponentUserProfile = ({
 }) => {
   const handleOpen = () => setopenEditPopup(true);
   const handleCloseEditPopup = () => setopenEditPopup(false);
-  const [avatar, setAvatar] = useState(changeProfile?.avatar)
+  const [avatar, setAvatar] = useState(changeProfile?.avatar);
 
   //form
   const dipatch = useDispatch();
@@ -74,7 +74,7 @@ const FormComponentUserProfile = ({
       phone: changeProfile?.phone,
       email: changeProfile?.email,
       username: changeProfile?.username,
-      avatar: changeProfile?.avatar
+      avatar: changeProfile?.avatar,
     },
   });
 
@@ -84,7 +84,6 @@ const FormComponentUserProfile = ({
     setValue("email", changeProfile?.email);
     setValue("username", changeProfile?.username);
     setValue("avatar", changeProfile?.avatar);
-
   }, [changeProfile]);
 
   const { errors } = formState;
@@ -95,70 +94,77 @@ const FormComponentUserProfile = ({
       phone: getValues("phone"),
       email: getValues("email"),
       username: getValues("username"),
-      avatar: avatar
+      avatar: avatar,
     };
 
     //@ts-ignore
-    dipatch(updateProfile({idUser: idUser, inforUpdate: userProfile})).then((result) => {
-      // @ts-ignore
-      if (result?.payload?.error) {
-        toast.error("Chỉnh sửa thông tin không thành công");
-        handleShowUserProfile();
-      } else {
-        toast.success("Chỉnh sửa thông tin thành công");
-        handleShowUserProfile();
+    dipatch(updateProfile({ idUser: idUser, inforUpdate: userProfile })).then(
+      (result: any) => {
+        // @ts-ignore
+        if (result?.payload?.data?.status === "Error") {
+          toast.error(result?.payload?.data?.message);
+          handleShowUserProfile();
+        } else {
+          toast.success("Chỉnh sửa thông tin thành công");
+          handleShowUserProfile();
+        }
       }
-    });
+    );
 
     setopenEditPopup(false);
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     handleShowUserProfile();
+    setAvatar(changeProfile?.avatar)
   }, [openEditPopup]);
 
-
-    //@ts-ignore
-  const handleOnchangeAvatar = async({fileList}) => {
-    const file = fileList[0]
+  //@ts-ignore
+  const handleOnchangeAvatar = async ({ fileList }) => {
+    const file = fileList[0];
     if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-      setAvatar(file.preview)
-}
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setAvatar(file.preview);
+  };
+  const currentURL = window.location.href;
 
   return (
     <div>
       <Dialog open={openEditPopup} onClose={handleCloseEditPopup}>
         <h2 className="text-center" style={{ paddingTop: "20px" }}>
-          Chỉnh sửa hồ sơ của tôi
+          Chỉnh sửa hồ sơ
         </h2>
         <DialogContent>
           <label htmlFor="upload-avatar" style={{ paddingBottom: "20px" }}>
-<div>
-      <div>
-        <Upload
-        maxCount={1}
-          onChange={handleOnchangeAvatar}
-        ><label htmlFor="avatar-upload">
-        <UploadOutlined />
-        Chọn ảnh đại diện
-      </label></Upload>
-      </div>
-      {avatar && (
-        <img
-          src={avatar}
-          style={{
-            height: '70px',
-            width: '70px',
-            borderRadius: '50%',
-            objectFit: 'cover',
-          }}
-          alt="avatar"
-        />
-      )}
-    </div>
+            <div>
+              {currentURL?.includes("pages/admin/manageAccount") ? (
+                ""
+              ) : (
+                <div>
+                  <Upload maxCount={1} onChange={handleOnchangeAvatar}>
+                    <label htmlFor="avatar-upload">
+                      <UploadOutlined />
+                      Chọn ảnh đại diện
+                    </label>
+                  </Upload>
+                </div>
+              )}
 
+              {avatar && (
+                <img
+                id="avatar"
+                  src={avatar}
+                  style={{
+                    height: "70px",
+                    width: "70px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                  alt="avatar"
+                />
+              )}
+            </div>
           </label>
           <TextField
             autoFocus

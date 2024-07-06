@@ -34,7 +34,7 @@ export default function Navitem() {
           <li className="nav-item">
             <Link href="../admin/manageAccount">
               <div className={`nav-link ${activeItem === '/admin/manageAccount' ? 'active' : ''}`} onClick={() => handleSetActiveItem('/admin/manageAccount')}>
-                <div className="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <div className="icon icon-shape icon-sm shadow border-radius-md  bg-white text-center me-1 d-flex align-items-center justify-content-center">
                   <img src='https://img.icons8.com/?size=24&id=11727&format=png&color=000000'></img>
                 </div>
                 <span className="nav-link-text ms-1 ">Quản lý tài khoản</span>

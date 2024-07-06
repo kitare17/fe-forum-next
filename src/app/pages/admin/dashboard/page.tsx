@@ -12,7 +12,6 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {useEffect} from "react";
-import {fetchUsers} from "@/app/store/action/user";
 import {getAmountBlogMonth, getTotalReport, getTotalUser} from "@/app/store/action/dashboard";
 
 export default function Dashboard() {
