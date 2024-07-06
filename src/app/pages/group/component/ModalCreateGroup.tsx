@@ -64,6 +64,8 @@ export default function CreateModalGroup() {
                 password: getValues("password"),
                 adminGroup: user.userEmailId
             }))
+        setOpen(false);
+
     }
 
 
@@ -107,7 +109,7 @@ export default function CreateModalGroup() {
                                                     textAlign: "center"
                                                 }}
                                     >
-                                        Tạo bài viết mới
+                                        Tạo nhóm mới
                                     </Typography>
 
 
@@ -116,7 +118,7 @@ export default function CreateModalGroup() {
                                         fullWidth
                                         margin="normal"
                                         required
-                                        label="Tiêu đề"
+                                        label="Tên nhóm"
                                         variant="outlined"
                                         {...register(
                                             'groupName',
