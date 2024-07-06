@@ -53,7 +53,7 @@ const ReportBlogDialog = (
             defaultValues: {
                 "title": "Báo cáo vi phạm",
                 "reason": "",
-                "blogId": blogId,
+
                 // @ts-ignore
                 "userReport": (user?.userEmailId ?? "")
             }
@@ -63,11 +63,11 @@ const ReportBlogDialog = (
 
     const handleReport = () => {
 
-        const reportForm: ReportBlogInterface = {
+        const reportForm:any = {
             title: getValues("title"),
             reason: getValues("reason"),
             userReport: getValues("userReport"),
-            blogId: getValues("blogId")
+            blogId: blogId
         }
 
         // @ts-ignore

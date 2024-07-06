@@ -251,7 +251,7 @@ export const showOneTopic = createAsyncThunk(
 
 export const createReport = createAsyncThunk(
     Types.BlOG_REPORT,
-    async (newReport: ReportBlogInterface) => {
+    async (newReport: any) => {
         try {
             const response = await axios.post('http://localhost:3001/report-blog', {
                 "title": newReport.title,
@@ -271,7 +271,7 @@ export const createReport = createAsyncThunk(
 
 export const createReportComment = createAsyncThunk(
     Types.BlOG_REPORT_COMMENT,
-    async (newReport: ReportCommentInterface) => {
+    async (newReport: any) => {
         // alert(JSON.stringify({newReport}))
         try {
             const response = await axios.post('http://localhost:3001/report-comment', {
