@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {Suspense, useEffect, useState} from "react";
 import {
   Table,
   TableBody,
@@ -323,4 +323,12 @@ useEffect(() => {
   );
 };
 
-export default ManageAccount;
+const ManageAccountRender = () => {
+  return (
+      // You could have a loading skeleton as the `fallback` too
+      <Suspense>
+        <ManageAccount/>
+      </Suspense>
+  )
+};
+export default ManageAccountRender;

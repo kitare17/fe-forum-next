@@ -77,8 +77,9 @@ const FormComponentUserProfile = ({
       avatar: changeProfile?.avatar,
     },
   });
-
+  var currentURL="";
   useEffect(() => {
+    currentURL = window.location.href;
     setValue("fullname", changeProfile?.fullname);
     setValue("phone", changeProfile?.phone);
     setValue("email", changeProfile?.email);
@@ -127,7 +128,6 @@ const FormComponentUserProfile = ({
     }
     setAvatar(file.preview);
   };
-  const currentURL = window.location.href;
 
   return (
     <div>
