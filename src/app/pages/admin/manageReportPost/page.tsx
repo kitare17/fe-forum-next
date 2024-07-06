@@ -1,7 +1,13 @@
 "use client"
 import React, {useState, useEffect, Suspense} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {findBlog, getAllReport, showAllBlog} from "@/app/store/action/dashboard";
+import {
+    acceptReportComment,
+    findBlog,
+    getAllReport,
+    showAllBlog,
+    showReportFollowStatus
+} from "@/app/store/action/dashboard";
 import BuildIcon from '@mui/icons-material/Build';
 import {
     Table,
@@ -39,15 +45,23 @@ import InputBase from "@mui/material/InputBase";
 import {useForm} from "react-hook-form";
 import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
 import ModalEditReport from "@/app/pages/admin/manageReportPost/component/ModalEditReport";
+import {ReportBlogInterface} from "@/app/interface/ReportBlog";
+import Image from "next/image";
+import {
+    setStateShowDoneReport,
+    setStateShowIllegalReport,
+    setStateShowPendingReport
+} from "@/app/store/reducer/dashboard";
 
 
 const ManagePost: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const page = searchParams.get('page') ?? 1;
+    var page = searchParams.get('page') ?? 1;
     const searchBlogTitle = searchParams.get('searchBlogTitle') ?? "";
     const {
-        listBlog,listReportBlog,isUpdate,isLoading
+        showListReportType,
+        listReportBlog, isUpdate, isLoading
     } =
         useSelector((state: RootState) => state.dashboard);
     const dispatch = useDispatch();
@@ -69,8 +83,28 @@ const ManagePost: React.FC = () => {
     )
 
     useEffect(() => {
+        switch (showListReportType) {
+            //all, pending, done, illegal
+            case "all":
+                // @ts-ignore
+                dispatch(getAllReport({page: page}))
+                break;
+            case "pending":
+                // @ts-ignore
+                dispatch(showReportFollowStatus({page: page, statusReport: "Đang chờ xử lí"}))
+                break;
+            case "done":
+                // @ts-ignore
+                dispatch(showReportFollowStatus({page: page, statusReport: "Đã giải quyết"}))
+                break;
+            case "illegal":
+                // @ts-ignore
+                dispatch(showReportFollowStatus({page: page, statusReport: "Báo cáo không hợp lệ"}))
+                break;
+
+        }
+
         // @ts-ignore
-        dispatch(getAllReport({page:page}))
 
         // if (searchBlogTitle) {
         //     // @ts-ignore
@@ -81,7 +115,7 @@ const ManagePost: React.FC = () => {
         //     dispatch(showAllBlog({page: page}));
         // }
 
-    }, [page]);
+    }, [page, isUpdate,showListReportType]);
 
     const handlePaging = (event: any, value: number) => {
         if (searchBlogTitle)
@@ -97,12 +131,58 @@ const ManagePost: React.FC = () => {
 
     //handle modal edit open
     const [open, setOpen] = React.useState(false);
-    const [blogPick, setBlogPick] = React.useState<BlogInterface | undefined>(undefined);
-    const handleOpenModalEdit = (blog: BlogInterface|undefined) => {
+    const [reportPick, setReportPick] = React.useState<ReportBlogInterface | undefined>(undefined);
+    const handleOpenModalEdit = (report: ReportBlogInterface | undefined) => {
         setOpen(true);
-        setBlogPick(blog);
+        setReportPick(report);
     }
 
+    const StatusReportNoti = ({statusReport}: { statusReport: string | undefined }) => {
+
+        var hrefStatus = "https://img.icons8.com/ios-filled/50/40C057/ok--v1.png";
+        if (statusReport === "Đã giải quyết") {
+            hrefStatus = "https://img.icons8.com/ios-filled/50/40C057/ok--v1.png";
+        } else if (statusReport === "Báo cáo không hợp lệ") {
+            hrefStatus = "https://img.icons8.com/sf-black/64/FA5252/cancel-2.png";
+        } else {
+            hrefStatus = "https://img.icons8.com/color/48/clock--v1.png";
+        }
+
+
+        return (
+            <Image
+                src={hrefStatus}
+                width={24}
+                height={24}
+                alt="none"
+            />
+
+        )
+    }
+    const handleShowAll = () => {
+        //@ts-ignore
+        dispatch(getAllReport({page: page}))
+    }
+    const handleShowAccept = () => {
+        //@ts-ignore
+        dispatch(showReportFollowStatus({page: "1", statusReport: "Đã giải quyết"}))
+        dispatch(setStateShowDoneReport());
+        page="1";
+    }
+
+    const handleShowCancel = () => {
+        //@ts-ignore
+
+        dispatch(showReportFollowStatus({page: "1", statusReport: "Báo cáo không hợp lệ"}))
+        dispatch(setStateShowIllegalReport());
+
+    }
+    const handleShowPending = () => {
+        //@ts-ignore
+        dispatch(showReportFollowStatus({page: "1", statusReport: "Đang chờ xử lí"}))
+        dispatch(setStateShowPendingReport());
+
+    }
 
     return (
         <>
@@ -116,7 +196,7 @@ const ManagePost: React.FC = () => {
                                     <a className="opacity-5 text-dark" href="javascript:;">Pages</a>
                                 </li>
                                 <li className="breadcrumb-item text-sm text-dark active" aria-current="page">
-                                    Quản lý report blog
+                                    Quản lý report blog {showListReportType}
                                 </li>
                             </ol>
 
@@ -135,8 +215,13 @@ const ManagePost: React.FC = () => {
                         </div>
                         <div className="card-header d-flex ">
 
-                            <Button sx={{mx: 2}} variant="contained"> Hiện chưa xử lí</Button>
-                            <Button sx={{mx: 2}} variant="contained"> Hiện đã xử lí</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowAll()} variant="contained"> Tất cả</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowPending()} variant="contained"> Hiện chưa xử
+                                lí</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowAccept()} variant="contained"> Hiện đã xử
+                                lí</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowCancel()} variant="contained"> Hiện không hợp
+                                lệ</Button>
                         </div>
                         <TableContainer>
                             <Table>
@@ -170,9 +255,10 @@ const ManagePost: React.FC = () => {
 
                                             </TableCell>
                                             <TableCell align="center">
-                                                <IconButton onClick={() => handleOpenModalEdit(report?.blogId)}>
+                                                <IconButton onClick={() => handleOpenModalEdit(report)}>
                                                     <BuildIcon/>
                                                 </IconButton>
+                                                <StatusReportNoti statusReport={report?.status}/>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -208,7 +294,7 @@ const ManagePost: React.FC = () => {
                             showFirstButton/>
                     </Grid>
                 </Grid>
-                <ModalEditReport openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
+                <ModalEditReport openEditStatusBlog={open} setOpenCreateWordForm={setOpen} report={reportPick}/>
             </main>
         </>
     );

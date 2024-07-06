@@ -15,7 +15,7 @@ import {
     CssBaseline,
     Paper,
     IconButton,
-    InputBase, LinearProgress
+    InputBase, LinearProgress, CircularProgress
 
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
@@ -106,7 +106,7 @@ const ChatEnglish = () => {
         <Box sx={{ width: 300 }} role="presentation" onClick={toggleDrawer(false)}>
             <Toolbar>
                 <Typography variant="h6" noWrap component="div">
-                    List of chat
+                  Danh sách bot
                 </Typography>
             </Toolbar>
             <Divider/>
@@ -187,27 +187,27 @@ const ChatEnglish = () => {
                 >
                     <Toolbar>
                         <Typography variant="h6" noWrap component="div">
-                            List of chat
+                            Danh sách bot
                         </Typography>
                     </Toolbar>
                     <Divider/>
-                    {/*<List>*/}
-                    {/*    {['Inbox', 'Starred', 'Drafts0', 'Send email', 'Drafts'].map((text, index) => (*/}
-                    {/*        <ListItem key={text} disablePadding>*/}
-                    {/*            <ListItemButton sx={{background: "#ede7e6"}}>*/}
-                    {/*                <ChatItem*/}
-                    {/*                    id="1"*/}
-                    {/*                    avatar={'https://png.pngtree.com/png-vector/20230416/ourmid/pngtree-avatar-ninja-symbol-icon-vector-png-image_6709524.png'}*/}
-                    {/*                    alt={'Reactjs'}*/}
-                    {/*                    title={'Facebook'}*/}
-                    {/*                    subtitle={'What are you doing?'}*/}
-                    {/*                    date={new Date()}*/}
-                    {/*                    unread={1}*/}
-                    {/*                />*/}
-                    {/*            </ListItemButton>*/}
-                    {/*        </ListItem>*/}
-                    {/*    ))}*/}
-                    {/*</List>*/}
+                    <List>
+                        {['Inbox'].map((text, index) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton sx={{background: "#ede7e6"}}>
+                                    <ChatItem
+                                        id="1"
+                                        avatar={'https://static.vecteezy.com/system/resources/thumbnails/007/225/199/small/robot-chat-bot-concept-illustration-vector.jpg'}
+                                        alt={'Reactjs'}
+                                        title={'Chat bot dịch thuật'}
+                                        subtitle={'Welcome!!!'}
+                                        date={new Date()}
+                                        unread={1}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
                     <Divider/>
 
                 </Drawer>
@@ -283,7 +283,13 @@ const ChatEnglish = () => {
                             <Divider sx={{height: 28, m: 0.5}} orientation="vertical"/>
                             <IconButton color="primary" sx={{p: '10px'}} aria-label="directions"
                             >
-                                <SendIcon onClick={handleSubmit(handleSendMessage)}/>
+                                {
+                                    isLoading?
+                                        <CircularProgress />
+                                        :
+                                        <SendIcon onClick={handleSubmit(handleSendMessage)}/>
+
+                                }
                             </IconButton>
                         </Paper>
                     </Box>

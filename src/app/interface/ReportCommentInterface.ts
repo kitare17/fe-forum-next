@@ -7,5 +7,7 @@ export interface ReportCommentInterface{
     "userReport"?:UserInterface,
     "blogId"?: BlogInterface,
     "commentId"?: string,
-    "status"?:string
+    "status"?:string,
+    createdAt?:string,
+    updatedAt?:string,
 }

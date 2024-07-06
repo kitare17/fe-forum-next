@@ -5,38 +5,25 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import {removeBlog} from "@/app/store/action/blog";
-import {toast} from "react-toastify";
-import {useRouter} from "next/navigation";
-import {Controller, useForm} from "react-hook-form";
-import {BlogInterface} from "@/app/interface/Blog";
-import {createNotification, createTaskGroup} from "@/app/store/action/group";
+import {useDispatch} from "react-redux";
+import {useForm} from "react-hook-form";
 import Grid from "@mui/material/Grid";
-import {Autocomplete, Box} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import {CKEditor} from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import {RootState} from "@/app/store";
-import blog from "@/app/store/reducer/blog";
-import {updateBlogStatus} from "@/app/store/action/dashboard";
+import {ReportBlogInterface} from "@/app/interface/ReportBlog";
+import {createDayToStringTask} from "@/app/constant/Fomart";
+import {acceptReportComment, cancelReportComment} from "@/app/store/action/dashboard";
 
 const ModalEditReport = (
     {
-        blog,
+        report,
         openEditStatusBlog,
         setOpenCreateWordForm
     }
         : {
-        blog: BlogInterface|undefined,
+        report: ReportBlogInterface | undefined
         openEditStatusBlog: boolean,
         setOpenCreateWordForm: React.Dispatch<React.SetStateAction<boolean>>
     }
 ) => {
-
-
 
 
     const handleClickCloseForm = () => {
@@ -68,35 +55,23 @@ const ModalEditReport = (
     const {errors} = formState;
 
 
-
-
-
-
-    const listStatusOption = [
-        {
-            label: "Đang hoạt động",
-            id: "1"
-        },
-        {
-            label: "Bị khóa",
-            id: "2"
-        }
-    ]
-
-
-
-    const handleFormCreate = () => {
-
-        var status=getValues("status");
-
-        // alert(blog?._id+" "+status.label);
-        // @ts-ignore
-
-        dipatch(updateBlogStatus({status:status.label, postId:blog?._id}))
-        // reset();
-        handleClickCloseForm();
+    const handleCancel = () => {
+        //@ts-ignore
+        dipatch(cancelReportComment({reportId:report?._id}))
+        setOpenCreateWordForm(false)
 
     }
+
+    const handleAccept = () => {
+        //@ts-ignore
+        dipatch(acceptReportComment({reportId:report?._id}))
+        setOpenCreateWordForm(false)
+
+    }
+
+
+
+
 
     return (
         <React.Fragment>
@@ -114,7 +89,7 @@ const ModalEditReport = (
                 }}
                 maxWidth="lg"
             >
-                <DialogTitle>Chỉnh sửa trạng thái của blog</DialogTitle>
+                <DialogTitle>Cập nhật trạng thái của report</DialogTitle>
                 <DialogContent>
                     <Grid container
                           direction="row"
@@ -124,6 +99,17 @@ const ModalEditReport = (
                           mt={4}
                           mb={9}
                     >
+                        <Grid item xs={10}>
+                            <b>Ngày tạo:</b> {createDayToStringTask(report?.createdAt ?? "")}
+                            <br/>
+                            <b>Cập nhật:</b> {createDayToStringTask(report?.updatedAt ?? "")}
+                            <br/>
+                            <b>Trạng thái:</b> {report?.status}
+                            <br/>
+                            <b>Lý do:</b> {report?.reason}
+                            <br/>
+
+                        </Grid>
                         <Grid item xs={10}
                               sx={{
                                   display: 'flex',
@@ -132,8 +118,11 @@ const ModalEditReport = (
 
                         >
 
-                            <Button variant="contained" sx={{backgroundColor:"#ff0000"}}>Xoá bài viết này</Button>
-                            <Button variant="contained" sx={{backgroundColor:"#00cc00"}} >Bài viết hợp lệ</Button>
+
+                            <Button variant="contained" onClick={() => handleAccept()}
+                                    sx={{backgroundColor: "#00cc00"}}>Khóa bài viết này</Button>
+                            <Button variant="contained" onClick={() => handleCancel()}
+                                    sx={{backgroundColor: "#ff0000"}}>Bài viết hợp lệ</Button>
 
 
                         </Grid>

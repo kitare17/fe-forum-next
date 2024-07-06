@@ -7,4 +7,7 @@ export interface ReportBlogInterface {
     "reason"?: string,
     "userReport"?:UserInterface,
     "blogId"?: BlogInterface,
+    createdAt?:string,
+    updatedAt?:string,
+    status?:string
 }
