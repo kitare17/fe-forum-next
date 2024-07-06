@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+import { AppDispatch, RootState } from "@/app/store";
 import { showAllQuizzes } from "@/app/store/action/quiz";
 import { submitTest } from "@/app/store/action/test";
-
-
-import { FlashCardInterface, TestInterfaceRequest } from '@/app/interface/Quizz';
+import { ArrowBack } from '@mui/icons-material';
+import { useRouter } from "next/navigation";
+import { FlashCardInterface, QuestionResponse, TestInterfaceRequest } from '@/app/interface/Quizz';
 
 import {
     Container,
@@ -26,7 +26,6 @@ import {
     styled
 } from '@mui/material';
 
-
 interface Settings {
     answerType: 'radio' | 'multiple';
     numberOfQuestions: number;
@@ -41,7 +40,7 @@ const SettingsComponent: React.FC<{ onStart: (settings: Settings) => void }> = (
     const [answerType, setAnswerType] = useState<'radio' | 'multiple'>('radio');
     const [numberOfQuestions, setNumberOfQuestions] = useState(3);
     const [randomizeQuestions, setRandomizeQuestions] = useState(false);
-
+    const router = useRouter();
     const handleStart = () => {
         onStart({ answerType, numberOfQuestions, randomizeQuestions });
     };
@@ -51,6 +50,15 @@ const SettingsComponent: React.FC<{ onStart: (settings: Settings) => void }> = (
             <Typography variant="h4" gutterBottom sx={{ padding: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 Test exam setting
             </Typography>
+            <Button
+                onClick={() => router.push(`/pages/quiz`)}
+                size="small"
+                color="inherit"
+                variant="outlined"
+                sx={{ marginBottom: '40px' }}
+            >
+                <ArrowBack />
+            </Button>
             <Card>
                 <CardContent>
                     <FormControl component="fieldset">
@@ -90,8 +98,8 @@ const SettingsComponent: React.FC<{ onStart: (settings: Settings) => void }> = (
 };
 
 const TestExam = (deckId: any) => {
-    const dispatch = useDispatch();
-    const [questions, setQuestions] = useState<FlashCardInterface[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
+    const [questions, setQuestions] = useState<QuestionResponse[]>([]);
     const [answers, setAnswers] = useState<{ [key: string]: string[] }>({});
     const [submitted, setSubmitted] = useState(false);
     const [settings, setSettings] = useState<Settings | null>(null);
@@ -100,23 +108,39 @@ const TestExam = (deckId: any) => {
 
     const { listFlashCard, isLoading, isError } = useSelector((state: RootState) => state.quiz);
 
-    const getListFlashCardByDeckId = (listFlashCard: FlashCardInterface[], deckId: string): FlashCardInterface[] => {
-        return listFlashCard.filter((flashCard) => flashCard.deck._id === deckId);
+    const getListFlashCardByDeckId = (listFlashCard: QuestionResponse[], deckId: string): QuestionResponse[] => {
+        return listFlashCard.filter((flashCard) => flashCard.deck === deckId);
     };
-
-    const filteredList = getListFlashCardByDeckId(listFlashCard, deckId.deckId);
 
     useEffect(() => {
         dispatch(showAllQuizzes());
+    }, [dispatch]);
+
+    useEffect(() => {
         if (settings) {
-            let selectedQuestions = filteredList.slice(0, settings.numberOfQuestions);
-            if (settings.randomizeQuestions) {
-                selectedQuestions = selectedQuestions.sort(() => Math.random() - 0.5);
+            const filteredList = getListFlashCardByDeckId(listFlashCard, deckId.deckId);
+
+            let selectedQuestions = filteredList;
+
+            if (settings.answerType === 'radio') {
+                selectedQuestions = selectedQuestions.filter((question) => {
+                    const trueAnswersCount = question.answers.filter(answer => answer.isAnswer === true).length;
+                    return trueAnswersCount === 1;
+                });
             }
+
+            if (settings.randomizeQuestions) {
+                selectedQuestions = shuffleArray(selectedQuestions);
+            }
+
+            selectedQuestions = selectedQuestions.slice(0, settings.numberOfQuestions);
+
+            console.log("Selected Questions after randomization and slicing:", selectedQuestions);
+
             setQuestions(selectedQuestions);
             setStartTime(new Date());
         }
-    }, [settings]);
+    }, [settings, listFlashCard, deckId]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -129,6 +153,24 @@ const TestExam = (deckId: any) => {
         }
         return () => clearInterval(timer);
     }, [startTime, submitted]);
+
+    const shuffleArray = (array: any[]) => {
+        let currentIndex = array.length, randomIndex;
+
+        // While there remain elements to shuffle.
+        while (currentIndex !== 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    };
 
     const handleAnswerChange = (questionId: string, answer: string) => {
         setAnswers(prevAnswers => {
@@ -154,17 +196,15 @@ const TestExam = (deckId: any) => {
         });
     };
 
-
     const handleSubmit = async () => {
-        console.log("question", questions);
-        console.log('answers', answers);
+        console.log("Questions:", questions);
+        console.log('Answers:', answers);
 
         const numberCorrectAnswer = questions.reduce((count, question) => {
             const selectedAnswers = answers[question._id] || [];
             const correctAnswers = question.answers
                 .filter(answer => answer.isAnswer)
                 .map(answer => answer.answerName);
-
             const isCorrect = settings?.answerType === 'multiple'
                 ? selectedAnswers.length === correctAnswers.length && selectedAnswers.every(answer => correctAnswers.includes(answer))
                 : selectedAnswers.length === 1 && correctAnswers.includes(selectedAnswers[0]);
@@ -185,9 +225,9 @@ const TestExam = (deckId: any) => {
             durationInMinutes,
         };
 
-        console.log("score", score);
-        console.log("numberCorrectAnswer", numberCorrectAnswer);
-        console.log("totalQuestionTest", totalQuestionTest);
+        console.log("Score:", score);
+        console.log("Number of correct answers:", numberCorrectAnswer);
+        console.log("Total number of questions:", totalQuestionTest);
 
         try {
             await dispatch(submitTest(testResult));
@@ -195,53 +235,30 @@ const TestExam = (deckId: any) => {
         } catch (error) {
             console.error('Error saving test result:', error);
         }
-
     };
 
+    const getAnswerStyle = (questionId: string, answer: string) => {
+        if (!submitted) return {};
+        const question = questions.find(q => q._id === questionId);
+        const correctAnswers = question?.answers.filter(ans => ans.isAnswer).map(ans => ans.answerName) || [];
+        const isSelected = (answers[questionId] || []).includes(answer);
+        const isCorrect = correctAnswers.includes(answer);
 
-    const renderAnswerCard = (question: FlashCardInterface, selectedAnswers: string[]) => {
-        const isCorrect = selectedAnswers.length === 1 && question.correctAnswer === selectedAnswers[0];
-        return (
-            <Card
-                variant="outlined"
-                style={{
-                    border: isCorrect ? '2px solid green' : '2px solid red',
-                    marginBottom: '8px',
-                }}
-            >
-                <CardContent>
-                    <Typography variant="h6">Selected Answer(s): {selectedAnswers.join(', ')}</Typography>
-                    <Typography variant="body1">Correct Answer: {question.correctAnswer}</Typography>
-                </CardContent>
-            </Card>
-        );
+        if (isSelected && isCorrect) {
+            return { border: '2px solid green' };
+        } else if (isSelected && !isCorrect) {
+            return { border: '2px solid red' };
+        } else if (!isSelected && isCorrect) {
+            return { border: '2px solid green' };
+        } else {
+            return {};
+        }
     };
 
     if (!settings) {
         return <SettingsComponent onStart={setSettings} />;
     }
 
-    if (submitted) {
-        return (
-            <Container>
-                <Typography variant="h4" gutterBottom>
-                    Test Submitted
-                </Typography>
-                <Typography variant="body1">
-                    Thank you for completing the test.
-                </Typography>
-                <Typography variant="h6">
-                    Total Duration: {Math.floor(duration / 60)} minutes and {duration % 60} seconds
-                </Typography>
-                {/* <Typography variant="h6">
-                    Score: {score}%
-                </Typography>
-                <Typography variant="h6">
-                    Correct Answers: {numberCorrectAnswer}/{totalQuestionTest}
-                </Typography> */}
-            </Container>
-        );
-    }
 
     return (
         <Container sx={{ padding: '20px' }}>
@@ -254,7 +271,7 @@ const TestExam = (deckId: any) => {
             {questions.map((question, index) => (
                 <Card key={question._id} style={{ marginBottom: '16px' }}>
                     <CardContent>
-                        <Typography variant="h6">{`Q${index + 1}: ${question.name}`}</Typography>
+                        <Typography variant="h6">{`Question ${index + 1}: ${question.name}`}</Typography>
                         <Grid container spacing={2}>
                             {question.answers.map((answer, i) => (
                                 <Grid item xs={12} sm={6} key={i}>
@@ -266,6 +283,7 @@ const TestExam = (deckId: any) => {
                                                 : answers[question._id]?.[0] === answer.answerName
                                                     ? '#e0f7fa'
                                                     : 'white',
+                                            ...getAnswerStyle(question._id, answer.answerName)
                                         }}
                                         onClick={() => handleAnswerChange(question._id, answer.answerName)}
                                         sx={{

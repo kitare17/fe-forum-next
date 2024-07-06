@@ -45,7 +45,6 @@ export interface Question {
     __v: number;
 }
 
-
 export interface FlashCardInterface {
   _id: string;
   questions: QuestionInterface[]; // Array of QuestionInterface

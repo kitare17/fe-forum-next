@@ -12,7 +12,6 @@ import { Grid, Box } from '@mui/material';
 import { useRouter } from "next/navigation";
 
 const DeckComponent = () => {
-    const router = useRouter();
     const dipatch = useDispatch();
 
     const { listDeck, isLoading, isError } = useSelector((state: RootState) => state.quiz);
@@ -26,7 +25,7 @@ const DeckComponent = () => {
     return (
         <>
             <Box mt={4} mx={2}>
-                <Header />
+                <Header deckId={{ deckId: "" }} questionsCount={0} />
 
                 <Grid container
                     direction="row"

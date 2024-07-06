@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardContent, Typography, List, ListItem, ListItemText } from '@mui/material';
-import { Question, Answer } from "@/app/interface/Quizz"; // Adjust as per your interface definitions
+import { Answer, QuestionResponse } from "@/app/interface/Quizz";
 
 interface Props {
-    question?: Question; // Specify the type of the flashcard prop as optional
-    showAnswer: boolean; // State to manage the visibility of the answer
-    setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>; // Function to set the visibility of the answer
+    question?: QuestionResponse
+    showAnswer: boolean;
+    setShowAnswer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FlashCard: React.FC<Props> = ({ question, showAnswer, setShowAnswer }) => {
@@ -13,8 +13,8 @@ const FlashCard: React.FC<Props> = ({ question, showAnswer, setShowAnswer }) => 
         setShowAnswer(!showAnswer);
     };
 
-    // Use optional chaining and nullish coalescing operator to handle optional properties safely
-    const correctAnswers: Answer[] | undefined = question?.answers.filter(answer => answer.isAnswer);
+    //
+    const correctAnswers: any = question?.answers.filter(answer => answer.isAnswer);
 
     return (
         <>
@@ -41,7 +41,7 @@ const FlashCard: React.FC<Props> = ({ question, showAnswer, setShowAnswer }) => 
                                     {/* Display all correct answers inline */}
                                     {correctAnswers && correctAnswers.length > 0 ? (
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {correctAnswers.map((answer, index) => (
+                                            {correctAnswers.map((answer: any, index: any) => (
                                                 <p key={index}>
                                                     {answer.answerName}
                                                 </p>

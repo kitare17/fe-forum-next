@@ -3,8 +3,10 @@ import { Button, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 interface HeaderProps {
-    deckId: string; // Assuming deckId is a string based on previous context
-    questionsCount: number; // Number of questions in the filtered list
+    deckId: {
+        deckId: string;
+    };
+    questionsCount: number;
 }
 
 const Header: React.FC<HeaderProps> = ({ deckId, questionsCount }) => {
@@ -40,9 +42,8 @@ const Header: React.FC<HeaderProps> = ({ deckId, questionsCount }) => {
                     </Button>
                 </>
             ) : (
-
                 <Button
-                    onClick={() => router.push(`/pages/quiz/createQuiz/${deckId.deckId}`)} // Adjust the route as per your requirement
+                    onClick={() => router.push(`/pages/quiz/createQuiz/${deckId.deckId}`)} // Use deckId directly as it's a string
                     size="small"
                     color="inherit"
                     variant="outlined"
@@ -50,9 +51,7 @@ const Header: React.FC<HeaderProps> = ({ deckId, questionsCount }) => {
                 >
                     Tạo Quiz
                 </Button>
-
             )}
-
         </Box>
     );
 };

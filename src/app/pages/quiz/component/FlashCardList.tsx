@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import FlashCard from './FlashCard';
 import ListCard from './ListCard';
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/store";
+import { AppDispatch, RootState } from "@/app/store";
 import { showAllQuizzes, deleteQuestion } from "@/app/store/action/quiz";
 
-import { Grid, Button, Box, IconButton } from '@mui/material';
+import { Grid, Button, Box, IconButton, Typography } from '@mui/material';
 import { useRouter } from "next/navigation";
 import { ArrowForward, ArrowBack } from '@mui/icons-material';
-import { FlashCardInterface } from '@/app/interface/Quizz';
+import { FlashCardInterface, QuestionResponse } from '@/app/interface/Quizz';
 import Header from './Header';
 
 const FlashCardList = (deckId: any) => {
@@ -16,15 +16,15 @@ const FlashCardList = (deckId: any) => {
     const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const { listFlashCard, isLoading, isError } = useSelector((state: RootState) => state.quiz);
 
     useEffect(() => {
         dispatch(showAllQuizzes());
     }, [dispatch]);
 
-    const getListFlashCardByDeckId = (listFlashCard: FlashCardInterface[], deckId: string): FlashCardInterface[] => {
-        return listFlashCard.filter((flashCard) => flashCard.deck._id === deckId);
+    const getListFlashCardByDeckId = (listFlashCard: QuestionResponse[], deckId: string): QuestionResponse[] => {
+        return listFlashCard.filter((flashCard) => flashCard.deck === deckId);
     };
 
     const filteredList = getListFlashCardByDeckId(listFlashCard, deckId.deckId);
@@ -40,8 +40,6 @@ const FlashCardList = (deckId: any) => {
     };
 
     const handleEdit = (questionId: string) => {
-        console.log("questionId in flashcard list", questionId)
-
         router.push(`/pages/quiz/editQuiz/${questionId}`);
     };
 
@@ -56,6 +54,7 @@ const FlashCardList = (deckId: any) => {
 
     return (
         <>
+
             <Box
                 sx={{
                     display: 'flex',
@@ -66,6 +65,15 @@ const FlashCardList = (deckId: any) => {
                     gap: '10px'
                 }}
             >
+                <Button
+                    onClick={() => router.push(`/pages/quiz`)}
+                    size="small"
+                    color="inherit"
+                    variant="outlined"
+                    sx={{ marginRight: '200px' }}
+                >
+                    <ArrowBack />
+                </Button>
                 <Button
                     onClick={() => router.push(`/pages/quiz/testExam/${deckId.deckId}`)}
                     size="small"
@@ -86,6 +94,7 @@ const FlashCardList = (deckId: any) => {
             </Box>
 
             <Box>
+
                 <Grid container justifyContent="center">
                     <Grid sx={{ padding: '20px' }} item xs={12} sm={6} md={4} lg={6}>
                         {filteredList &&
@@ -93,6 +102,16 @@ const FlashCardList = (deckId: any) => {
                         }
                     </Grid>
                 </Grid>
+                <Box
+                    sx={{
+                        fontSize: '14px',
+                        color: 'text.primary',
+                        textAlign: 'center',
+                        padding: '20px',
+                    }}
+                >
+                    {currentFlashcardIndex + 1} / {filteredList.length}
+                </Box>
 
                 {filteredList.length > 0 && (
                     <Box display="flex" justifyContent="center" mb={6}>

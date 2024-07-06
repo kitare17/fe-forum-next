@@ -35,7 +35,7 @@ export const createDeck = createAsyncThunk(
       });
 
       // Display success message
-      toast.success('Tạo bài viết thành công');
+      toast.success('Tạo chủ đề thành công');
 
       // Return the created deck data
       return response.data;
@@ -113,9 +113,9 @@ export const getQuestion = createAsyncThunk(
     Types.QUESTION_GET,
     async (questionId: string) => {
         try {
-            console.log("In Connect DB ", questionId);
             const response = await axios.get(`http://localhost:5000/quizzes/${questionId}`);
             const data: QuestionResponse = response.data;
+            console.log("Data", data)
             return data;
         } catch (error) {
             console.error("Error: " + Types.QUESTION_GET, error);

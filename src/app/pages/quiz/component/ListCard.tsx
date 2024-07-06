@@ -2,16 +2,16 @@ import React from 'react';
 import { Card, CardContent, Typography, List, ListItem, ListItemText, IconButton, Box } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Answer, Question } from "@/app/interface/Quizz";
+import { Answer, QuestionResponse } from "@/app/interface/Quizz";
 
 interface Props {
-    question: Question;
+    question: QuestionResponse;
     onEdit: (questionId: string) => void;
     onDelete: (questionId: string) => void;
 }
 
 const ListCard: React.FC<Props> = ({ question, onEdit, onDelete }) => {
-    const correctAnswers: Answer[] | undefined = question?.answers.filter(answer => answer.isAnswer);
+    const correctAnswers: any = question?.answers.filter(answer => answer.isAnswer);
 
     return (
         <Card variant="outlined" sx={{ position: 'relative', width: '1000px', height: '350px' }}>
@@ -74,7 +74,7 @@ const ListCard: React.FC<Props> = ({ question, onEdit, onDelete }) => {
                 >
                     {correctAnswers && correctAnswers.length > 0 ? (
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                            {correctAnswers.map((answer, index) => (
+                            {correctAnswers.map((answer: any, index: any) => (
                                 <Typography key={index}>
                                     {answer.answerName}
                                 </Typography>

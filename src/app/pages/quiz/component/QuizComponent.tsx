@@ -4,10 +4,11 @@ import { Box, TextField, Button, Grid, Typography, Checkbox, FormControlLabel, F
 import { useRouter } from "next/navigation";
 import { QuizInterface } from "@/app/interface/Quizz";
 import { createQuiz } from "@/app/store/action/quiz";
+import { AppDispatch } from "@/app/store";
 
 const QuizComponent = (deckId: any) => {
     const router = useRouter();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const initialQuestion = { name: "", answers: [{ answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }] };
     const [formData, setFormData] = useState<QuizInterface>({
@@ -24,12 +25,13 @@ const QuizComponent = (deckId: any) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleQuestionChange = (questionIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+    const handleQuestionChange = (questionIndex: number, e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement; // Type assertion
         const updatedQuestions = [...formData.questions];
         updatedQuestions[questionIndex] = { ...updatedQuestions[questionIndex], [name]: value };
         setFormData({ ...formData, questions: updatedQuestions });
     };
+
 
     const handleAnswerChange = (questionIndex: number, answerIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, checked, type } = e.target;
@@ -69,7 +71,7 @@ const QuizComponent = (deckId: any) => {
         if (validate()) {
             try {
                 await dispatch(createQuiz(formData));
-                router.replace('/');
+                router.replace('/pages/quiz');
             } catch (error) {
                 console.error('Error creating quiz:', error);
             }
@@ -146,7 +148,8 @@ const QuizComponent = (deckId: any) => {
                                                 variant="outlined"
                                                 name="answerName"
                                                 value={answer.answerName}
-                                                onChange={(e) => handleAnswerChange(questionIndex, answerIndex, e)}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleAnswerChange(questionIndex, answerIndex, e)}
+
                                                 error={!!errors[`questions.${questionIndex}.answers.${answerIndex}.answerName`]}
                                                 helperText={errors[`questions.${questionIndex}.answers.${answerIndex}.answerName`]}
                                             />

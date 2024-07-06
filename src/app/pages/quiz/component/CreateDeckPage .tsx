@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import { Button, TextField, Typography, Grid, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
 import { createDeck } from "@/app/store/action/quiz";
 import { DeckInterface } from "@/app/interface/Quizz";
+import { AppDispatch } from '@/app/store';
 
 const CreateDeckPage = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const [formData, setFormData] = useState<DeckInterface>({
         name: '',
@@ -21,8 +22,8 @@ const CreateDeckPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            dispatch(createDeck(formData));
-            router.replace('/');
+            await dispatch(createDeck(formData)).unwrap();
+            router.replace('/pages/quiz');
         } catch (error) {
             console.error('Error creating deck:', error);
         }

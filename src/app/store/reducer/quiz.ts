@@ -12,7 +12,7 @@ interface InitialState {
      listDeck: DeckInterface[];
     isLoading: boolean;
     isError: boolean;
-    listFlashCard: FlashCardInterface[];
+    listFlashCard: QuestionResponse[];
     newQuiz: QuizInterface;
     newQuestion: QuestionRequest;
     question: QuestionResponse;
@@ -141,7 +141,7 @@ const quizSlice = createSlice({
             })
             //DELETE Question 
             .addCase(deleteQuestion.fulfilled, (state, action) => {
-                state.question = action.payload;
+                state.question = action.payload.data;
                 state.isLoading = false;
                 state.isError = false;
             })

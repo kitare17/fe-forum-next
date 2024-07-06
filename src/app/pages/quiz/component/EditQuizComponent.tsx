@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { Box, TextField, Button, Grid, Typography, Checkbox, FormControlLabel, Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { QuestionResponse } from "@/app/interface/Quizz";
 import { editQuestion, getQuestion } from "@/app/store/action/quiz";
+import { AppDispatch } from "@/app/store";
 
 const initialAnswer = [
     { answerName: "", isAnswer: false },
@@ -22,9 +23,9 @@ const initialFormData: QuestionResponse = {
     __v: 0,
 };
 
-const EditQuizComponent = ({ questionId }) => {
+const EditQuizComponent = (questionId: any) => {
     const router = useRouter();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const [formData, setFormData] = useState<QuestionResponse>(initialFormData);
     const [errors, setErrors] = useState<any>({});
@@ -32,7 +33,7 @@ const EditQuizComponent = ({ questionId }) => {
     useEffect(() => {
         const fetchQuestion = async () => {
             try {
-                const resultAction = await dispatch(getQuestion(questionId));
+                const resultAction = await dispatch(getQuestion(questionId.questionId));
                 if (getQuestion.fulfilled.match(resultAction)) {
                     const question = resultAction.payload;
                     setFormData(question);
@@ -52,14 +53,26 @@ const EditQuizComponent = ({ questionId }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleAnswerChange = (answerIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, checked, type } = e.target;
-        const updatedAnswers = [...formData.answers];
-        updatedAnswers[answerIndex] = {
-            ...updatedAnswers[answerIndex],
-            [name]: type === "checkbox" ? checked : value
-        };
-        setFormData({ ...formData, answers: updatedAnswers });
+    const handleAnswerChange = (answerIndex: number, e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+
+        // Check if it's a checkbox input
+        if (type === 'checkbox') {
+            const isChecked = (e.target as HTMLInputElement).checked; // Type assertion here
+            const updatedAnswers = [...formData.answers];
+            updatedAnswers[answerIndex] = {
+                ...updatedAnswers[answerIndex],
+                [name]: isChecked,
+            };
+            setFormData({ ...formData, answers: updatedAnswers });
+        } else {
+            const updatedAnswers = [...formData.answers];
+            updatedAnswers[answerIndex] = {
+                ...updatedAnswers[answerIndex],
+                [name]: value,
+            };
+            setFormData({ ...formData, answers: updatedAnswers });
+        }
     };
 
     const validate = () => {
@@ -84,7 +97,7 @@ const EditQuizComponent = ({ questionId }) => {
 
                 console.log("Data ne ", formData);
                 await dispatch(editQuestion({ id: formData._id, newQuestion: formData }));
-                router.replace('/');
+                router.replace('/pages/quiz');
             } catch (error) {
                 console.error('Error editing quiz:', error);
             }
