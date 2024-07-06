@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { fetchUserProfile } from "../action/user";
+import { fetchUserProfile, fetchUsers } from "../action/user";
 import { UserInterface } from "@/app/interface/User";
 
 interface InitialState {
@@ -33,23 +33,23 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder
-        // .addCase(fetchUsers.fulfilled, (state, action) => {
-        //         console.log("ok xong fulfilled");
-        //         console.log({action})
-        //         // @ts-ignore
-        //         state.listUser=action.payload;
-        //         state.isLoading = false;
-        //         state.isError = false;
-        //     })
-        //     .addCase(fetchUsers.pending, (state, action) => {
+        .addCase(fetchUsers.fulfilled, (state, action) => {
+                console.log("ok xong fulfilled");
+                console.log({action})
+                // @ts-ignore
+                state.listUser=action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(fetchUsers.pending, (state, action) => {
 
-        //         state.isLoading = true;
-        //         state.isError = false
-        //     })
-        //     .addCase(fetchUsers.rejected, (state, action) => {
-        //         state.isLoading = false;
-        //         state.isError = true;
-        //     })
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(fetchUsers.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
 
          // DETAIL PROFILE
          .addCase(fetchUserProfile.fulfilled, (state, action) => {
