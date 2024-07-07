@@ -56,7 +56,7 @@ var initialState: InitialState = {
     listUser: {
         users: [],
         maxPage: 1
-    }
+    },
     blog7Months: [0, 0, 0, 0, 0, 0, 0],
     showListReportType: "all"
 }
