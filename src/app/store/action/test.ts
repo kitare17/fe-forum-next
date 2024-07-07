@@ -5,14 +5,14 @@ import { TestResponse, TestInterfaceRequest} from "@/app/interface/Quizz";
 import { toast } from "react-toastify";
 
 // Region Deck
-export const getResultTest = createAsyncThunk<TestResponse[], { id: string }>(
+export const getResultTest = createAsyncThunk(
     Types.TEST_LIST_RESULT,
-    async ({ id }) => {
+    async ( {id} : {id: string}) => {
         try {
             const response = await axios.get(`http://localhost:5000/test/${id}`);
             const data: TestResponse = response.data;
             // Ensure the data is returned as an array
-            return [data];
+            return data;
         } catch (error) {
             console.error("Error: " + Types.TEST_LIST_RESULT, error);
             throw error;

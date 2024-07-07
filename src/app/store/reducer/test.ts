@@ -39,6 +39,7 @@ const testSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getResultTest.fulfilled, (state, action) => {
+                  // @ts-ignore
                 state.resultTest = action.payload;
                 state.isLoading = false;
                 state.isError = false;

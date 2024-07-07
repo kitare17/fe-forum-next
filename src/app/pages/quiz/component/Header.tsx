@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ deckId, questionsCount }) => {
                 padding: '20px'
             }}
         >
-            {!deckId ? (
+            {!deckId.deckId ? (
                 <>
                     <Button
                         onClick={() => router.push(`/pages/quiz/createDeck`)}

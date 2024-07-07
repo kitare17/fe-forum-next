@@ -29,9 +29,11 @@ const HistoryTest = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+    console.log("test", resultTest)
 
     return (
         <>
+
             <Box mt={4} mx={2}>
                 <Grid container direction="row" alignItems="center" spacing={2} mb={9} p={2}>
                     <Button
@@ -54,8 +56,7 @@ const HistoryTest = () => {
                                     <Table>
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>ID</TableCell>
-                                                <TableCell>Deck ID</TableCell>
+                                                <TableCell>Deck Name</TableCell>
                                                 <TableCell>Score</TableCell>
                                                 <TableCell>Number Correct Answers</TableCell>
                                                 <TableCell>Total Questions</TableCell>
@@ -64,9 +65,8 @@ const HistoryTest = () => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {resultTest.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((test) => (
+                                            {resultTest.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((test: any) => (
                                                 <TableRow key={test._id}>
-                                                    <TableCell>{test._id}</TableCell>
                                                     <TableCell>{test.deckId?.name || 'Unknown'}</TableCell>
                                                     <TableCell>{test.score}</TableCell>
                                                     <TableCell>{test.numberCorrectAnswer}</TableCell>
