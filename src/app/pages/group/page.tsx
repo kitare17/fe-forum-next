@@ -1,5 +1,5 @@
 "use client"
-import React, {Suspense, useEffect} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import SearchGroup from "@/app/pages/group/component/SearchGroup";
 import CardGroup from "@/app/pages/group/component/CardGroup";
 import Grid from "@mui/material/Grid";
@@ -8,14 +8,16 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {fetchUsers} from "@/app/store/action/user";
 import {toast} from "react-toastify";
-import {findAllGroup} from "@/app/store/action/group";
+import {findAllGroup, findAllGroupByName} from "@/app/store/action/group";
 
 import {useRouter, useSearchParams} from "next/navigation";
+import CreateModalGroup from "@/app/pages/group/component/ModalCreateGroup";
 
 const GroupPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const page = searchParams.get('page') ?? 1;
+    const searchName = searchParams.get('groupName') ?? "";
 
 
     //fetch data
@@ -24,10 +26,20 @@ const GroupPage = () => {
 
 
     useEffect(() => {
-        console.log("vào useEffect", page)
-        // @ts-ignore
-        dipatch(findAllGroup({page}));
-    }, [page])
+        console.log("check search", searchName)
+
+        if (!searchName){
+            // @ts-ignore
+            dipatch(findAllGroup({page}));
+        }
+
+
+        else
+        {
+            // @ts-ignore
+            dipatch(findAllGroupByName({page, groupName: searchName}));
+        }
+    }, [page, searchName])
     useEffect(() => {
         // if (isLoading)
         //     toast.info("Đang tải thông tin")
@@ -37,36 +49,46 @@ const GroupPage = () => {
 
 
     const handlePaging = (event: any, value: number) => {
+        if(searchName)
+        router.push(`/pages/group?page=${value}&groupName=${searchName}`);
+        else
         router.push(`/pages/group?page=${value}`)
     };
 
 
     return (
         <>
-            <SearchGroup/>
-
+            <SearchGroup />
+            <CreateModalGroup/>
             <CardGroup array={listGroup}/>
-
-            <Grid item xs={10}
+            <Grid container
                   sx={{
                       display: 'flex',
                       justifyContent: 'center'
                   }}
                   mb={2}
             >
-                <Pagination
-                    onChange={handlePaging}
-                    count={maxPage}
-                    defaultPage={1}
-                    siblingCount={1}
-                    size="large"
-                    showLastButton
-                    showFirstButton/>
+                <Grid item xs={10}
+                      sx={{
+                          display: 'flex',
+                          justifyContent: 'center'
+                      }}
+                >
+                    <Pagination
+                        onChange={handlePaging}
+                        count={maxPage}
+                        defaultPage={1}
+                        siblingCount={1}
+                        page={Number(page)??1}
+                        size="large"
+
+                        showLastButton
+                        showFirstButton/>
+                </Grid>
             </Grid>
         </>
     );
 };
-
 
 
 const GroupPageRender = () => {

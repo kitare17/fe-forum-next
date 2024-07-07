@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 // Region Deck
 export const getResultTest = createAsyncThunk(
     Types.TEST_LIST_RESULT,
-    async ( {id} : {id: string}) => {
+    async ({ id, deckId }: { id: string, deckId: string }) => {
         try {
-            const response = await axios.get(`http://localhost:5000/test/${id}`);
+            const response = await axios.get(`http://localhost:5000/test/${id}?deckId=${deckId}`);
             const data: TestResponse = response.data;
             // Ensure the data is returned as an array
             return data;

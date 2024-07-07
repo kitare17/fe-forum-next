@@ -67,7 +67,7 @@ function Header() {
     const hanldeLogout = () => {
         dispatch(fetchLogout)
         console.log("dang xuat")
-        resetInitialState();
+        dispatch(resetInitialState());
         window.localStorage.clear()
         router.push("/pages/auth/login")
     };

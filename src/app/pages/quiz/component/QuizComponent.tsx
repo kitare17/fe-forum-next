@@ -1,21 +1,21 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, TextField, Button, Grid, Typography, Checkbox, FormControlLabel, FormControl, RadioGroup, Radio, FormLabel, Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { QuizInterface } from "@/app/interface/Quizz";
 import { createQuiz } from "@/app/store/action/quiz";
-import { AppDispatch } from "@/app/store";
+import { AppDispatch, RootState } from "@/app/store";
 
 const QuizComponent = (deckId: any) => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
-
+    const { user } = useSelector((state: RootState) => state.auth);
     const initialQuestion = { name: "", answers: [{ answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }] };
     const [formData, setFormData] = useState<QuizInterface>({
         questions: [initialQuestion],
         deckName: "",
         regionType: "",
-        deckOwner: "60d0fe4f5311236168a109ca",
+        deckOwner: user.email,
         deckId: deckId.deckId || ""
     });
     const [errors, setErrors] = useState<any>({});
@@ -69,6 +69,7 @@ const QuizComponent = (deckId: any) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (validate()) {
+            console.log("formData", formData.deckOwner)
             try {
                 await dispatch(createQuiz(formData));
                 router.replace('/pages/quiz');

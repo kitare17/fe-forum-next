@@ -107,6 +107,7 @@ const TestExam = (deckId: any) => {
     const [duration, setDuration] = useState<number>(0);
 
     const { listFlashCard, isLoading, isError } = useSelector((state: RootState) => state.quiz);
+    const { user } = useSelector((state: RootState) => state.auth);
 
     const getListFlashCardByDeckId = (listFlashCard: QuestionResponse[], deckId: string): QuestionResponse[] => {
         return listFlashCard.filter((flashCard) => flashCard.deck === deckId);
@@ -217,7 +218,7 @@ const TestExam = (deckId: any) => {
         const durationInMinutes = Math.floor(duration / 60);
 
         const testResult: TestInterfaceRequest = {
-            testOwner: '60b725f10c9b1b3c4d6c7f9e', // replace with actual user ID
+            testOwner: user.email,
             deckId: deckId.deckId,
             score,
             numberCorrectAnswer,

@@ -9,16 +9,16 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
-const HistoryTest = () => {
+const HistoryTest = (deckId: any) => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { resultTest, isLoading, isError } = useSelector((state: RootState) => state.test);
-
+    const { user } = useSelector((state: RootState) => state.auth);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
     useEffect(() => {
-        dispatch(getResultTest({ id: '60b725f10c9b1b3c4d6c7f9e' }));
+        dispatch(getResultTest({ id: user.email, deckId: deckId.deckId }));
     }, [dispatch]);
 
     const handleChangePage = (event: unknown, newPage: number) => {

@@ -4,15 +4,16 @@ import { useRouter } from "next/navigation";
 import { Button, TextField, Typography, Grid, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
 import { createDeck } from "@/app/store/action/quiz";
 import { DeckInterface } from "@/app/interface/Quizz";
-import { AppDispatch } from '@/app/store';
+import { AppDispatch, RootState } from '@/app/store';
 
 const CreateDeckPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
+    const { user } = useSelector((state: RootState) => state.auth);
     const [formData, setFormData] = useState<DeckInterface>({
         name: '',
         regionType: '',
-        deckOwner: '60b725f10c9b1b3c4d6c7f9e',
+        deckOwner: user.email,
     });
 
     const handleChange = (e: any) => {

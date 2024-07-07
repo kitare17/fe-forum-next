@@ -83,7 +83,7 @@ const FlashCardList = (deckId: any) => {
                     Kiểm tra
                 </Button>
                 <Button
-                    onClick={() => router.push(`/pages/quiz/historyTest`)}
+                    onClick={() => router.push(`/pages/quiz/historyTest/${deckId.deckId}`)}
                     size="small"
                     color="inherit"
                     variant="outlined"

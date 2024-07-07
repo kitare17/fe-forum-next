@@ -53,7 +53,6 @@ export const createQuiz = createAsyncThunk(
     Types.QUIZ_CREATE,
     async (newQuiz: QuizInterface) => {
         try {
-            console.log("newQuiz" , newQuiz)
             const response = await axios.post('http://localhost:5000/quizzes', {
                 questions: newQuiz.questions,
                 deckName: newQuiz.deckName,
