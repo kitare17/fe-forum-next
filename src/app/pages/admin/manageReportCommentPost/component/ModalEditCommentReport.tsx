@@ -5,38 +5,29 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import {removeBlog} from "@/app/store/action/blog";
-import {toast} from "react-toastify";
-import {useRouter} from "next/navigation";
-import {Controller, useForm} from "react-hook-form";
-import {BlogInterface} from "@/app/interface/Blog";
-import {createNotification, createTaskGroup} from "@/app/store/action/group";
+import {useDispatch} from "react-redux";
+import {useForm} from "react-hook-form";
 import Grid from "@mui/material/Grid";
-import {Autocomplete, Box} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import {CKEditor} from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import {RootState} from "@/app/store";
-import blog from "@/app/store/reducer/blog";
-import {updateBlogStatus} from "@/app/store/action/dashboard";
+import {ReportBlogInterface} from "@/app/interface/ReportBlog";
+import {createDayToStringTask} from "@/app/constant/Fomart";
+import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
+import {CommentInterface} from "@/app/interface/Comment";
+import DOMPurify from "isomorphic-dompurify";
+import {acceptReportComment, cancelReportComment} from "@/app/store/action/dashboard";
+
 
 const ModalEditCommentReport = (
     {
-        blog,
+        report,
         openEditStatusBlog,
         setOpenCreateWordForm
     }
         : {
-        blog: BlogInterface|undefined,
+        report: ReportCommentInterface | undefined,
         openEditStatusBlog: boolean,
         setOpenCreateWordForm: React.Dispatch<React.SetStateAction<boolean>>
     }
 ) => {
-
-
 
 
     const handleClickCloseForm = () => {
@@ -47,55 +38,35 @@ const ModalEditCommentReport = (
     //form
     const dipatch = useDispatch();
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState,
-        control,
-        trigger,
-        setValue,
-        getValues
-    } = useForm(
-        {
-            defaultValues: {
 
-                "status": "",
-
-            }
-        }
-    )
-    const {errors} = formState;
-
-
-
-
-
-
-    const listStatusOption = [
-        {
-            label: "Đang hoạt động",
-            id: "1"
-        },
-        {
-            label: "Bị khóa",
-            id: "2"
-        }
-    ]
-
+    //@ts-ignore
+    var comment: CommentInterface | undefined = report?.blogId?.comments?.filter(comment => comment._id === report?.commentId)[0];
 
 
     const handleFormCreate = () => {
 
-        var status=getValues("status");
 
-        // alert(blog?._id+" "+status.label);
+        // alert(report?._id+" "+status.label);
         // @ts-ignore
 
-        dipatch(updateBlogStatus({status:status.label, postId:blog?._id}))
+
         // reset();
         handleClickCloseForm();
 
+    }
+
+    const handleAccept = () => {
+        //@ts-ignore
+        dipatch(acceptReportComment({reportId: report?._id, postId: report?.blogId?._id, commentId: report?.commentId}))
+
+        setOpenCreateWordForm(false)
+
+    }
+    const handleCancel = () => {
+        //@ts-ignore
+        dipatch(cancelReportComment({reportId: report?._id}));
+
+        setOpenCreateWordForm(false)
     }
 
     return (
@@ -114,7 +85,7 @@ const ModalEditCommentReport = (
                 }}
                 maxWidth="lg"
             >
-                <DialogTitle>Chỉnh sửa trạng thái của blog</DialogTitle>
+                <DialogTitle>Chỉnh sửa trạng thái của report</DialogTitle>
                 <DialogContent>
                     <Grid container
                           direction="row"
@@ -125,6 +96,15 @@ const ModalEditCommentReport = (
                           mb={9}
                     >
                         <Grid item xs={10}
+                        >
+                            <b>Tạo ngày: </b> {createDayToStringTask(report?.createdAt ?? "")}
+                            <br/>
+                            <b>Comment bị báo cáo: </b>
+
+                            <span className="Container"
+                                  dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(comment?.detail ?? "Comment này có lẽ đã bị xóa")}}></span>
+                        </Grid>
+                        <Grid item xs={10}
                               sx={{
                                   display: 'flex',
                                   justifyContent: 'space-between'
@@ -132,8 +112,11 @@ const ModalEditCommentReport = (
 
                         >
 
-                            <Button variant="contained" sx={{backgroundColor:"#ff0000"}}>Xoá comment này</Button>
-                            <Button variant="contained" sx={{backgroundColor:"#00cc00"}} >Comment hợp lệ</Button>
+
+                            <Button variant="contained" onClick={() => handleAccept()}
+                                    sx={{backgroundColor: "#00cc00"}}>Xoá comment này</Button>
+                            <Button variant="contained" onClick={() => handleCancel()}
+                                    sx={{backgroundColor: "#ff0000"}}>Comment hợp lệ</Button>
 
 
                         </Grid>
@@ -141,7 +124,6 @@ const ModalEditCommentReport = (
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClickCloseForm}>Hủy</Button>
-                    {/*<Button type="button" onClick={handleSubmit(handleFormCreate)}>Lưu</Button>*/}
                 </DialogActions>
             </Dialog>
         </React.Fragment>

@@ -1,6 +1,7 @@
 import * as Types from "../../constant/ActionType"
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from "axios";
+import {DASHBOARD_GET_ALL_REPORT_COMMENT_FOLLOW_STATUS} from "../../constant/ActionType";
 
 
 export const getTotalUser = createAsyncThunk(
@@ -126,29 +127,29 @@ export const getAllReportComment = createAsyncThunk(
 );
 
 
-export const acceptReportComment = createAsyncThunk(
-    Types.DASHBOARD_ACCEPT_REPORT_COMMENT,
+export const acceptReportBlog = createAsyncThunk(
+    Types.DASHBOARD_ACCEPT_REPORT_BLOG,
     async ({reportId}: { reportId: string | undefined }) => {
         try {
             const response = await axios.put(`http://localhost:3001/report-blog/${reportId}/blog/accept`);
             const data = response.data;
             return data;
         } catch (error) {
-            console.log("Error: " + Types.DASHBOARD_ACCEPT_REPORT_COMMENT);
+            console.log("Error: " + Types.DASHBOARD_ACCEPT_REPORT_BLOG);
 
         }
     }
 );
 
-export const cancelReportComment = createAsyncThunk(
-    Types.DASHBOARD_CANCEL_REPORT_COMMENT,
+export const cancelReportBlog = createAsyncThunk(
+    Types.DASHBOARD_CANCEL_REPORT_BLOG,
     async ({reportId}: { reportId: string | undefined }) => {
         try {
             const response = await axios.put(`http://localhost:3001/report-blog/${reportId}/blog/cancel`);
             const data = response.data;
             return data;
         } catch (error) {
-            console.log("Error: " + Types.DASHBOARD_CANCEL_REPORT_COMMENT);
+            console.log("Error: " + Types.DASHBOARD_CANCEL_REPORT_BLOG);
 
         }
     }
@@ -163,6 +164,54 @@ export const showReportFollowStatus = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT_FOLLOW_STATUS);
+
+        }
+    }
+);
+
+export const acceptReportComment = createAsyncThunk(
+    Types.DASHBOARD_ACCEPT_REPORT_COMMENT,
+    async ({reportId,postId,commentId}: { reportId: string | undefined, postId: string | undefined,commentId: string | undefined,}) => {
+        try {
+            const response = await axios.put(`http://localhost:3001/report-comment/${reportId}/choice-accept`,{
+                "commentId": commentId,
+                "postId": postId
+            });
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_ACCEPT_REPORT_BLOG);
+
+        }
+    }
+);
+
+export const cancelReportComment = createAsyncThunk(
+    Types.DASHBOARD_CANCEL_REPORT_COMMENT,
+    async ({reportId}: { reportId: string | undefined}) => {
+        try {
+            alert(reportId)
+            const response = await axios.put(`http://localhost:3001/report-comment/${reportId}/choice-cancel`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_CANCEL_REPORT_COMMENT);
+
+        }
+    }
+);
+
+
+
+export const showReportCommentFollowStatus = createAsyncThunk(
+    Types.DASHBOARD_GET_ALL_REPORT_COMMENT_FOLLOW_STATUS,
+    async ({statusReport, page}: { statusReport: string | undefined, page: string | undefined }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/report-comment/show/blog?statusReport=${statusReport}&page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT_COMMENT_FOLLOW_STATUS);
 
         }
     }

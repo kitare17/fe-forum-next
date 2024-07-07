@@ -1,49 +1,27 @@
 "use client"
-import React, {useState, useEffect, Suspense} from "react";
+import React, {Suspense, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    acceptReportComment,
-    findBlog,
-    getAllReport,
-    showAllBlog,
-    showReportFollowStatus
-} from "@/app/store/action/dashboard";
+import {getAllReport, showReportFollowStatus} from "@/app/store/action/dashboard";
 import BuildIcon from '@mui/icons-material/Build';
 import {
+    Button,
+    IconButton,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
-    IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Typography,
-    Button,
-    TextField,
-    InputAdornment,
-    Avatar
+    Typography
 } from "@mui/material";
-import {
-    Edit as EditIcon,
-    Visibility as ViewIcon,
-    Lock as LockIcon,
-    LockOpen as UnlockIcon,
-    Search as SearchIcon
-} from "@mui/icons-material";
+import {Visibility as ViewIcon} from "@mui/icons-material";
 import {RootState} from "@/app/store";
-import {BlogInterface} from "@/app/interface/Blog";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
 import {useRouter, useSearchParams} from "next/navigation";
-import InputBase from "@mui/material/InputBase";
 import {useForm} from "react-hook-form";
-import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
 import ModalEditReport from "@/app/pages/admin/manageReportPost/component/ModalEditReport";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import Image from "next/image";

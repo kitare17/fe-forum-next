@@ -4,13 +4,19 @@ import {fetchUsers} from "@/app/store/action/user";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {
-    acceptReportComment, cancelReportComment,
-    findBlog, getAllReport, getAllReportComment,
-    getAmountBlogMonth, getBlog7Day,
+
+    cancelReportBlog,
+    acceptReportBlog,
+    findBlog,
+    getAllReport,
+    getAllReportComment,
+    getAmountBlogMonth,
+    getBlog7Day,
     getTotalReport,
     getTotalUser,
-    showAllBlog, showReportFollowStatus,
-    updateBlogStatus
+    showAllBlog,
+    showReportFollowStatus,
+    updateBlogStatus, acceptReportComment, cancelReportComment, showReportCommentFollowStatus
 } from "@/app/store/action/dashboard";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
@@ -27,6 +33,7 @@ interface InitialState {
     isUpdate: boolean,
     blog7Months: number[],
     showListReportType: string,//all, pending, done, illegal
+    showListCommentReportType: string,//all, pending, done, illegal
 
 }
 
@@ -42,20 +49,24 @@ var initialState: InitialState = {
         maxPage: 1
     },
     blog7Months: [0, 0, 0, 0, 0, 0, 0],
-    showListReportType: "all"
+    showListReportType: "all",
+    showListCommentReportType: "all"
 }
 const dashboardSlice = createSlice({
     name: "dashboard",
     initialState: initialState,
     reducers: {
         setStateShowPendingReport: (state) => {
-            state.showListReportType="pending"
+            state.showListReportType = "pending"
         },
         setStateShowDoneReport: (state) => {
-            state.showListReportType="done"
+            state.showListReportType = "done"
         },
         setStateShowIllegalReport: (state) => {
-            state.showListReportType="illegal"
+            state.showListReportType = "illegal"
+        },
+        setStateShowCommentReport: (state, action) => {
+            state.showListCommentReportType = action.payload
         },
 
     },
@@ -191,7 +202,7 @@ const dashboardSlice = createSlice({
             // @ts-ignore
             state.listReportBlog = action.payload
             state.isError = false;
-            state.showListReportType="all"
+            state.showListReportType = "all"
 
 
         })
@@ -225,40 +236,39 @@ const dashboardSlice = createSlice({
 
             })
 
-        //ACCEPT REPORT COMMENT BLOG MANAGE
-        builder.addCase(acceptReportComment.fulfilled, (state, action) => {
+        //ACCEPT REPORT  BLOG MANAGE
+        builder.addCase(acceptReportBlog.fulfilled, (state, action) => {
             state.isLoading = false;
             state.isError = false;
             state.isUpdate = false;
         })
-            .addCase(acceptReportComment.pending, (state, action) => {
+            .addCase(acceptReportBlog.pending, (state, action) => {
                 state.isLoading = true;
                 state.isError = false;
                 state.isUpdate = true;
 
 
             })
-            .addCase(acceptReportComment.rejected, (state, action) => {
+            .addCase(acceptReportBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isUpdate = false;
             })
 
-        //CANCEL REPORT COMMENT BLOG MANAGE
-        builder.addCase(cancelReportComment.fulfilled, (state, action) => {
-
+        //CANCEL REPORT  BLOG MANAGE
+        builder.addCase(cancelReportBlog.fulfilled, (state, action) => {
             state.isError = false;
             state.isLoading = false;
             state.isUpdate = false;
         })
-            .addCase(cancelReportComment.pending, (state, action) => {
+            .addCase(cancelReportBlog.pending, (state, action) => {
                 state.isLoading = true;
                 state.isError = false;
                 state.isUpdate = true;
 
 
             })
-            .addCase(cancelReportComment.rejected, (state, action) => {
+            .addCase(cancelReportBlog.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.isUpdate = false;
@@ -269,11 +279,7 @@ const dashboardSlice = createSlice({
             state.listReportBlog = action.payload
             state.isError = false;
             state.isLoading = false;
-
-
             //all, pending, done, illegal
-            
-            
 
         })
             .addCase(showReportFollowStatus.pending, (state, action) => {
@@ -285,9 +291,76 @@ const dashboardSlice = createSlice({
                 state.isError = true;
 
             })
+        //CANCEL REPORT COMMENT  BLOG MANAGE
+
+        builder.addCase(cancelReportComment.fulfilled, (state, action) => {
+            state.isUpdate=false;
+            state.isError = false;
+            state.isLoading = false;
+            //all, pending, done, illegal
+
+        })
+            .addCase(cancelReportComment.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isUpdate = true;
+
+            })
+            .addCase(cancelReportComment.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isUpdate = false;
+
+
+            })
+        //ACCEPT REPORT COMMENT  BLOG MANAGE
+
+        builder.addCase(acceptReportComment.fulfilled, (state, action) => {
+            state.isUpdate=false;
+            state.isError = false;
+            state.isLoading = false;
+            //all, pending, done, illegal
+
+        })
+            .addCase(acceptReportComment.pending, (state, action) => {
+                state.isLoading = true;
+                state.isUpdate = true;
+                state.isError = false;
+            })
+            .addCase(acceptReportComment.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isUpdate = false;
+
+
+            })
+
+        //SHOW FOLLOW STATUS REPORT COMMENT BLOG MANAGE
+        builder.addCase(showReportCommentFollowStatus.fulfilled, (state, action) => {
+            // @ts-ignore
+            state.listReportCommentBlog = action.payload
+            state.isError = false;
+            state.isLoading = false;
+            //all, pending, done, illegal
+
+        })
+            .addCase(showReportCommentFollowStatus.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(showReportCommentFollowStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+
+            })
     }
 })
-export const {setStateShowPendingReport,setStateShowIllegalReport,setStateShowDoneReport} = dashboardSlice.actions;
+export const {
+    setStateShowPendingReport,
+    setStateShowIllegalReport,
+    setStateShowDoneReport,
+    setStateShowCommentReport
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
 
