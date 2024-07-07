@@ -25,7 +25,6 @@ export const index =
                 task: task,
                 todoList: todoList,
                 dashboard: dashboard,
-                sale: sale,
                 quiz:  quiz,
                 test: test,
             }
