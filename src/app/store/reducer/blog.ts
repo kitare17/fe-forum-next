@@ -2,9 +2,9 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {
     addNewComment,
-    createBlog, createReplyComment, createReport, createReportComment,
-    findOneBlog,
-    likeBlog,
+    createBlog, createReplyComment, createReport, createReportComment, editBlog,
+    findOneBlog, getOneBlogCheck,
+    likeBlog, removeBlog, removeCommentBlog,
     showAllBlog,
     showOneTopic,
     unlikeBlog
@@ -12,6 +12,8 @@ import {
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+
 
 interface InitialState {
     newBlog: BlogInterface;
@@ -22,16 +24,25 @@ interface InitialState {
     listBlog: { posts: BlogInterface[], maxPage: number },
     isLike: boolean,
     isSuccess: boolean,
+    isLoadAddComment:boolean,
     message: string
 }
 
 
 var initialState: InitialState = {
-    newBlog: {},
+    newBlog: {
+        detail:"",
+        title:""
+    },
     isLoading: false,
     isError: false,
     isSuccess: false,
-    blogDetail: {},
+    isLoadAddComment: false,
+
+    blogDetail: {
+        detail:"",
+        title:""
+    },
     listBlog: {
         posts: [],
         maxPage: 1
@@ -92,11 +103,13 @@ const blogSlice = createSlice({
             .addCase(addNewComment.fulfilled, (state, action) => {
                 // @ts-ignore
                 state.blogDetail = action.payload;
+                state.isLoadAddComment=false;
                 state.isLoading = false;
                 state.isError = false;
             })
             .addCase(addNewComment.pending, (state, action) => {
-                state.isSuccess = false
+                state.isSuccess = false;
+                state.isLoadAddComment=true;
                 state.isLoading = true;
                 state.isError = false
             })
@@ -232,8 +245,6 @@ const blogSlice = createSlice({
 
             //REPLY COMMENT
             .addCase(createReplyComment.fulfilled, (state, action) => {
-
-                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
                 // @ts-ignore
                 state.blogDetail = action.payload;
                 // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
@@ -249,6 +260,91 @@ const blogSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.isSuccess = false
+            })
+
+        //EDIT COMMENT
+            .addCase(editBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(editBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(editBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+
+            //REMOVE BLOG
+            .addCase(removeBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.message=action.payload.message
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(removeBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(removeBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+
+            //REMOVE COMMENT BLOG
+            .addCase(removeCommentBlog.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.blogDetail=action.payload
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(removeCommentBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(removeCommentBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false
+            })
+
+            //FIND ONE BLOG CHECK
+            .addCase(getOneBlogCheck.fulfilled, (state, action) => {
+
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
+                // @ts-ignore
+                state.blogDetail = action.payload;
+                // @ts-ignore
+                if ([...(action.payload.likes ?? [])].includes(userId)) {
+                    state.isLike = true
+                }
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getOneBlogCheck.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getOneBlogCheck.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                // @ts-ignore
+                toast.error(action.payload?.data?.message);
+
             })
     }
 

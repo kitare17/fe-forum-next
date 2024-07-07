@@ -8,7 +8,37 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import Box from "@mui/material/Box";
+import {useDispatch} from "react-redux";
+import {findAllGroupByName} from "@/app/store/action/group";
+import {useForm} from "react-hook-form";
+import {BlogInterface} from "@/app/interface/Blog";
+import {useRouter} from "next/navigation";
+
 const SearchGroup = () => {
+
+    const dipatch = useDispatch();
+    const router = useRouter();
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState,
+        control,
+        trigger,
+        setValue,
+        getValues
+    } = useForm<any>(
+        {
+            defaultValues: {
+                "groupName": "",
+            }
+        }
+    )
+    const handleFindGroup = () => {
+        var groupName = getValues("groupName")
+        router.push(`/pages/group?page=1&groupName=${groupName}`);
+    }
     return (
         <Box
             sx={{
@@ -37,9 +67,12 @@ const SearchGroup = () => {
                     sx={{ml: 1, flex: 1}}
                     placeholder="Tìm kiếm group"
                     inputProps={{'aria-label': 'Tìm kiếm group'}}
+                    {...register(
+                        'groupName'
+                    )}
                 />
                 <IconButton type="button" sx={{p: '10px'}} aria-label="search">
-                    <SearchIcon/>
+                    <SearchIcon onClick={() => handleFindGroup()}/>
                 </IconButton>
             </Paper>
 
