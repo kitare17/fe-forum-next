@@ -10,7 +10,8 @@ import {useForm} from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {createDayToStringTask} from "@/app/constant/Fomart";
-import {acceptReportComment, cancelReportComment} from "@/app/store/action/dashboard";
+import {acceptReportBlog, cancelReportBlog} from "@/app/store/action/dashboard";
+import Image from "next/image";
 
 const ModalEditReport = (
     {
@@ -57,14 +58,14 @@ const ModalEditReport = (
 
     const handleCancel = () => {
         //@ts-ignore
-        dipatch(cancelReportComment({reportId:report?._id}))
+        dipatch(cancelReportBlog({reportId:report?._id}))
         setOpenCreateWordForm(false)
 
     }
 
     const handleAccept = () => {
         //@ts-ignore
-        dipatch(acceptReportComment({reportId:report?._id}))
+        dipatch(acceptReportBlog({reportId:report?._id}))
         setOpenCreateWordForm(false)
 
     }
