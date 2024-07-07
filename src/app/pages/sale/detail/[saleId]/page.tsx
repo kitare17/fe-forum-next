@@ -31,11 +31,16 @@ const SaleDetail = () => {
                     border: none;
                     background: none;
                 }
+                body {
+                
+                }
+               
             `}</style>
+            <div className="bg-light py-3">
             <script src="https://kit.fontawesome.com/a00e93d0d1.js" crossOrigin="anonymous" async ></script>
-            <div className="container bg-light my-3" style={{paddingBottom: '20px', borderRadius: '1%'}}>
+            <div className="container bg-white border border-1 mt-4" style={{paddingBottom: '20px', borderRadius: '1%'}}>
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-md-4">
                         <div className="row p-3">
                             <div className="col-3">
                                 <Image
@@ -56,7 +61,7 @@ const SaleDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-9" style={{textAlign: 'right'}}>
+                    <div className="col-md-8" style={{textAlign: 'right'}}>
                         <button><i className="fa-solid fa-bars"></i></button>
                     </div>
                 </div>
@@ -66,7 +71,9 @@ const SaleDetail = () => {
                 </div>
                 <div className="row">
                     <div className="col-md-7">
-                        <CarouselComponent/>
+                    {saleDetail?.images && (
+                            <CarouselComponent items={saleDetail.images.map(image => ({ image }))} />
+                        )}
                     </div>
                     <div className="col-md-5">
                         <div className="row">
@@ -96,6 +103,35 @@ const SaleDetail = () => {
                     </div>
                 </div>
             </div>
+
+            <div className="container bg-white border border-1 my-5">
+    <div className="row">
+      <div className = 'col-md-12 my-2'>
+      <h3>Tin rao tương tự</h3>
+      <hr/>
+      </div>
+    </div>
+
+    <div className="row mt-1 mb-5">
+      <div className="col-md-2">
+        <div className="">
+          <a href="#" className="text-decoration-none">
+            <div className="card" style={{width: '100%'}}>
+              <img src="https://via.placeholder.com/300x200" className="card-img-top" alt="Product Image" />
+              <div className="card-body">
+                <h5 className="card-title" style={{color: 'black'}}>Product Title</h5>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-danger fw-bold">$29.99</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
 
         </>
     )

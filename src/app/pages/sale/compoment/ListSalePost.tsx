@@ -21,7 +21,47 @@ const ListSalePost = ({array}: { array: SaleInterface[] }) => {
                     text-decoration: none;
                     color: inherit;
                 }
+
+                .navbar-custom {
+            background-color: #4CAF50; /* Màu nền xanh lá */
+        }
+        .navbar-brand,
+        .nav-link {
+            color: white !important; /* Màu chữ trắng */
+        }
+        .search-bar {
+            width: 50%; /* Độ rộng của thanh tìm kiếm */
+        }
+        .dropdown-menu a:hover {
+            background-color: #4CAF50; /* Màu nền khi hover */
+            color: white !important; /* Màu chữ khi hover */
+        }
             `}</style>
+            <nav className="navbar navbar-expand-lg navbar-custom">
+      <div className="container-fluid">
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+          <ul className="navbar-nav">
+            <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a className="dropdown-item" href="#">Action</a></li>
+                <li><a className="dropdown-item" href="#">Another action</a></li>
+                <li><a className="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form className="d-flex mx-auto search-bar">
+            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+            <button className="btn btn-outline-light" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
             <div className="container my-2">
                 <div className="row">
 
