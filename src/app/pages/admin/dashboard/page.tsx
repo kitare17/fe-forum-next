@@ -13,9 +13,10 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {useEffect} from "react";
 import {getAmountBlogMonth, getTotalReport, getTotalUser} from "@/app/store/action/dashboard";
+import ChartBlogInMonth from "@/app/pages/admin/dashboard/component/ChartBlogInMonth";
 
 export default function Dashboard() {
-    const dipatch=useDispatch();
+    const dipatch = useDispatch();
 
     const {
         totalUser,
@@ -26,7 +27,7 @@ export default function Dashboard() {
     } = useSelector((state: RootState) => state.dashboard);
 
 
-    useEffect(()=>{
+    useEffect(() => {
 
         // @ts-ignore
         dipatch(getTotalUser());
@@ -34,7 +35,7 @@ export default function Dashboard() {
         dipatch(getAmountBlogMonth());
         // @ts-ignore
         dipatch(getTotalReport());
-    },[])
+    }, [])
     return (
         <>
 
@@ -121,7 +122,7 @@ export default function Dashboard() {
                                             <div className="numbers">
                                                 <p className="text-sm mb-0 text-capitalize font-weight-bold">
 
-                                                    Người dùng 
+                                                    Người dùng
                                                 </p>
                                                 <h5 className="font-weight-bolder mb-0">
                                                     {totalUser}
@@ -146,7 +147,7 @@ export default function Dashboard() {
                                         <div className="col-8">
                                             <div className="numbers">
                                                 <p className="text-sm mb-0 text-capitalize font-weight-bold">
-                                                    Bài viết 
+                                                    Bài viết
                                                 </p>
                                                 <h5 className="font-weight-bolder mb-0">
                                                     {totalBlogMonth}
@@ -192,6 +193,16 @@ export default function Dashboard() {
 
                     </div>
                 </div>
+
+                <div className="container-fluid py-4 bg-white">
+                    <div className="row">
+                        <ChartBlogInMonth/>
+                    </div>
+                    <div className="row ">
+                       <h3 className="text-center">Số bài viết trong 7 ngày qua</h3>
+                    </div>
+                </div>
+
             </main>
         </>
     );

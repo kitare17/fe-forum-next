@@ -15,7 +15,14 @@ import Divider from "@mui/material/Divider";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/app/store";
 import {toast} from "react-toastify";
-import {addNewComment, createReplyComment, findOneBlog, likeBlog, unlikeBlog} from "@/app/store/action/blog";
+import {
+    addNewComment,
+    createReplyComment,
+    findOneBlog,
+    getOneBlogCheck,
+    likeBlog,
+    unlikeBlog
+} from "@/app/store/action/blog";
 import {useParams, useRouter} from "next/navigation";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // @ts-ignore
@@ -45,6 +52,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FormRemoveDialog from "@/app/pages/blog/component/FormRemove";
 import FormRemoveCommentDialog from '../../component/FormCommentRemove';
 import CircularProgress from '@mui/material/CircularProgress';
+
 const Blog = () => {
 
     const router = useRouter();
@@ -81,8 +89,14 @@ const Blog = () => {
     } =
         useSelector((state: RootState) => state.blog);
     useEffect(() => {
-        // @ts-ignore
-        dipatch(findOneBlog(blogId));
+        var admin = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.admin : {};
+
+        if (admin)
+            // @ts-ignore
+            dipatch(findOneBlog(blogId));
+        else
+            // @ts-ignore
+            dipatch(getOneBlogCheck(blogId));
 
     }, [])
 
@@ -90,11 +104,11 @@ const Blog = () => {
         // if (isLoading)
         //     toast.info("Đang tải thông tin")
         if (isError)
-            toast.error("lỗi rồi")
+            router.replace("/")
         if (isSuccess)
             toast.success(message)
 
-    }, [isLoading, isError, isSuccess,isLoadAddComment])
+    }, [isLoading, isError, isSuccess, isLoadAddComment])
 
     const handleLikeState = () => {
 
@@ -302,13 +316,13 @@ const Blog = () => {
                                 >
                                 </CKEditor>
                             </div>
-                            {!isLoadAddComment?
-                            <Button onClick={handleComment} variant="contained" endIcon={<SendIcon/>}>
-                                Bình luận
-                            </Button>
+                            {!isLoadAddComment ?
+                                <Button onClick={handleComment} variant="contained" endIcon={<SendIcon/>}>
+                                    Bình luận
+                                </Button>
 
-                            :
-                                <Button disabled  variant="contained" endIcon={<CircularProgress size="1rem" />}>
+                                :
+                                <Button disabled variant="contained" endIcon={<CircularProgress size="1rem"/>}>
                                     Bình luận
                                 </Button>
                             }

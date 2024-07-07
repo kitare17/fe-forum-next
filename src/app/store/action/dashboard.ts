@@ -1,6 +1,7 @@
 import * as Types from "../../constant/ActionType"
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from "axios";
+
 import { UserInterface } from "@/app/interface/User";
 
 import {
@@ -11,6 +12,7 @@ import {
     DASHBOARD_USER_SHOW_ALL, DASHBOARD_USER_UPDATE_PROFILE,
     DASHBOARD_REPORT_COUNT
 } from "../../constant/ActionType";
+
 
 export const getTotalUser = createAsyncThunk(
     Types.DASHBOARD_USER_COUNT,
@@ -94,6 +96,7 @@ export const updateBlogStatus = createAsyncThunk(
     }
 );
 
+
 export const showAllUser = createAsyncThunk(
     Types.DASHBOARD_USER_SHOW_ALL,
     async ({page}: { page: number }) => {
@@ -167,6 +170,90 @@ export const updateUserStatus = createAsyncThunk(
             // @ts-ignore
             const errorData = error as AxiosError;
             return {data: errorData.response?.data};
+        }
+    }
+);
+
+
+export const getBlog7Day = createAsyncThunk(
+    Types.DASHBOARD_BLOG_7_DATE,
+    async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/dashboard/getAmount7Months`);
+            const data: [] = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_BLOG_7_DATE);
+
+        }
+    }
+);
+export const getAllReport = createAsyncThunk(
+    Types.DASHBOARD_GET_ALL_REPORT,
+    async ({page}: { page: number }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/report-blog?page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT);
+
+        }
+    }
+);
+export const getAllReportComment = createAsyncThunk(
+    Types.DASHBOARD_GET_ALL_REPORT_COMMENT,
+    async ({page}: { page: number }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/report-comment?page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT_COMMENT);
+
+        }
+    }
+);
+
+
+export const acceptReportComment = createAsyncThunk(
+    Types.DASHBOARD_ACCEPT_REPORT_COMMENT,
+    async ({reportId}: { reportId: string | undefined }) => {
+        try {
+            const response = await axios.put(`http://localhost:3001/report-blog/${reportId}/blog/accept`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_ACCEPT_REPORT_COMMENT);
+
+        }
+    }
+);
+
+export const cancelReportComment = createAsyncThunk(
+    Types.DASHBOARD_CANCEL_REPORT_COMMENT,
+    async ({reportId}: { reportId: string | undefined }) => {
+        try {
+            const response = await axios.put(`http://localhost:3001/report-blog/${reportId}/blog/cancel`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_CANCEL_REPORT_COMMENT);
+
+        }
+    }
+);
+
+export const showReportFollowStatus = createAsyncThunk(
+    Types.DASHBOARD_GET_ALL_REPORT_FOLLOW_STATUS,
+    async ({statusReport, page}: { statusReport: string | undefined, page: string | undefined }) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/report-blog/show/blog?statusReport=${statusReport}&page=${page}`);
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.DASHBOARD_GET_ALL_REPORT_FOLLOW_STATUS);
+
         }
     }
 );

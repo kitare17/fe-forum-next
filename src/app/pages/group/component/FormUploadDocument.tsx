@@ -65,7 +65,7 @@ const FormUploadDocument = ({groupId,admin}: { groupId: string,admin:string }) =
         const docName = getValues("docName");
         const linkFile = getValues("linkFile");
         const linkDown = "http://localhost:8080/minio/download" + linkFile.substring(linkFile.indexOf("/commons"));
-        alert(groupId + " " + docName + " " + linkDown);
+        // alert(groupId + " " + docName + " " + linkDown);
         //@ts-ignore
         dipatch(createDocGroup({docName: docName, link: linkDown, group: groupId}))
 
