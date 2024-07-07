@@ -11,7 +11,7 @@ import {RootState} from "@/app/store";
  
 const UploadPost = () => {
     const dipatch = useDispatch();
-    // alert(saleId)
+   
     return (
         <>
             <style jsx>{`
