@@ -92,7 +92,7 @@ const UploadPost = () => {
                         </div>
                         <div className="mb-3">
                             <label htmlFor="description" className="form-label">Mô Tả Chi Tiết</label>
-                            <textarea className="form-control" id="description" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+                            <textarea className="form-control" id="description" rows={3} placeholder="Nhập mô tả chi tiết"></textarea>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="price" className="form-label">Giá Tiền</label>

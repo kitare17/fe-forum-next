@@ -17,7 +17,7 @@ const View = () => {
 
     useEffect(()=>{
             
-        dipatch(getAllCategory());
+        // dipatch(getAllCategory());
     },[])
     useEffect(()=>{
       if(isLoading)
