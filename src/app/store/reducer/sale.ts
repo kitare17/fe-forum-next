@@ -1,7 +1,7 @@
 import { UserInterface } from "@/app/interface/userinterface";
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchUsers } from "@/app/store/action/user";
-import { getAllCategory, getAllSalePost, getOneSalePost } from "@/app/store/action/sale";
+import {getAllCategory, getAllSalePost, getOneSalePost, getRelatedProduct} from "@/app/store/action/sale";
 import { SaleInterface } from "@/app/interface/SaleInterface";
 import { CategoryInterface } from "@/app/interface/CategoryInterface";
 
@@ -10,6 +10,7 @@ interface InitialState {
     isError: boolean,
     saleDetail?: SaleInterface,
     listCategory?: CategoryInterface[],
+    listRelatedProduct?: SaleInterface[],
     listSale: any,
     maxPage: number
 }
@@ -78,6 +79,24 @@ const saleSlice = createSlice({
                 state.isError = false
             })
             .addCase(getAllCategory.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+
+            //GET RELATED PRODUCT
+            .addCase(getRelatedProduct.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.listRelatedProduct = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getRelatedProduct.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getRelatedProduct.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
             })

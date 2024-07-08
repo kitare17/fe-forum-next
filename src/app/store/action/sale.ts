@@ -3,6 +3,7 @@ import * as Types from "../../constant/ActionType"
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axios from "axios";
 import { CategoryInterface } from "@/app/interface/CategoryInterface";
+import {SAlE_GET_RELATED_PRODUCT} from "../../constant/ActionType";
 
 
 export const getAllSalePost = createAsyncThunk(
@@ -45,6 +46,19 @@ export const getAllCategory = createAsyncThunk(
             return data;
         } catch (error) {
             console.log("Error: " + Types.CATEGORY_SHOW_ALL);
+
+        }
+    }
+);
+export const getRelatedProduct = createAsyncThunk(
+    Types.SAlE_GET_RELATED_PRODUCT,
+    async ({saleId}:{saleId:string}) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/saleposts/related/${saleId}`);
+            const data:[SaleInterface] = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.SAlE_GET_RELATED_PRODUCT);
 
         }
     }
