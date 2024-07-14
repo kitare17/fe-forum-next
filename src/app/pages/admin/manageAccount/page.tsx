@@ -262,7 +262,7 @@ useEffect(() => {
                         <IconButton
                           onClick={() => handleStatusChange(user._id)}
                           color={
-                            user?.status === true ? "primary" : "secondary"
+                            user?.status === true ? "primary" : "error"
                           }
                         >
                           {user?.status === true ? (
