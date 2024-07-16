@@ -20,7 +20,14 @@ import {
   Avatar,
   InputBase,
   Pagination,
+  Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Box
 } from "@mui/material";
+import Logout from "@mui/icons-material/Logout";
+
 import Grid from "@mui/material/Grid";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -32,11 +39,13 @@ import {
   Search as SearchIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchLogout } from "@/app/store/action/auth";
 import { RootState } from "@/app/store";
 import { UserInterface } from "@/app/interface/User";
 import { findUser, showAllUser, updateUserStatus } from "@/app/store/action/dashboard";
 import FormComponentUserProfile from "../../auth/myprofile/component/FormComponentUserProfile";
 import { useForm } from "react-hook-form";
+import { resetInitialState } from "@/app/store/reducer/auth";
 
 const ManageAccount: React.FC = () => {
   const dispatch = useDispatch();
@@ -119,6 +128,24 @@ useEffect(() => {
     router.push(`/pages/admin/manageAccount?page=1&searchUser=${searchUser}`);
   };
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const hanldeLogout = () => {
+    // @ts-ignore
+    dispatch(fetchLogout)
+    console.log("dang xuat")
+    dispatch(resetInitialState());
+    window.localStorage.clear()
+    router.push("/pages/auth/login")
+};
+
   return (
     <>
       <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
@@ -168,10 +195,76 @@ useEffect(() => {
                     aria-haspopup="true"
                     color="inherit"
                   >
-                    <Avatar
-                      alt="Admin"
-                      src="https://img.icons8.com/?size=24&id=82751&format=png&color=000000"
-                    />
+                    <React.Fragment>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Account settings">
+                          <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            sx={{ ml: 2 }}
+                            aria-controls={open ? "account-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                          >
+                            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                      <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={open}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                          elevation: 0,
+                          sx: {
+                            overflow: "visible",
+                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                            mt: 1.5,
+                            "& .MuiAvatar-root": {
+                              width: 32,
+                              height: 32,
+                              ml: -0.5,
+                              mr: 1,
+                            },
+                            "&::before": {
+                              content: '""',
+                              display: "block",
+                              position: "absolute",
+                              top: 0,
+                              right: 14,
+                              width: 10,
+                              height: 10,
+                              bgcolor: "background.paper",
+                              transform: "translateY(-50%) rotate(45deg)",
+                              zIndex: 0,
+                            },
+                          },
+                        }}
+                        transformOrigin={{
+                          horizontal: "right",
+                          vertical: "top",
+                        }}
+                        anchorOrigin={{
+                          horizontal: "right",
+                          vertical: "bottom",
+                        }}
+                      >
+                        <MenuItem onClick={hanldeLogout}>
+                          <ListItemIcon>
+                            <Logout fontSize="small" />
+                          </ListItemIcon>
+                          Logout
+                        </MenuItem>
+                      </Menu>
+                    </React.Fragment>
                   </IconButton>
                 </li>
               </ul>
