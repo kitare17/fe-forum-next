@@ -2,10 +2,31 @@ import {createSlice} from "@reduxjs/toolkit";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
 
-import * from "@/app/store/action/dashboard";
+
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
-import { UserInterface } from "@/app/interface/User";
+import {UserInterface} from "@/app/interface/User";
+import {
+    acceptReportBlog,
+    acceptReportComment,
+    cancelReportBlog,
+    cancelReportComment,
+    findBlog,
+    findUser,
+    getAllReport,
+    getAllReportComment,
+    getAmountBlogMonth,
+    getBlog7Day,
+    getTotalReport,
+    getTotalUser,
+    showAllBlog,
+    showAllUser,
+    showReportCommentFollowStatus,
+    showReportFollowStatus,
+    updateBlogStatus,
+    updateUserStatus
+} from "../action/dashboard";
+
 interface InitialState {
     user: UserInterface,
     totalUser: number,
@@ -85,7 +106,7 @@ const dashboardSlice = createSlice({
                 state.isError = true;
             })
 
-             // GET ALL USER
+        // GET ALL USER
         builder.addCase(showAllUser.fulfilled, (state, action) => {
 
             // @ts-ignore
@@ -103,7 +124,7 @@ const dashboardSlice = createSlice({
                 state.isError = true;
             })
 
-             // FIND USER
+        // FIND USER
         builder.addCase(findUser.fulfilled, (state, action) => {
 
             // @ts-ignore
@@ -121,7 +142,7 @@ const dashboardSlice = createSlice({
                 state.isError = true;
             })
 
-              // UPDATE STATUS
+        // UPDATE STATUS
         builder.addCase(updateUserStatus.fulfilled, (state, action) => {
 
             state.isLoading = false;
@@ -342,7 +363,7 @@ const dashboardSlice = createSlice({
         //CANCEL REPORT COMMENT  BLOG MANAGE
 
         builder.addCase(cancelReportComment.fulfilled, (state, action) => {
-            state.isUpdate=false;
+            state.isUpdate = false;
             state.isError = false;
             state.isLoading = false;
             //all, pending, done, illegal
@@ -364,7 +385,7 @@ const dashboardSlice = createSlice({
         //ACCEPT REPORT COMMENT  BLOG MANAGE
 
         builder.addCase(acceptReportComment.fulfilled, (state, action) => {
-            state.isUpdate=false;
+            state.isUpdate = false;
             state.isError = false;
             state.isLoading = false;
             //all, pending, done, illegal
