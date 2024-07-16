@@ -1,7 +1,6 @@
 import * as Types from "../../constant/ActionType";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
-import {UserInterface} from "@/app/interface/userinterface";
 import {LoginInterface} from "@/app/interface/LoginInterface";
 import {RegisterInterface} from "@/app/interface/RegisterInterface";
 
@@ -29,7 +28,7 @@ export const fetchLogin = createAsyncThunk(
 
 export const fetchLogout = createAsyncThunk(Types.LOGOUT, async () => {
     try {
-        // const response = await axios.post("http://localhost:3001/users/logout");
+        const response = await axios.post("http://localhost:3001/users/logout");
         console.log("dang xuat")
         return {data: "Logout"};
     } catch (error) {
@@ -46,7 +45,11 @@ export const fetchRegister = createAsyncThunk(
                 {
                     email: userRegister.email,
                     password: userRegister.password,
-                    username: userRegister.username
+                    username: userRegister.username,
+                    fullname: "",
+                    phone:"",
+                    avatar: "", 
+                    statusUser: true
                 }
             );
             const data: RegisterInterface = response.data;
@@ -59,3 +62,5 @@ export const fetchRegister = createAsyncThunk(
         }
     }
 );
+
+

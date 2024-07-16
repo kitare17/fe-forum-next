@@ -1,31 +1,18 @@
-import {UserInterface} from "@/app/interface/userinterface";
 import {createSlice} from "@reduxjs/toolkit";
-import {fetchUsers} from "@/app/store/action/user";
 import {BlogInterface} from "@/app/interface/Blog";
 import {CommentInterface} from "@/app/interface/Comment";
-import {
 
-    cancelReportBlog,
-    acceptReportBlog,
-    findBlog,
-    getAllReport,
-    getAllReportComment,
-    getAmountBlogMonth,
-    getBlog7Day,
-    getTotalReport,
-    getTotalUser,
-    showAllBlog,
-    showReportFollowStatus,
-    updateBlogStatus, acceptReportComment, cancelReportComment, showReportCommentFollowStatus
-} from "@/app/store/action/dashboard";
+import * from "@/app/store/action/dashboard";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
-
+import { UserInterface } from "@/app/interface/User";
 interface InitialState {
+    user: UserInterface,
     totalUser: number,
     totalBlogMonth: number,
     totalReport: number,
     listBlog?: { posts: BlogInterface[] | [], maxPage: number },
+    listUser?: { users: UserInterface[] | [], maxPage: number },
     listReportBlog?: { reports: ReportBlogInterface[] | [], maxPage: number },
     listReportCommentBlog?: { reports: ReportCommentInterface[] | [], maxPage: number },
     isLoading: boolean,
@@ -38,6 +25,10 @@ interface InitialState {
 }
 
 var initialState: InitialState = {
+    user: {
+        username: "",
+        _id: ""
+    },
     totalUser: 0,
     totalBlogMonth: 0,
     totalReport: 0,
@@ -46,6 +37,10 @@ var initialState: InitialState = {
     isUpdate: false,
     listBlog: {
         posts: [],
+        maxPage: 1
+    },
+    listUser: {
+        users: [],
         maxPage: 1
     },
     blog7Months: [0, 0, 0, 0, 0, 0, 0],
@@ -89,6 +84,59 @@ const dashboardSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
             })
+
+             // GET ALL USER
+        builder.addCase(showAllUser.fulfilled, (state, action) => {
+
+            // @ts-ignore
+            state.listUser = action.payload;
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(showAllUser.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(showAllUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+             // FIND USER
+        builder.addCase(findUser.fulfilled, (state, action) => {
+
+            // @ts-ignore
+            state.listUser = action.payload;
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(findUser.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(findUser.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+              // UPDATE STATUS
+        builder.addCase(updateUserStatus.fulfilled, (state, action) => {
+
+            state.isLoading = false;
+            state.isError = false;
+        })
+            .addCase(updateUserStatus.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(updateUserStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
         // GET TOTAL BLOG MONTH
         builder.addCase(getAmountBlogMonth.fulfilled, (state, action) => {
 
