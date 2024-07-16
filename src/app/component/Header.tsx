@@ -19,6 +19,9 @@ import {fetchLogout} from "../store/action/auth";
 import {resetInitialState} from "../store/reducer/auth";
 import Link from "next/link";
 import {useEffect, useState} from "react";
+import ReportIcon from '@mui/icons-material/Report';
+import Badge from '@mui/material/Badge';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const logoStyle = {
     width: "60px",
@@ -42,6 +45,7 @@ function Header() {
     useEffect(() => {
         // @ts-ignore
         const authnRes:string=window.localStorage.getItem("authnRes")
+        console.log("sdsdsdsd",authnRes)
         setAuthLoginString(authnRes);
     }, []);
     const authLogin = authLoginString ? JSON.parse(authLoginString) : null;
@@ -175,6 +179,24 @@ function Header() {
                                         Hội nhóm
                                     </Typography>
                                 </MenuItem>
+                                <MenuItem
+                                    onClick={() => router.push("/pages/task-management")}
+                                    sx={{py: "6px", px: "12px"}}
+                                >
+                                    <Typography variant="body2" color="text.primary">
+                                        Nhiệm vụ
+                                    </Typography>
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => router.push("/pages/auth/myprofile")}
+                                    sx={{py: "6px", px: "12px"}}
+                                >
+                                    <Typography variant="body2" color="text.primary">
+                                        Tài khoản
+                                    </Typography>
+                                </MenuItem>
+                               
+
                             </Box>
                         </Box>
                         <Box
@@ -213,6 +235,7 @@ function Header() {
                                             Đăng kí
                                         </Button>
                                     </Link>
+
 
                                 </>
                             )}

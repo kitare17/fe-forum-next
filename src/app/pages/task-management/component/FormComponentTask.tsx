@@ -17,7 +17,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "50%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -102,16 +102,7 @@ const FormComponentTask = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-            mt={4}
-            mb={9}
-          >
-            <Grid item xs={10}>
+         
               <Box
                 onSubmit={handleSubmit(handle)}
                 component="form"
@@ -147,8 +138,7 @@ const FormComponentTask = ({
                   Sửa
                 </Button>
               </Box>
-            </Grid>
-          </Grid>
+           
         </Box>
       </Modal>
     </div>
