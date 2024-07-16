@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 import {
     addNewComment,
-    createBlog, createReplyComment, createReport, createReportComment, editBlog,
+    createBlog, createReplyComment, createReport, createReportComment, editBlog, editCommentBlog,
     findOneBlog, getOneBlogCheck,
     likeBlog, removeBlog, removeCommentBlog,
     showAllBlog,
@@ -346,6 +346,35 @@ const blogSlice = createSlice({
                 toast.error(action.payload?.data?.message);
 
             })
+        //EDIT COMMENT BLOG
+            .addCase(editCommentBlog.fulfilled, (state, action) => {
+
+                var userId = typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}")?.userEmailId : {};
+                // @ts-ignore
+                state.blogDetail = action.payload.post;
+                // @ts-ignore
+                if ([...(action.payload.post.likes ?? [])].includes(userId)) {
+                    state.isLike = true
+                }
+                // alert(typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes')??"{}")?.userEmailId : {})
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(editCommentBlog.pending, (state, action) => {
+                state.isSuccess = false
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(editCommentBlog.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                // @ts-ignore
+                toast.error(action.payload?.data?.message);
+
+            })
+
+
     }
 
 })
