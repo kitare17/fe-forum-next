@@ -52,6 +52,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FormRemoveDialog from "@/app/pages/blog/component/FormRemove";
 import FormRemoveCommentDialog from '../../component/FormCommentRemove';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormEditCommentDialog from "@/app/pages/blog/component/FormEditComment";
 
 const Blog = () => {
 
@@ -63,6 +64,8 @@ const Blog = () => {
     //Get param
     const {blogId}: { blogId: string } = useParams();
 
+    //current user id
+    const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
 
     //Add comment
     const [text, setText] = useState<string>("");
@@ -149,13 +152,24 @@ const Blog = () => {
     //Menu comment post
     const [menuComment, setMenuComment] = React.useState<null | HTMLElement>(null);
     const openMenuComment = Boolean(menuComment);
-
-    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>, commentId: string) => {
+    const [authCommentAction, setAuthCommentAction] = useState<boolean>(false);
+    const handleMenuCommentOpen = (event: React.MouseEvent<HTMLButtonElement>, commentId: string, commentDetail: string) => {
         setMenuComment(event.currentTarget);
         setCommentIdReport(commentId);
+        setCommentIdEdit(commentId)
+        setCommentDetailEdit(commentDetail);
+        var commentBlog = [...(blogDetail?.comments ?? [])].filter(comment => comment._id === commentId);
+        if (commentBlog.length > 0) {
+            var userCommentId = commentBlog[0]?.userComment?._id;
+            if (userCommentId === userId) {
+                setAuthCommentAction(true);
+            }
+        }
+
     };
     const handleMenuCommentClose = () => {
         setMenuComment(null);
+        setAuthCommentAction(false);
     };
 
     //state report blog form
@@ -190,10 +204,15 @@ const Blog = () => {
     const [openFormCommentReport, setOpenFormCommentReport] = useState<boolean>(false);
     const [commentIdReport, setCommentIdReport] = useState<string>("");
 
+    //state comment edit
+    const [openEditComment, setOpenEditComment] = useState<boolean>(false);
+    const [commentIdEdit, setCommentIdEdit] = useState<string>("");
+    const [commentDetailEdit, setCommentDetailEdit] = useState<string>("");
+
 
     //Handle edit / report comment
     const handleEditComment = () => {
-        alert("handleEditComment");
+        setOpenEditComment(true);
 
     }
 
@@ -356,7 +375,7 @@ const Blog = () => {
                                                     action={
                                                         <IconButton
                                                             id="menu-comment-btn"
-                                                            onClick={(e) => handleMenuCommentOpen(e, comment._id)}
+                                                            onClick={(e) => handleMenuCommentOpen(e, comment._id, comment?.detail)}
                                                             aria-controls={openMenuComment ? 'menu-comment' : undefined}
                                                             aria-haspopup="true"
                                                             aria-expanded={openMenuComment ? 'true' : undefined}
@@ -521,25 +540,31 @@ const Blog = () => {
                     'aria-labelledby': 'menu-main-btn',
                 }}
             >
-                <MenuItem onClick={handleEditMainPost}>
-                    <ListItemIcon>
-                        <EditIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Chỉnh sửa"/>
-                </MenuItem>
+                {
+                    userId === blogDetail?.creator?._id &&
+                    <MenuItem onClick={handleEditMainPost}>
+                        <ListItemIcon>
+                            <EditIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Chỉnh sửa"/>
+                    </MenuItem>
+                }
+
                 <MenuItem onClick={handleReportMainPost}>
                     <ListItemIcon>
                         <FlagIcon/>
                     </ListItemIcon>
                     <ListItemText primary="Báo cáo"/>
                 </MenuItem>
-
-                <MenuItem onClick={handleDeleteMainPost}>
-                    <ListItemIcon>
-                        <DeleteIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Xóa bài viết"/>
-                </MenuItem>
+                {
+                    userId === blogDetail?.creator?._id &&
+                    <MenuItem onClick={handleDeleteMainPost}>
+                        <ListItemIcon>
+                            <DeleteIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Xóa bài viết"/>
+                    </MenuItem>
+                }
             </Menu>
 
 
@@ -553,24 +578,36 @@ const Blog = () => {
                     'aria-labelledby': 'menu-comment-btn',
                 }}
             >
-                <MenuItem onClick={handleEditComment}>
-                    <ListItemIcon>
-                        <EditIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Chỉnh sửa"/>
-                </MenuItem>
-                <MenuItem onClick={handleReportComment}>
-                    <ListItemIcon>
-                        <FlagIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Báo cáo"/>
-                </MenuItem>
-                <MenuItem onClick={handleRemoveComment}>
-                    <ListItemIcon>
-                        <DeleteIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary="Xóa bình luận"/>
-                </MenuItem>
+
+                {
+                    authCommentAction &&
+                    <MenuItem onClick={handleEditComment}>
+                        <ListItemIcon>
+                            <EditIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Chỉnh sửa"/>
+                    </MenuItem>
+                }
+                {
+                    !authCommentAction &&
+                    <MenuItem onClick={handleReportComment}>
+                        <ListItemIcon>
+                            <FlagIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Báo cáo"/>
+                    </MenuItem>
+                }
+
+                {
+                    authCommentAction &&
+                    <MenuItem onClick={handleRemoveComment}>
+                        <ListItemIcon>
+                            <DeleteIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Xóa bình luận"/>
+                    </MenuItem>
+                }
+
             </Menu>
 
             <ReportBlogDialog blogId={blogId} openFormBlogReport={openFormBlogReport}
@@ -597,6 +634,14 @@ const Blog = () => {
                 commentId={commentIdReport}
                 openRemoveCommentBlog={openRemoveCommentBlog}
                 setOpenRemoveCommentBlog={setOpenRemoveCommentBlog}
+            />
+
+            <FormEditCommentDialog
+                blogId={blogId}
+                commentId={commentIdEdit}
+                detail={commentDetailEdit}
+                openEditComment={openEditComment}
+                setOpenEditComment={setOpenEditComment}
             />
 
 
