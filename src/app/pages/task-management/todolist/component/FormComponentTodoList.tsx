@@ -149,7 +149,7 @@ const FormComponentTodoList = ({
                 helperText={errors.title?.message}
                 // onChange={handleOnchangeTitle}
               />
-              <FormControl fullWidth sx={{ mt: 2 }} error={!!errors.label}>
+              <FormControl required fullWidth sx={{ mt: 2 }} error={!!errors.label}>
                 <InputLabel id="demo-simple-select-label">Nhãn</InputLabel>
                 <Controller
                   name="label"
@@ -173,7 +173,7 @@ const FormComponentTodoList = ({
             </Box>
 
             <Box sx={styleInput}>
-              <FormControl fullWidth sx={{ mt: 1 }} error={!!errors.prioritize}>
+              <FormControl required fullWidth sx={{ mt: 1 }} error={!!errors.prioritize}>
                 <InputLabel id="demo-simple-select-label">Ưu tiên</InputLabel>
                 <Controller
                   name="prioritize"
@@ -198,7 +198,7 @@ const FormComponentTodoList = ({
                 />
               </FormControl>
 
-              <FormControl fullWidth sx={{ mt: 1 }} error={!!errors.status}>
+              <FormControl required fullWidth sx={{ mt: 1 }} error={!!errors.status}>
                 <InputLabel id="demo-simple-select-label">
                   Trạng thái
                 </InputLabel>
@@ -298,33 +298,6 @@ const FormComponentTodoList = ({
                 </LocalizationProvider>
               </Box>
             </Box>
-
-            {/* <Box sx={styleInput}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  sx={{ pr: "130px" }}
-                  components={["DatePicker", "DatePicker"]}
-                >
-                  <DatePicker
-                    label="Ngày bắt đầu"
-                    // value={startDate}
-                    // onChange={(newValue) => setStartDate(newValue)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  sx={{}}
-                  components={["DatePicker", "DatePicker"]}
-                >
-                  <DatePicker
-                    label="Ngày kết thúc"
-                    // value={endDate}
-                    // onChange={(newValue) => setEndDate(newValue)}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Box> */}
             <Button
               type="submit"
               fullWidth
