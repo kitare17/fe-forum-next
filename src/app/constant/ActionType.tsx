@@ -1,3 +1,4 @@
+import exp from "constants";
 
 
 export const  GET_RESPONSE_CHAT_GPT="GET_RESPONSE_CHAT_GPT";
@@ -62,9 +63,18 @@ export const GROUP_CREATE_TASK="GROUP_CREATE_TASK"
 export const GROUP_SHOW_TASK="GROUP_SHOW_TASK"
 export const GROUP_UPDATE_TASK="GROUP_UPDATE_TASK"
 
-//SALE ACTION
+//SALE ACTION q
 
-export const SAlE_SHOW_ALL="GROUP_SHOW_ALL"
+export const SAlE_SHOW_ALL="SALE_SHOW_ALL"
+
+export const SAlE_SHOW_ONE="SALE_SHOW_ONE"
+export const SAlE_GET_RELATED_PRODUCT="SAlE_GET_RELATED_PRODUCT"
+export const SAlE_CREATE_PRODUCT="SAlE_CREATE_PRODUCT"
+
+
+//category action
+export const CATEGORY_SHOW_ALL = "CATEGORY_SHOW_ALL"
+
 
 //=================================================================================
 
