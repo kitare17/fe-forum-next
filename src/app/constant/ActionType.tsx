@@ -24,6 +24,7 @@ export const BlOG_EDIT="BlOG_EDIT"
 export const BlOG_REMOVE="BlOG_REMOVE"
 export const BlOG_COMMENT_REMOVE="BlOG_COMMENT_REMOVE"
 
+
 //TOPIC ACION
 export const TOPIC_FIND_ALL="TOPIC_FIND_ALL"
 export const TOPIC_FIND_ONE="TOPIC_FIND_ONE"
@@ -46,8 +47,10 @@ export const GROUP_SHOW_ONE="GROUP_SHOW_ONE"
 //SALE ACTION q
 
 export const SAlE_SHOW_ALL="SALE_SHOW_ALL"
-
+export const SALE_SHOW_ALL_BY_USER = 'SALE_SHOW_ALL_BY_USER';
 export const SAlE_SHOW_ONE="SALE_SHOW_ONE"
+export const SAlE_SEARCH="SAlE_SEARCH"
+
 
 //category action
 export const CATEGORY_SHOW_ALL = "CATEGORY_SHOW_ALL"

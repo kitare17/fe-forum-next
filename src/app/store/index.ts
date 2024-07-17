@@ -7,6 +7,7 @@ import blog from "./reducer/blog"
 import topic from "@/app/store/reducer/topic";
 import group from "@/app/store/reducer/group";
 import sale from "@/app/store/reducer/sale";
+import wishlistReducer from '@/app/store/reducer/wishlistSlice';
 export const index =
     configureStore({
             reducer: {
@@ -16,7 +17,8 @@ export const index =
                 topic:topic,
                 auth: auth,
                 group: group,
-                sale: sale
+                sale: sale,
+                wishlist: wishlistReducer,
             }
         }
     )

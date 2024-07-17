@@ -14,7 +14,7 @@ import {useForm} from "react-hook-form";
 import {BlogInterface} from "@/app/interface/Blog";
 import {useRouter} from "next/navigation";
 
-const SearchGroup = () => {
+const FindComponent = () => {
 
     const dipatch = useDispatch();
     const router = useRouter();
@@ -28,7 +28,7 @@ const SearchGroup = () => {
         trigger,
         setValue,
         getValues
-    } = useForm<any>(
+    } = useForm(
         {
             defaultValues: {
                 "groupName": "",
@@ -37,8 +37,8 @@ const SearchGroup = () => {
     )
     const handleFindGroup = () => {
         var groupName = getValues("groupName")
+        router.push(`/pages/sale?page=${1}&title=${groupName}`)
         alert(groupName)
-        dipatch(searchProduct({ten:groupName}))
     }
     return (
         <Box
@@ -54,7 +54,6 @@ const SearchGroup = () => {
                 height: "150px"
             }}
         >
-            <h1>🎓🎓 Danh sách các group️ 🎓🎓</h1>
 
             <Paper
                 component="form"
@@ -84,4 +83,4 @@ const SearchGroup = () => {
     );
 };
 
-export default SearchGroup;
+export default FindComponent;
