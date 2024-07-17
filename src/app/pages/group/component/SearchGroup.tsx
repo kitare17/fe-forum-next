@@ -38,6 +38,7 @@ const SearchGroup = () => {
     const handleFindGroup = () => {
         var groupName = getValues("groupName")
         alert(groupName)
+        //@ts-ignore
         dipatch(searchProduct({ten:groupName}))
     }
     return (
