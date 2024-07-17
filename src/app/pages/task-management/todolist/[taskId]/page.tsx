@@ -148,7 +148,7 @@ const ToDoList = () => {
       formattedEndDate === "Invalid Date" ||
       formattedStartDate === "Invalid Date"
     ) {
-      toast.error("Date can not be null");
+      toast.error("Phải nhập ngày");
     } else {
       dispatch(
         createTodoList({ newTodoList: newTodoList, idTaskManagement: taskId })
@@ -637,7 +637,7 @@ const ToDoList = () => {
                   autoFocus
                   onChange={handleOnchangeTitle}
                 />
-                <FormControl fullWidth sx={{ mt: 2 }}>
+                <FormControl required fullWidth sx={{ mt: 2 }}>
                   <InputLabel id="demo-simple-select-label">Nhãn</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -654,7 +654,7 @@ const ToDoList = () => {
               </Box>
 
               <Box sx={styleInput}>
-                <FormControl fullWidth sx={{ mt: 1 }}>
+                <FormControl required fullWidth sx={{ mt: 1 }}>
                   <InputLabel id="demo-simple-select-label">Ưu tiên</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -670,7 +670,7 @@ const ToDoList = () => {
                   </Select>
                 </FormControl>
 
-                <FormControl fullWidth sx={{ mt: 1 }}>
+                <FormControl required fullWidth sx={{ mt: 1 }}>
                   <InputLabel id="demo-simple-select-label">
                     Trạng thái
                   </InputLabel>
@@ -699,13 +699,14 @@ const ToDoList = () => {
                 autoFocus
                 onChange={handleOnChangeDetail}
               />
-              <Box sx={styleInput}>
+              <Box sx={styleInput} >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
                     sx={{ pr: "220px" }}
                     components={["DatePicker", "DatePicker"]}
                   >
                     <DatePicker
+                    
                       label="Ngày bắt đầu"
                       value={startDate}
                       // @ts-ignore
@@ -713,8 +714,11 @@ const ToDoList = () => {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
+                
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker", "DatePicker"]}>
+                  <DemoContainer
+                  components={["DatePicker", "DatePicker"]}
+                  >
                     <DatePicker
                       label="Ngày kết thúc"
                       value={endDate}

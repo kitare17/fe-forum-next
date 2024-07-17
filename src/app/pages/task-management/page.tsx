@@ -204,7 +204,7 @@ const TaskManagement = () => {
                             }}                      
                             className="align-middle"
                           >
-                            <span>{task.taskName} </span>
+                            <span title="Xem chi tiết danh sách công việc">{task.taskName} </span>
                           </td>
                           <td className="align-middle">
                             <span>
