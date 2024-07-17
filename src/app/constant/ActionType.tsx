@@ -49,6 +49,8 @@ export const SAlE_SHOW_ALL="SALE_SHOW_ALL"
 
 export const SAlE_SHOW_ONE="SALE_SHOW_ONE"
 export const SAlE_GET_RELATED_PRODUCT="SAlE_GET_RELATED_PRODUCT"
+export const SAlE_CREATE_PRODUCT="SAlE_CREATE_PRODUCT"
+
 
 //category action
 export const CATEGORY_SHOW_ALL = "CATEGORY_SHOW_ALL"

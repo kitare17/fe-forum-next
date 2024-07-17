@@ -22,9 +22,16 @@ const SaleDetail = () => {
         //@ts-ignore
         dipatch(getOneSalePost(saleId));
         //@ts-ignore
-        dipatch(getRelatedProduct({saleId: saleId}));
-
+       // if(saleDetail?.category) dipatch(getRelatedProduct({saleId: saleDetail?.category}));
+       //
+       //  alert(saleDetail?.category);
     }, [])
+    useEffect(() => {
+        //@ts-ignore
+        if(saleDetail?.category) dipatch(getRelatedProduct({saleId: saleDetail?.category}));
+
+
+    }, [saleDetail]);
     return (
         <>
             <style jsx>{`

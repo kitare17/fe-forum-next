@@ -5,16 +5,28 @@ import {useParams, useRouter} from "next/navigation";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from 'react';
 import {RootState} from "@/app/store";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {BlogInterface} from "@/app/interface/Blog";
 import TextField from "@mui/material/TextField";
-import Gallery from 'react-fine-uploader'
+//@ts-ignore
 import FineUploaderTraditional from 'fine-uploader-wrappers'
-//Get param
+//@ts-ignore
+import Gallery from 'react-fine-uploader'
 import 'react-fine-uploader/gallery/gallery.css'
+
+import {SaleInterface} from "@/app/interface/SaleInterface";
+import {FormControl, FormHelperText, FormLabel, MenuItem, Radio, RadioGroup, Select} from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import {createProduct, getAllCategory} from "@/app/store/action/sale";
+
 const UploadPost = () => {
     const dipatch = useDispatch();
-
+    const {listCategory} = useSelector((state: RootState) => state.sale);
+    const [options, setOptions]
+        = useState<[
+        { label: string | undefined, value: string | undefined }
+    ] | []>([])
+    const [productImages, setProductImages] = useState<string[]>([]);
     const {
         register,
         handleSubmit,
@@ -35,8 +47,8 @@ const UploadPost = () => {
                 "brand": "",
                 "category": "",
                 "creator": "",
-                "origin":"",
-                "address":""
+                "origin": "",
+                "address": ""
 
 
             }
@@ -44,6 +56,19 @@ const UploadPost = () => {
     )
 
     const {errors} = formState;
+
+    useEffect(() => {
+        // @ts-ignore
+        dipatch(getAllCategory());
+
+    }, []);
+
+    useEffect(() => {
+        if (listCategory) [...(listCategory ?? [])].map(cate => {
+            // @ts-ignore
+            setOptions([...options, {label: cate?.name, value: cate?._id}])
+        })
+    }, [listCategory]);
 
 
     const uploader = new FineUploaderTraditional({
@@ -63,10 +88,13 @@ const UploadPost = () => {
                 enableAuto: false
             },
             callbacks: {
+                //@ts-ignore
                 onComplete: (id, name, responseJSON, xhr) => {
                     // Xử lý khi tải lên hoàn tất
                     if (xhr.status === 200) {
-                        console.log('File uploaded successfully!');
+                        console.log('File uploaded successfully!', responseJSON);
+                        var link = "http://localhost:9000/commons/" + responseJSON.name;
+                        setProductImages([...productImages, link])
                     } else {
                         console.error('File upload failed.');
                     }
@@ -74,9 +102,39 @@ const UploadPost = () => {
             }
         }
     })
+    const handleSubmitProduct = () => {
+        // var title = getValues("title");
+        // var detail = getValues("detail");
+        // var image = getValues("images");
+        // var price = getValues("price");
+        // var productStatus = getValues("productStatus");
+        // var brand = getValues("brand");
+        // var category = getValues("category");
+        // var creator = getValues("creator");
+        // var origin = getValues("origin");
+        // var address = getValues("address");
+
+        var newSale: SaleInterface = {
+            title: getValues("title"),
+            detail: getValues("detail"),
+            images: productImages,
+            price: Number(getValues("price")),
+            productStatus: getValues("productStatus"),
+            brand: getValues("brand"),
+            category: getValues("category"),
+            origin: getValues("origin"),
+            address: getValues("address")
+        }
+        console.log(newSale);
+        const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
+        //@ts-ignore
+        dipatch(createProduct({product:newSale, creator:userId}))
+    }
 
 
+    const handleAddImage = () => {
 
+    }
     return (
         <>
             <style jsx>{`
@@ -121,33 +179,68 @@ const UploadPost = () => {
                     {/* Bên trái: Upload hình ảnh và video */}
                     <div className="col-md-6 form-section">
                         <h4>Upload Hình Ảnh Sản Phẩm</h4>
-                        <Gallery uploader={ uploader } />
+                        <Gallery uploader={uploader}/>
                     </div>
                     {/* Bên phải: Thông tin sản phẩm */}
                     <div className="col-md-6 form-section">
                         <h4>Thông Tin Sản Phẩm</h4>
                         <form>
                             <div className="mb-3">
-                                <label htmlFor="category" className="form-label">Danh Mục</label>
-                                <select className="form-select" id="category">
-                                    <option value="" selected>Chọn danh mục</option>
-                                    <option value="1">Danh mục 1</option>
-                                    <option value="2">Danh mục 2</option>
-                                    <option value="3">Danh mục 3</option>
-                                </select>
+                                <FormControl fullWidth component="fieldset" error={Boolean(errors.category)}>
+                                    <FormLabel component="legend">Tình trạng</FormLabel>
+                                    <Controller
+                                        name="category"
+                                        control={control}
+                                        rules={{required: 'This field is required'}}
+                                        render={({field}) => (
+                                            <Select {...field}>
+                                                {options.map((option) => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    />
+                                    {errors.category &&
+                                        <FormHelperText>{errors.category.message}</FormHelperText>}
+                                </FormControl>
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Tình Trạng</label>
-                                <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="condition" id="newCondition"
-                                           value="new"/>
-                                    <label className="form-check-label" htmlFor="newCondition">Mới</label>
-                                </div>
-                                <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="condition" id="usedCondition"
-                                           value="used"/>
-                                    <label className="form-check-label" htmlFor="usedCondition">Đã Sử Dụng</label>
-                                </div>
+                                <FormControl component="fieldset" error={Boolean(!!errors.productStatus)}>
+                                    <FormLabel component="legend">Tình trạng </FormLabel>
+                                    <Controller
+
+                                        rules={{required: 'Vui lòng lựa chọn'}}
+                                        {...register(
+                                            'productStatus',
+                                            {
+                                                required: "Vui lòng lựa chọn"
+                                            }
+                                        )}
+                                        control={control}
+                                        name="productStatus"
+                                        render={({field}) => (
+                                            <RadioGroup {...field}
+
+                                            >
+                                                <FormControlLabel
+                                                    value="Đã Sử Dụng"
+                                                    control={<Radio/>}
+                                                    label="Đã Sử Dụng"
+                                                />
+                                                <FormControlLabel
+                                                    value="Mới"
+                                                    control={<Radio/>}
+                                                    label="Mới"
+                                                />
+
+                                            </RadioGroup>
+                                        )}
+                                    />
+                                    {errors.productStatus &&
+                                        <FormHelperText>{errors?.productStatus.message}</FormHelperText>}
+                                </FormControl>
                             </div>
                             <div className="mb-3">
                                 <TextField
@@ -222,7 +315,7 @@ const UploadPost = () => {
                                     )}
                                     error={!!errors.brand}
                                     helperText={errors.brand?.message}
-                                    />
+                                />
 
 
                             </div>
@@ -257,7 +350,7 @@ const UploadPost = () => {
                                     label="Nhập địa chỉ giao dịch"
                                     variant="outlined"
                                     {...register(
-                                        'origin',
+                                        'address',
                                         {
                                             required: "Phải nhập địa chỉ giao dịch"
                                         }
@@ -266,7 +359,10 @@ const UploadPost = () => {
                                     helperText={errors.address?.message}
                                 />
                             </div>
-                            <button type="submit" className="btn btn-primary w-100">Đăng Bài</button>
+
+                            <button type="submit" className="btn btn-primary w-100"
+                                    onClick={handleSubmit(handleSubmitProduct)}>Đăng Bài
+                            </button>
                         </form>
                     </div>
                 </div>
