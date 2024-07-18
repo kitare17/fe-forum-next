@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,Suspense  } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Grid from '@mui/material/Grid';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -212,5 +212,15 @@ const Sale = () => {
     </>
   );
 };
+const SalePageRender = () => {
+  return (
+      <>
+      {/* You could have a loading skeleton as the `fallback` too*/}
+      <Suspense>
+          <Sale/>
+      </Suspense>
+      </>
+  )
+};
 
-export default Sale;
+export default SalePageRender;
