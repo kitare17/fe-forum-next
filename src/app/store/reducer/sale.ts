@@ -6,14 +6,18 @@ import {
     getAllCategory,
     getAllSalePost,
     getOneSalePost,
-    getRelatedProduct
+    getRelatedProduct,
+    getAllSalePostByUserId,
+    searchProduct,
+    getProductsByCategory,
+    deleteSalePost,
+    updateSalePost
 } from "@/app/store/action/sale";
 import {SaleInterface} from "@/app/interface/SaleInterface";
 import {CategoryInterface} from "@/app/interface/CategoryInterface";
-import { createSlice } from "@reduxjs/toolkit";
-import { getAllCategory, getAllSalePost, getAllSalePostByUserId, getOneSalePost, searchProduct, getProductsByCategory, deleteSalePost, updateSalePost } from "@/app/store/action/sale";
-import { SaleInterface } from "@/app/interface/SaleInterface";
-import { CategoryInterface } from "@/app/interface/CategoryInterface";
+
+
+
 
 interface InitialState {
     isLoading: boolean,
@@ -21,8 +25,6 @@ interface InitialState {
     saleDetail?: SaleInterface,
     listCategory?: CategoryInterface[],
     listRelatedProduct?: SaleInterface[],
-    listSale: any,
-    maxPage: number
     allSalePosts: SaleInterface[],
     userSalePosts: SaleInterface[],
     allPostsMaxPage: number,
