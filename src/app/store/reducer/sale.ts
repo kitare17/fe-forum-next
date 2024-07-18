@@ -1,3 +1,15 @@
+import {UserInterface} from "@/app/interface/userinterface";
+import {createSlice} from "@reduxjs/toolkit";
+import {fetchUsers} from "@/app/store/action/user";
+import {
+    createProduct,
+    getAllCategory,
+    getAllSalePost,
+    getOneSalePost,
+    getRelatedProduct
+} from "@/app/store/action/sale";
+import {SaleInterface} from "@/app/interface/SaleInterface";
+import {CategoryInterface} from "@/app/interface/CategoryInterface";
 import { createSlice } from "@reduxjs/toolkit";
 import { getAllCategory, getAllSalePost, getAllSalePostByUserId, getOneSalePost, searchProduct, getProductsByCategory, deleteSalePost, updateSalePost } from "@/app/store/action/sale";
 import { SaleInterface } from "@/app/interface/SaleInterface";
@@ -8,6 +20,9 @@ interface InitialState {
     isError: boolean,
     saleDetail?: SaleInterface,
     listCategory?: CategoryInterface[],
+    listRelatedProduct?: SaleInterface[],
+    listSale: any,
+    maxPage: number
     allSalePosts: SaleInterface[],
     userSalePosts: SaleInterface[],
     allPostsMaxPage: number,
@@ -23,6 +38,7 @@ var initialState: InitialState = {
     userPostsMaxPage: 1
 }
 
+
 const saleSlice = createSlice({
     name: "sale",
     initialState: initialState,
@@ -30,7 +46,7 @@ const saleSlice = createSlice({
     extraReducers: builder => {
 
         builder
-            // GET ALL SALE POST 
+            // GET ALL SALE POST
             .addCase(getAllSalePost.fulfilled, (state, action) => {
                 state.allSalePosts = action.payload.salePosts;
                 state.allPostsMaxPage = action.payload.maxPage;
@@ -63,7 +79,7 @@ const saleSlice = createSlice({
             })
 
 
-            // Find SALE POST 
+            // Find SALE POST
             .addCase(searchProduct.fulfilled, (state, action) => {
                 state.allSalePosts = action.payload.salePosts;
                 state.allPostsMaxPage = action.payload.maxPage;
@@ -79,6 +95,7 @@ const saleSlice = createSlice({
                 state.isError = true;
             })
 
+        //GET ONE SALE POST
             // GET ONE SALE POST
             .addCase(getOneSalePost.fulfilled, (state, action) => {
                 state.saleDetail = action.payload;
@@ -125,6 +142,45 @@ const saleSlice = createSlice({
                 state.isError = true;
             })
 
+
+            //GET RELATED PRODUCT
+            .addCase(getRelatedProduct.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.listRelatedProduct = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getRelatedProduct.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(getRelatedProduct.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            //CREATE PRODUCT
+            .addCase(createProduct.fulfilled, (state, action) => {
+                // @ts-ignore
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(createProduct.pending, (state, action) => {
+
+                state.isLoading = true;
+                state.isError = false
+            })
+            .addCase(createProduct.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+            // DELETE SALE POST
+            .addCase(deleteSalePost.fulfilled, (state, action) => {
+                state.allSalePosts = state.allSalePosts.filter((post: SaleInterface) => post._id !== action.payload);
+                state.userSalePosts = state.userSalePosts.filter((post: SaleInterface) => post._id !== action.payload);
+            })
+            // UPDATE SALE POST
             .addCase(updateSalePost.fulfilled, (state, action) => {
                 // Update in both lists
                 const allIndex = state.allSalePosts.findIndex((post: SaleInterface) => post._id === action.payload._id);
@@ -137,12 +193,9 @@ const saleSlice = createSlice({
                 }
             })
 
-            // DELETE SALE POST
-            .addCase(deleteSalePost.fulfilled, (state, action) => {
-                state.allSalePosts = state.allSalePosts.filter((post: SaleInterface) => post._id !== action.payload);
-                state.userSalePosts = state.userSalePosts.filter((post: SaleInterface) => post._id !== action.payload);
-            })
     }
-});
+
+})
 
 export default saleSlice.reducer;
+

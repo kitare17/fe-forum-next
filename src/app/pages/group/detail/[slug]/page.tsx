@@ -44,9 +44,10 @@ const GroupDetailPage = () => {
             </Breadcrumbs>
 
             {isJoin ?
-                <PassJoinGroup/>
-                :
                 <GroupDetail/>
+                :
+                <PassJoinGroup/>
+
             }
 
         </>

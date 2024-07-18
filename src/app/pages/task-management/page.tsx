@@ -1,388 +1,347 @@
+"use client";
+import Modal from "@mui/material/Modal";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import { useDispatch, useSelector } from "react-redux";
+import Box from "@mui/material/Box";
+import Pagination from "@mui/material/Pagination";
+import Typography from "@mui/material/Typography";
+import { AppDispatch } from "@/app/store";
+import { RootState } from "@/app/store";
+import { toast } from "react-toastify";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { TaskInterface } from "@/app/interface/Task";
+import * as React from "react";
+import { useRouter } from "next/navigation";
 
-"use client"
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Image from 'next/image'
+import {
+  createTask,
+  deleteTask,
+  getDetailTask,
+  showTask,
+  updateTask,
+} from "@/app/store/action/task";
+import FormComponentTask from "./component/FormComponentTask";
+import ToDoList from "./todolist/[taskId]/page";
 
 const style = {
-    position: 'absolute' as 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    maxHeight: '90vh',  
-    overflowY: 'auto',
-    
-    p: 4,
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
 };
+
 const TaskManagement = () => {
-    const [openAddTask, setOpenAdd] = React.useState(false);
-    const handleOpenAddTask = () => {
-        setOpenAdd(true);
+  const dispatch = useDispatch<AppDispatch>();
+
+  // open update modal
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+
+  const [prioritize, setprioritize] = React.useState("");
+  const [prioritizeUpdate, setprioritizeUpdate] = React.useState("");
+  const [idUpdateTaskState, setIdUpdateTaskState] = React.useState("");
+  const [taskNameState, setTaskNameState] = React.useState("");
+
+  const {
+    user,
+    isLoading: isAuthLoading,
+    isError: isAuthError,
+    message,
+  } = useSelector((state: RootState) => state.auth);
+
+  const {
+    listTask,
+    isLoading: isTaskLoading,
+    isError: isTaskError,
+  } = useSelector((state: RootState) => state.task);
+
+  const handleChangePriority = (event: SelectChangeEvent) => {
+    setprioritize(event.target.value as string);
+  };
+
+  // Modal add task
+  const [openAddTask, setOpenAdd] = React.useState(false);
+  const handleOpenAddTask = () => {
+    setOpenAdd(true);
+  };
+  const handleCloseAddTask = () => {
+    setOpenAdd(false);
+  };
+
+  // Add task
+  const handleAddTask = async(event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const mission = data.get("mission") as string;
+    var today = new Date(),
+      date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+
+      
+
+    const newTask: TaskInterface = {
+      _id: "nn",
+      taskName: mission,
+      createAt: date,
+      updateAt: date,
+      userId: user?.userEmailId,
+      todoList: [],
     };
-    const handleCloseAddTask = () => {
-        setOpenAdd(false);
-    };
-        return (
-            <>
-                <section className=" gradient-custom-2">
-                    <div className="container ">
-                        <div className="row d-flex justify-content-center align-items-center h-100">
-                            <div className="col-md-12 col-xl-10">
+    await dispatch(createTask(newTask)).then((result: any) => {
+      // @ts-ignore
+      if (result?.payload?.error) {
+        toast.error("Tạo nhiệm vụ không thành công");
+        handleCloseAddTask();
+        handleShowTask();
+      } else {
+        toast.success("Tạo nhiệm vụ thành công");
+        handleCloseAddTask();
+        handleShowTask();
+      }
+    });
+  };
 
-                                <div className="card mask-custom">
-                                    <div className="card-body p-4 text-white">
+  // Modal update task
 
-                                        <div className="d-flex justify-content-between align-items-center mb-3">
-                                            <h1 className="text-center ">TASK MANAGEMENT</h1>
-                                            <button type="button" className="btn btn-primary fw-bold text-white" onClick={handleOpenAddTask}>THÊM NHIỆM VỤ</button>
-                                        </div>
+  const handleOpenUpdateTask = ({
+    idTaskUpdate,
+    taskNameUpdate,
+  }: {
+    idTaskUpdate: string;
+    taskNameUpdate: string;
+  }) => {
+    setIdUpdateTaskState(idTaskUpdate);
+    setTaskNameState(taskNameUpdate);
+    setOpenUpdate(true);
+  };
 
-                                        <table className="table text-dark mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Team Member</th>
-                                                    <th scope="col">Task</th>
-                                                    <th scope="col">Priority</th>
-                                                    <th scope="col">Details</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr className="fw-normal">
-                                                    <th>
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
+  const [currentPage, setCurrentPage] = useState(1);
+  const handlePaging = (event: any, value: number) => {
+    setCurrentPage(value);
+  };
 
-                                                        <span className="ms-2">Alice Mayer</span>
-                                                    </th>
-                                                    <td className="align-middle">
-                                                        <span>Call Sam For payments</span>
-                                                    </td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-danger">Rất quan trọng</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
+  // get all task
+  const handleShowTask = async() => {
+    await dispatch(
+      showTask({ page: currentPage, userId: user?.userEmailId })
+    );
+   
+  };
 
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
-                                                <tr className="fw-normal">
-                                                    <th>
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
+  useEffect(() => {
+    // @ts-ignore
+    handleShowTask();
+  }, [currentPage]);
 
-                                                        <span className="ms-2">Alice Mayer</span>
-                                                    </th>
-                                                    <td className="align-middle">
-                                                        <span>Call Sam For payments</span>
-                                                    </td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-danger">Rất quan trọng</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
+  // Delete task
+  const handleDelete = async(idTask: any) => {
+    await dispatch(
+      deleteTask({
+        idTaskManagement: idTask.idTask,
+      })
+    )
+    handleShowTask();
+  };
+  const [taskId, setTaskId] = useState();
+  
 
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
+  const router = useRouter();
+  const handleNavigate = (idtask: any) => {
 
-                                                <tr className="fw-normal">
-                                                    <th>
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
+    // <ToDoList taskId={listTask.tasks[idtask]._id} />
 
-                                                        <span className="ms-2">Alice Mayer</span>
-                                                    </th>
-                                                    <td className="align-middle">
-                                                        <span>Call Sam For payments</span>
-                                                    </td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-danger">Rất quan trọng</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
 
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
-                                                <tr className="fw-normal">
-                                                    <th>
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
+    
+  };
 
-                                                        <span className="ms-2">Alice Mayer</span>
-                                                    </th>
-                                                    <td className="align-middle">
-                                                        <span>Call Sam For payments</span>
-                                                    </td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-danger">Rất quan trọng</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
+  return (
+    <>
+      <section className=" gradient-custom-2">
+        <div className="container ">
+          <div className="row d-flex justify-content-center align-items-center h-100">
+            <div className="col-md-12 col-xl-10">
+              <div className="card mask-custom">
+                <div className="card-body p-4 text-white">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h1 className="text-center ">Quản lý nhiệm vụ</h1>
+                    <button
+                      type="button"
+                      className="btn btn-primary fw-bold text-white"
+                      onClick={handleOpenAddTask}
+                    >
+                      THÊM NHIỆM VỤ
+                    </button>
+                  </div>
 
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
+                  <table className="table text-dark mb-5">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nhiệm Vụ</th>
+                        <th scope="col">Ngày Tạo</th>
+                        <th scope="col">Ngày thay đổi</th>
+                        <th scope="col">Tùy chọn</th>
+                      </tr>
+                    </thead>
 
-                                                <tr className="fw-normal">
-                                                    <th>
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
+                    {[...(listTask.tasks ?? [])].map((task, index) => (
+                      <tbody key={task._id}>
+                        <tr className="fw-normal">
+                          <td style={{cursor: "pointer"}}
+                            onClick={() => {
+                              router.push(`/pages/task-management/todolist/${task._id}`)
+                            }}                      
+                            className="align-middle"
+                          >
+                            <span title="Xem chi tiết danh sách công việc">{task.taskName} </span>
+                          </td>
+                          <td className="align-middle">
+                            <span>
+                              {new Date(task?.createAt ?? "").getDate()}/
+                              {new Date(task?.createAt ?? "").getMonth() + 1}/
+                              {new Date(task?.createAt ?? "").getFullYear()}
+                            </span>
+                          </td>
+                          <td className="align-middle">
+                            <span>
+                              {new Date(task?.updateAt ?? "").getDate()}/
+                              {new Date(task?.updateAt ?? "").getMonth() + 1}/
+                              {new Date(task?.updateAt ?? "").getFullYear()}
+                            </span>
+                          </td>
+                          <td className="align-middle">
+                            <button
+                              onClick={() => handleDelete({ idTask: task._id })}
+                              style={{
+                                border: "none",
+                                padding: 0,
+                                backgroundColor: "white",
+                              }}
+                              type="submit"
+                            >
+                              <Image
+                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
+                                width={30}
+                                height={30}
+                                alt="Picture of the author"
+                              />
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleOpenUpdateTask({
+                                  idTaskUpdate: task._id,
+                                  taskNameUpdate: task.taskName,
+                                })
+                              }
+                              style={{
+                                border: "none",
+                                padding: 0,
+                                backgroundColor: "white",
+                              }}
+                              type="submit"
+                            >
+                              <Image
+                                src="https://img.icons8.com/?size=100&id=wsH5SVIBggxT&format=png&color=000000"
+                                width={30}
+                                height={30}
+                                alt="Picture of the author"
+                              />
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    ))}
+                  </table>
 
-                                                        <span className="ms-2">Kate Moss</span>
-                                                    </th>
-                                                    <td className="align-middle">Make payment to Bluedart</td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-success">Bình thường</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
+                  {/* modal */}
 
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
-                                                <tr className="fw-normal">
-                                                    <th>
+                  <Modal
+                    open={openAddTask}
+                    onClose={handleCloseAddTask}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={style}>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        Thêm Nhiệm Vụ Mới
+                      </Typography>
+                      <Box
+                        component="form"
+                        noValidate
+                        onSubmit={handleAddTask}
+                        sx={{ mt: 1 }}
+                      >
+                        <TextField
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="mission"
+                          label="Tên nhiệm vụ"
+                          name="mission"
+                          type="mission"
+                          autoFocus
+                        />
+                        <Button
+                          type="submit"                          
+                          variant="contained"
+                          sx={{ mt: 3, mb: 2 }}
+                        >
+                          Thêm
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Modal>
 
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
-                                                        <span className="ms-2">Danny McChain</span>
-                                                    </th>
-                                                    <td className="align-middle">Office rent</td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-warning">Quan trọng</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
+                  {/* modal update */}
+                  <FormComponentTask
+                    idUpdateTask={idUpdateTaskState}
+                    taskName={taskNameState}
+                    openEditBlog={openUpdate}
+                    setOpenEditBlog={setOpenUpdate}
+                    handleShowTask={handleShowTask}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
-                                                <tr className="fw-normal">
-                                                    <th>
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
-                                                        <span className="ms-2">Alexa Chung</span>
-                                                    </th>
-                                                    <td className="align-middle">Office grocery shopping</td>
-                                                    <td className="align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-danger">Rất quan trọng</span></h6>
-                                                    </td>
-                                                    <td className="align-middle">
-
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
-                                                <tr className="fw-normal">
-                                                    <th className="border-0">
-                                                        <Image
-                                                            src="/img/FPT1.jpg"
-                                                            width={100}
-                                                            height={100}
-                                                            alt="Picture of the author"
-                                                        />
-                                                        <span className="ms-2">Ben Smith</span>
-                                                    </th>
-                                                    <td className="border-0 align-middle">Ask for Lunch to Clients</td>
-                                                    <td className="border-0 align-middle">
-                                                        <h6 className="mb-0"><span className="badge bg-success">Bình thường</span></h6>
-                                                    </td>
-                                                    <td className="border-0 align-middle">
-
-                                                        <a href="#!" data-mdb-tooltip-init title="Done">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=50&id=11849&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            />
-                                                        </a>
-                                                        <a href="#!" data-mdb-tooltip-init title="Remove">
-                                                            <Image
-                                                                src="https://img.icons8.com/?size=100&id=13903&format=png&color=000000"
-                                                                width={30}
-                                                                height={30}
-                                                                alt="Picture of the author"
-                                                            /></a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <Modal
-                                            open={openAddTask}
-                                            onClose={handleCloseAddTask}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description">
-                                         <Box sx={style}>
-                                                <Typography id="modal-modal-title" variant="h6" component="h2">
-                                                    Thêm Nhiệm Vụ Mới
-                                                </Typography>
-                                                <form>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="imageUpload" className="form-label">Hình ảnh</label>
-                                                        <input type="text" className="form-control" id="TaskTitle" required />
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="memberName" className="form-label">Tên Thành Viên</label>
-                                                        <input type="text" className="form-control" id="memberName" required/>
-
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="task" className="form-label">Nhiệm vụ</label>
-                                                        <input type="text" className="form-control" id="memberName"required />
-
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label htmlFor="TaskPriority" className="form-label">Độ ưu tiên</label>
-                                                        <select className="form-select" id="TaskPriority">
-                                                            <option value="rất-quan-trọng">Rất quan trọng</option>
-                                                            <option value="quan-trọng">Quan trọng</option>
-                                                            <option value="bình-thường">Bình thường</option>
-                                                            required
-                                                        </select>
-                                                    </div>
-                                                    <button type="submit" className="btn btn-primary text-white">Thêm</button>
-                                                </form>
-
-                                            </Box>
-                                        </Modal>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </>
-        );
-    }
+      <Grid
+        item
+        xs={10}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Pagination
+          onChange={handlePaging}
+          count={listTask.maxPage}
+          defaultPage={1}
+          siblingCount={1}
+          size="large"
+          showLastButton
+          showFirstButton
+        />
+      </Grid>
+    </>
+  );
+};
 
 export default TaskManagement;

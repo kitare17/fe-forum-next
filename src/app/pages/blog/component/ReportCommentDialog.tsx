@@ -55,7 +55,7 @@ const ReportCommentDialog = (
             defaultValues: {
                 "title": "Báo cáo vi phạm",
                 "reason": "",
-                "blogId": blogId,
+
                 // @ts-ignore
                 "userReport": (user?.userEmailId ?? "")
             }
@@ -65,12 +65,13 @@ const ReportCommentDialog = (
 
     const handleReport = () => {
 
-        const reportForm: ReportCommentInterface = {
+        const reportForm: any = {
             title: getValues("title"),
             reason: getValues("reason"),
             userReport: getValues("userReport"),
-            blogId: getValues("blogId"),
-            commentId: commentId
+            blogId: blogId,
+            commentId: commentId,
+
         }
         // @ts-ignore
 

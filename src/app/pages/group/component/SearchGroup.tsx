@@ -9,7 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import Box from "@mui/material/Box";
 import {useDispatch} from "react-redux";
-import {searchProduct} from "@/app/store/action/sale";
+import {findAllGroupByName} from "@/app/store/action/group";
 import {useForm} from "react-hook-form";
 import {BlogInterface} from "@/app/interface/Blog";
 import {useRouter} from "next/navigation";
@@ -37,9 +37,7 @@ const SearchGroup = () => {
     )
     const handleFindGroup = () => {
         var groupName = getValues("groupName")
-        alert(groupName)
-        //@ts-ignore
-        dipatch(searchProduct({ten:groupName}))
+        router.push(`/pages/group?page=1&groupName=${groupName}`);
     }
     return (
         <Box

@@ -34,7 +34,7 @@ const CardGroup = ({array}:{array:GroupInterface[]}) => {
                                     </Tooltip>
                                 }
                                 title={group.groupName}
-                                subheader={group.adminGroup.username}
+                                subheader={group.adminGroup?.username??""}
                             />
                         </Card>
                     </Grid>

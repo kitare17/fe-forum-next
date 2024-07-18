@@ -14,6 +14,8 @@ import {showAllBlog} from "@/app/store/action/blog";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import {useRouter} from "next/navigation";
+import { Box } from "@mui/material";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -73,16 +75,25 @@ const ListBlog = () => {
         // @ts-ignore
         dipatch(showAllBlog({page:currentPage}));
     }, [currentPage])
+    
     useEffect(() => {
         if (isLoading)
             toast.info("Đang tải thông tin")
         if (isError)
             toast.error("lỗi rồi")
     }, [isLoading, isError])
+    const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
 
 
     return (
         <>
+            {
+                userId &&
+                <Grid px={5} container justifyContent="flex-end">
+                    <Button onClick={()=>router.push("/pages/blog/write")} ><AddBoxIcon fontSize="large"/>Viết bài mới</Button>
+                </Grid>
+            }
+
             <Grid container spacing={2}
                   mt={5}
                   mb={5}

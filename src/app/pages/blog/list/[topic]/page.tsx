@@ -13,6 +13,7 @@ import { showOneTopic} from "@/app/store/action/blog";
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import {useParams, useRouter} from "next/navigation";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 const useStyles = makeStyles({
     container: {
         display: "flex",
@@ -82,10 +83,17 @@ const ListBlog = () => {
         if (isError)
             toast.error("lỗi rồi")
     }, [isLoading, isError])
+    const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
 
 
     return (
         <>
+            {
+                userId &&
+                <Grid px={5} container justifyContent="flex-end">
+                    <Button onClick={()=>router.push("/pages/blog/write")} ><AddBoxIcon fontSize="large"/>Viết bài mới</Button>
+                </Grid>
+            }
             <Grid container spacing={2}
                   mt={5}
                   mb={5}
