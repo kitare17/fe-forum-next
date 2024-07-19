@@ -9,7 +9,8 @@ export const getAllSalePost = createAsyncThunk(
     Types.SAlE_SHOW_ALL,
     async ({page}: { page: number }) => {
         try {
-            const response = await axios.get(`http://localhost:3001/saleposts/`);
+            page = page ? page : 1;
+            const response = await axios.get(`http://localhost:3001/saleposts?page=${page}`);
             const data = response.data;
             return data;
         } catch (error) {
@@ -23,7 +24,7 @@ export const getAllSalePostByUserId = createAsyncThunk(
     Types.SALE_SHOW_ALL_BY_USER,
     async ({userId}: { userId: string }) => {
         try {
-            const response = await axios.get(`http://localhost:3001/saleposts/${userId}`);
+            const response = await axios.get(`http://localhost:3001/saleposts/${userId}/users`);
             const data = response.data;
             return data;
         } catch (error) {
@@ -92,7 +93,8 @@ export const createProduct = createAsyncThunk(
                 "category": product.category,
                 "creator": creator,
                 "isLock": false,
-                "isSold": false
+                "isSold": false,
+                "phone": product.phone
             });
             const data = response.data;
             return data;

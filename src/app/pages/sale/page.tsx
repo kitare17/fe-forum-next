@@ -13,6 +13,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Link from 'next/link';
 import { Storefront, Favorite, PostAdd, Category } from '@mui/icons-material';
 import { Divider, Tooltip } from '@mui/material';
+import AddBoxIcon from "@mui/icons-material/AddBox";
 
 const Sale = () => {
   const router = useRouter();
@@ -92,8 +93,22 @@ const Sale = () => {
               Chợ Trời
             </Typography>
           </Box>
+          <Divider orientation="vertical" flexItem sx={{ bgcolor: 'white', mx: 1 }} />
 
-         
+          <Tooltip title="Đăng bài">
+            <Button
+                component={Link}
+                href="/pages/sale/uploadpost"
+                color="inherit"
+                startIcon={<PostAdd />}
+                sx={{ mr: 1, color: 'white' }}
+            >
+              Đăng bài
+            </Button>
+          </Tooltip>
+
+
+
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '20px' }}>
             <Tooltip title="Danh sách yêu thích">
               <Button
@@ -178,6 +193,7 @@ const Sale = () => {
           </Box>
         </Toolbar>
       </AppBar>
+
 
       <Container maxWidth="lg" sx={{ my: 4 }}>
         {isLoading ? (

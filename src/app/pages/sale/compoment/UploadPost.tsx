@@ -22,6 +22,7 @@ import dynamic from "next/dynamic";
 
 const UploadPost = () => {
     const dipatch = useDispatch();
+    const router=useRouter();
     const {listCategory} = useSelector((state: RootState) => state.sale);
     const [options, setOptions]
         = useState<[
@@ -49,7 +50,8 @@ const UploadPost = () => {
                 "category": "",
                 "creator": "",
                 "origin": "",
-                "address": ""
+                "address": "",
+                "phone":""
 
 
             }
@@ -124,12 +126,15 @@ const UploadPost = () => {
             brand: getValues("brand"),
             category: getValues("category"),
             origin: getValues("origin"),
-            address: getValues("address")
+            address: getValues("address"),
+            phone:getValues("phone")
+
         }
         console.log(newSale);
         const userId: string | undefined = (typeof window !== "undefined" ? JSON.parse(window.localStorage.getItem('authnRes') ?? "{}") : {}).userEmailId
         //@ts-ignore
         dipatch(createProduct({product:newSale, creator:userId}))
+        router.replace("/pages/sale");
     }
 
 
@@ -361,6 +366,25 @@ const UploadPost = () => {
                                 />
                             </div>
 
+                            <div className="mb-3">
+
+                                <TextField
+                                    id="address"
+                                    fullWidth
+                                    margin="normal"
+                                    required
+                                    label="Nhập số điện thoại"
+                                    variant="outlined"
+                                    {...register(
+                                        'phone',
+                                        {
+                                            required: "Phải nhập số điện thoại"
+                                        }
+                                    )}
+                                    error={!!errors.address}
+                                    helperText={errors.address?.message}
+                                />
+                            </div>
                             <button type="submit" className="btn btn-primary w-100"
                                     onClick={handleSubmit(handleSubmitProduct)}>Đăng Bài
                             </button>
