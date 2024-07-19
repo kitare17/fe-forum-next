@@ -1,98 +1,94 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import {SaleInterface} from "@/app/interface/SaleInterface";
-import {FormatCurrency} from "@/app/constant/Fomart";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/app/store";
+import { togglePostInWishlist, getWishlist } from "@/app/store/action/wishlist";
+import { SaleInterface } from "@/app/interface/SaleInterface";
+import { FormatCurrency } from "@/app/constant/Fomart";
+import FindComponent from "../compoment/FindComponent";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { toast } from 'react-toastify';
 
-const ListSalePost = ({array}: { array: SaleInterface[] }) => {
+const ListSalePost = ({ array, categories, onCategorySelect }: { array: SaleInterface[], categories: any[], onCategorySelect: (categoryId: string) => void }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const wishlist = useSelector((state: RootState) => state.wishlist.wishlistData);
+    const wishlistItems = wishlist?.postLiked || [];
+    const userId = useSelector((state: RootState) => state.auth.user?.userEmailId);
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    useEffect(() => {
+        if (userId) {
+            dispatch(getWishlist(userId));
+        }
+    }, [dispatch, userId]);
+
+    const handleToggleWishlist = async (postId: string) => {
+        if (!userId) {
+            toast.error("Please login to add items to your wishlist");
+            return;
+        }
+        setIsProcessing(true);
+        try {
+            await dispatch(togglePostInWishlist({ userId, salePostId: postId })).unwrap();
+            toast.success(wishlistItems.some(item => item._id === postId) ? "Removed from wishlist" : "Added to wishlist");
+        } catch (error) {
+            toast.error("An error occurred. Please try again.");
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const isPostLiked = (postId: string) => {
+        return wishlistItems.some(item => item._id === postId);
+    };
+
     return (
         <>
-            <style jsx>{`
-                /* CSS để tạo hiệu ứng hover */
-                .card:hover {
-                    transform: translateY(-5px);
-                    transition: transform 0.2s;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                }
 
-
-                /* Đảm bảo rằng liên kết bao quanh toàn bộ thẻ không bị gạch chân */
-                .card a {
-                    text-decoration: none;
-                    color: inherit;
-                }
-
-                .navbar-custom {
-            background-color: #4CAF50; /* Màu nền xanh lá */
-        }
-        .navbar-brand,
-        .nav-link {
-            color: white !important; /* Màu chữ trắng */
-        }
-        .search-bar {
-            width: 50%; /* Độ rộng của thanh tìm kiếm */
-        }
-        .dropdown-menu a:hover {
-            background-color: #4CAF50; /* Màu nền khi hover */
-            color: white !important; /* Màu chữ khi hover */
-        }
-            `}</style>
-            <nav className="navbar navbar-expand-lg navbar-custom">
-      <div className="container-fluid">
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-          <ul className="navbar-nav">
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a className="dropdown-item" href="#">Action</a></li>
-                <li><a className="dropdown-item" href="#">Another action</a></li>
-                <li><a className="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form className="d-flex mx-auto search-bar">
-            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-            <button className="btn btn-outline-light" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-            <div className="container my-2">
+            <div className="container my-4">
                 <div className="row">
-
-                        {
-                            [...array ?? []].map((sale, index) => {
-                                return (
-                                    <div className="col-md-3 mt-2 mb-2" key={index}>
-                                        <Link href="#" className="text-decoration-none">
-                                            <div className="card" style={{width: "100%"}}>
-                                                <Image src={sale.images[0]}
-                                                       className="card-img-top"
-                                                       width={0}
-                                                       height={0}
-                                                       sizes="100vw"
-                                                       style={{width: '100%', height: 'auto'}}
-                                                       alt="Product Image"/>
-                                                <div className="card-body">
-                                                    <h5 className="card-title" style={{color: "black"}}>{sale.title}</h5>
-                                                    <p className="card-text text-secondary">{sale.productStatus}</p>
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <span className="text-danger fw-bold">{FormatCurrency(sale.price)}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Link>
+                    {array.map((sale, index) => (
+                        <div className="col-md-3 mb-4" key={index}>
+                            <div className="card h-100 shadow-sm">
+                                <Link href={`/pages/sale/detail/${sale._id}`} legacyBehavior>
+                                    <a>
+                                        <Image
+                                            src={sale.images[0]}
+                                            className="card-img-top"
+                                            width={0}
+                                            height={0}
+                                            sizes="100vw"
+                                            style={{ width: '100%', height: '200px', objectFit: 'cover' }}
+                                            alt="Product Image"
+                                        />
+                                    </a>
+                                </Link>
+                                <div className="card-body d-flex flex-column">
+                                    <Link href={`/pages/sale/detail/${sale._id}`} legacyBehavior>
+                                        <a>
+                                            <h5 className="card-title">{sale.title}</h5>
+                                        </a>
+                                    </Link>
+                                    <p className="card-text text-secondary">{sale.productStatus}</p>
+                                    <div className="mt-auto d-flex justify-content-between align-items-center">
+                                        <span className="text-danger fw-bold">{FormatCurrency(sale.price)}</span>
+                                        <button
+                                            className="btn btn-outline-primary"
+                                            onClick={() => handleToggleWishlist(sale._id ? sale._id : "undefined")}
+                                            disabled={isProcessing}
+                                            title={userId ? "Toggle wishlist" : "Login to use wishlist"}
+                                        >
+                                            <FontAwesomeIcon icon={isPostLiked(sale._id ? sale._id : "undefined") ? solidHeart : regularHeart} />
+                                        </button>
                                     </div>
-                                )
-                            })}
-
-
-            </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );

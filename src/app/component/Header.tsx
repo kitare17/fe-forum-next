@@ -45,7 +45,6 @@ function Header() {
     useEffect(() => {
         // @ts-ignore
         const authnRes:string=window.localStorage.getItem("authnRes")
-        console.log("sdsdsdsd",authnRes)
         setAuthLoginString(authnRes);
     }, []);
     const authLogin = authLoginString ? JSON.parse(authLoginString) : null;
@@ -195,8 +194,6 @@ function Header() {
                                         Tài khoản
                                     </Typography>
                                 </MenuItem>
-                               
-
                             </Box>
                         </Box>
                         <Box
@@ -235,8 +232,6 @@ function Header() {
                                             Đăng kí
                                         </Button>
                                     </Link>
-
-
                                 </>
                             )}
                         </Box>

@@ -66,8 +66,10 @@ export const GROUP_UPDATE_TASK="GROUP_UPDATE_TASK"
 //SALE ACTION q
 
 export const SAlE_SHOW_ALL="SALE_SHOW_ALL"
-
+export const SALE_SHOW_ALL_BY_USER = 'SALE_SHOW_ALL_BY_USER';
 export const SAlE_SHOW_ONE="SALE_SHOW_ONE"
+export const SAlE_SEARCH="SAlE_SEARCH"
+
 export const SAlE_GET_RELATED_PRODUCT="SAlE_GET_RELATED_PRODUCT"
 export const SAlE_CREATE_PRODUCT="SAlE_CREATE_PRODUCT"
 
@@ -79,7 +81,7 @@ export const CATEGORY_SHOW_ALL = "CATEGORY_SHOW_ALL"
 //=================================================================================
 
 //CREATE TASK MANAGERMENT
-export const CREATE_TASK="CREATE_TASK" 
+export const CREATE_TASK="CREATE_TASK"
 
 //SHOW TASK MANAGERMENT
 export const SHOW_TASK="SHOW_TASK"
@@ -96,7 +98,7 @@ export const UPDATE_TASK="UPDATE_TASK"
 //=================================================================================
 
 //CREATE TODO LIST
-export const CREATE_TODOLIST="CREATE_TODOLIST" 
+export const CREATE_TODOLIST="CREATE_TODOLIST"
 
 //SHOW TODO LIST
 export const SHOW_TODOLIST="SHOW_TODOLIST"

@@ -18,4 +18,5 @@ export interface SaleInterface {
     createdAt?:string,
     updatedAt?:string,
     price:number,
+    phone?:string
 }

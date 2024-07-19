@@ -6,10 +6,18 @@ import {
     getAllCategory,
     getAllSalePost,
     getOneSalePost,
-    getRelatedProduct
+    getRelatedProduct,
+    getAllSalePostByUserId,
+    searchProduct,
+    getProductsByCategory,
+    deleteSalePost,
+    updateSalePost
 } from "@/app/store/action/sale";
 import {SaleInterface} from "@/app/interface/SaleInterface";
 import {CategoryInterface} from "@/app/interface/CategoryInterface";
+
+
+
 
 interface InitialState {
     isLoading: boolean,
@@ -17,15 +25,19 @@ interface InitialState {
     saleDetail?: SaleInterface,
     listCategory?: CategoryInterface[],
     listRelatedProduct?: SaleInterface[],
-    listSale: any,
-    maxPage: number
+    allSalePosts: SaleInterface[],
+    userSalePosts: SaleInterface[],
+    allPostsMaxPage: number,
+    userPostsMaxPage: number
 }
 
 var initialState: InitialState = {
-    listSale: [],
+    allSalePosts: [],
+    userSalePosts: [],
     isLoading: false,
     isError: false,
-    maxPage: 1
+    allPostsMaxPage: 1,
+    userPostsMaxPage: 1
 }
 
 
@@ -34,57 +46,100 @@ const saleSlice = createSlice({
     initialState: initialState,
     reducers: {},
     extraReducers: builder => {
-        //GET ALL SALE POST 
-        builder.addCase(getAllSalePost.fulfilled, (state, action) => {
 
-            // @ts-ignore
-            state.listSale = action.payload.salePosts;
-            // @ts-ignore
-            state.maxPage = action.payload.maxPage;
-            state.isLoading = false;
-            state.isError = false;
-        })
-            .addCase(getAllSalePost.pending, (state, action) => {
-
-                state.isLoading = true;
-                state.isError = false
+        builder
+            // GET ALL SALE POST
+            .addCase(getAllSalePost.fulfilled, (state, action) => {
+                state.allSalePosts = action.payload.salePosts;
+                state.allPostsMaxPage = action.payload.maxPage;
+                state.isLoading = false;
+                state.isError = false;
             })
-            .addCase(getAllSalePost.rejected, (state, action) => {
+            .addCase(getAllSalePost.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(getAllSalePost.rejected, (state) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+            // GET ALL SALE POST BY USER ID
+            .addCase(getAllSalePostByUserId.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(getAllSalePostByUserId.fulfilled, (state, action) => {
+                state.userSalePosts = action.payload.salePosts;
+                state.userPostsMaxPage = action.payload.maxPage;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getAllSalePostByUserId.rejected, (state) => {
                 state.isLoading = false;
                 state.isError = true;
             })
 
 
-            //GET ONE SALE POST
+            // Find SALE POST
+            .addCase(searchProduct.fulfilled, (state, action) => {
+                state.allSalePosts = action.payload.salePosts;
+                state.allPostsMaxPage = action.payload.maxPage;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(searchProduct.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(searchProduct.rejected, (state) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+        //GET ONE SALE POST
+            // GET ONE SALE POST
             .addCase(getOneSalePost.fulfilled, (state, action) => {
-                // @ts-ignore
                 state.saleDetail = action.payload;
                 state.isLoading = false;
                 state.isError = false;
             })
-            .addCase(getOneSalePost.pending, (state, action) => {
-
+            .addCase(getOneSalePost.pending, (state) => {
                 state.isLoading = true;
-                state.isError = false
+                state.isError = false;
             })
-            .addCase(getOneSalePost.rejected, (state, action) => {
+            .addCase(getOneSalePost.rejected, (state) => {
                 state.isLoading = false;
                 state.isError = true;
             })
 
-            //GET ALL CATEOGORY
+            // GET ALL CATEGORY
             .addCase(getAllCategory.fulfilled, (state, action) => {
-                // @ts-ignore
                 state.listCategory = action.payload;
                 state.isLoading = false;
                 state.isError = false;
             })
-            .addCase(getAllCategory.pending, (state, action) => {
-
+            .addCase(getAllCategory.pending, (state) => {
                 state.isLoading = true;
-                state.isError = false
+                state.isError = false;
             })
-            .addCase(getAllCategory.rejected, (state, action) => {
+            .addCase(getAllCategory.rejected, (state) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+
+            // GET PRODUCTS BY CATEGORY
+            .addCase(getProductsByCategory.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(getProductsByCategory.fulfilled, (state, action) => {
+                state.allSalePosts = action.payload.salePosts;
+                state.allPostsMaxPage = action.payload.maxPage;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(getProductsByCategory.rejected, (state) => {
                 state.isLoading = false;
                 state.isError = true;
             })
@@ -122,6 +177,23 @@ const saleSlice = createSlice({
                 state.isError = true;
             })
 
+            // DELETE SALE POST
+            .addCase(deleteSalePost.fulfilled, (state, action) => {
+                state.allSalePosts = state.allSalePosts.filter((post: SaleInterface) => post._id !== action.payload);
+                state.userSalePosts = state.userSalePosts.filter((post: SaleInterface) => post._id !== action.payload);
+            })
+            // UPDATE SALE POST
+            .addCase(updateSalePost.fulfilled, (state, action) => {
+                // Update in both lists
+                const allIndex = state.allSalePosts.findIndex((post: SaleInterface) => post._id === action.payload._id);
+                if (allIndex !== -1) {
+                    state.allSalePosts[allIndex] = action.payload;
+                }
+                const userIndex = state.userSalePosts.findIndex((post: SaleInterface) => post._id === action.payload._id);
+                if (userIndex !== -1) {
+                    state.userSalePosts[userIndex] = action.payload;
+                }
+            })
 
     }
 

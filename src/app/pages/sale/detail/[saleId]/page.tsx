@@ -5,13 +5,16 @@ import {useParams, useRouter} from "next/navigation";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from 'react';
 import {RootState} from "@/app/store";
-import {getOneSalePost, getRelatedProduct} from "@/app/store/action/sale"; //import dispatch o day
-
+import {getOneSalePost, getRelatedProduct} from "@/app/store/action/sale";
+import {createDayToString} from "@/app/constant/Fomart"; //import dispatch o day
+import { vi } from 'date-fns/locale';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 //Get param
 
 const SaleDetail = () => {
     const dipatch = useDispatch();
     const {saleId}: { saleId: string } = useParams();
+    const [timeSinceCreated, setTimeSinceCreated] = useState<string>('');
     // alert(saleId)
     const {
         saleDetail,
@@ -32,6 +35,21 @@ const SaleDetail = () => {
 
 
     }, [saleDetail]);
+    const [phone,setPhone]=useState("");
+    const handleShowPhone=()=>{
+        if(phone) setPhone("")
+        else setPhone(saleDetail?.phone??"")
+    }
+
+    useEffect(() => {
+        if (saleDetail?.createdAt) {
+            const parsedDate = parseISO(saleDetail.createdAt);
+            const distance = formatDistanceToNow(parsedDate, { addSuffix: true, locale: vi });
+            setTimeSinceCreated(distance);
+        }
+    }, [saleDetail?.createdAt]);
+
+
     return (
         <>
             <style jsx>{`
@@ -56,7 +74,7 @@ const SaleDetail = () => {
                             <div className="row p-3">
                                 <div className="col-3">
                                     <Image
-                                        src="https://scontent.fdad3-5.fna.fbcdn.net/v/t39.30808-6/408401133_3503012760028740_2340052329278457272_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEZpsFWgJ3ROwCsLm3UGFfiPM5N2i9QNWw8zk3aL1A1bM8xvFXHAgIHe4_pT5Qx-QkwRyiEPIN_76pKgFvl9VZ9&_nc_ohc=dW0XiD2zk_EQ7kNvgHkbj5t&_nc_ht=scontent.fdad3-5.fna&oh=00_AYBfYMhxfpk2YosCzzWQJuQppZrzUDAFyXplFmjsGSHPhQ&oe=66609E51"
+                                        src="https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
                                         className="card-img-top"
                                         width={0}
                                         height={0}
@@ -69,7 +87,8 @@ const SaleDetail = () => {
                                 </div>
                                 <div className="col-9">
                                     <h5>{saleDetail?.creator?.username}</h5>
-                                    <p>{saleDetail?.createdAt}</p>
+                                    <p>{createDayToString(saleDetail?.createdAt??"")}</p>
+
                                 </div>
                             </div>
                         </div>
@@ -93,7 +112,7 @@ const SaleDetail = () => {
                                     <h4>{saleDetail?.title}</h4>
                                     <p className="text-danger fw-bolder fs-4">250.0000 đ</p>
                                     <hr/>
-                                    <div><i className="fa-regular fa-clock"></i> Đăng 12 ngày trước</div>
+                                    <div><i className="fa-regular fa-clock"></i>  Đăng {timeSinceCreated}</div>
                                     <div><i className="fa-solid fa-location-dot"></i> {saleDetail?.address}</div>
                                     <div><i className="fa-solid fa-plane"></i> Xuất xứ :{saleDetail?.origin}</div>
                                     <div><i className="fa-solid fa-wand-magic-sparkles"></i> Thương hiệu
@@ -108,11 +127,9 @@ const SaleDetail = () => {
                     </div>
                     <hr/>
                     <div className="row">
-                        <div className="col-md-6">
-                            <button style={{width: '100%'}}><i className="fa-regular fa-heart"></i> Thích</button>
-                        </div>
-                        <div className="col-md-6">
-                            <button style={{width: '100%'}}><i className="fa-solid fa-message"></i> Liên hệ</button>
+
+                        <div className="col-md-12">
+                            <button onClick={()=>handleShowPhone()} style={{width: '100%'}}><i className="fa-solid fa-message"></i> Liên hệ {`: ${phone}`}</button>
                         </div>
                     </div>
                 </div>
