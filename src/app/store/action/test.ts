@@ -9,7 +9,11 @@ export const getResultTest = createAsyncThunk(
     Types.TEST_LIST_RESULT,
     async ({ id, deckId }: { id: string, deckId: string }) => {
         try {
-            const response = await axios.get(`http://localhost:5000/test/${id}?deckId=${deckId}`);
+            const response = await axios.get(`http://localhost:3001/test`, 
+             {
+                params: { id, deckId }
+            }
+            );
             const data: TestResponse = response.data;
             // Ensure the data is returned as an array
             return data;
@@ -24,7 +28,7 @@ export const submitTest = createAsyncThunk(
   Types.TEST_CREATE,
   async (newTest: TestInterfaceRequest) => {
     try {
-      const response = await axios.post('http://localhost:5000/test', newTest);
+      const response = await axios.post('http://localhost:3001/test', newTest);
       toast.success('Nộp bài thành công');
       return response.data;
     } catch (error) {

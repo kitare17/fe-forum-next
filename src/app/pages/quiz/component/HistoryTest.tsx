@@ -16,9 +16,9 @@ const HistoryTest = (deckId: any) => {
     const { user } = useSelector((state: RootState) => state.auth);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
+    const userEmailId = user?.userEmailId ?? "";
     useEffect(() => {
-        dispatch(getResultTest({ id: user.email, deckId: deckId.deckId }));
+        dispatch(getResultTest({ id: userEmailId, deckId: deckId.deckId }));
     }, [dispatch]);
 
     const handleChangePage = (event: unknown, newPage: number) => {

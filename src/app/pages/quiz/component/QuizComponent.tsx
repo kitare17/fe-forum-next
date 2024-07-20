@@ -10,12 +10,13 @@ const QuizComponent = (deckId: any) => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { user } = useSelector((state: RootState) => state.auth);
+    const userEmailId = user?.userEmailId ?? "";
     const initialQuestion = { name: "", answers: [{ answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }, { answerName: "", isAnswer: false }] };
     const [formData, setFormData] = useState<QuizInterface>({
         questions: [initialQuestion],
         deckName: "",
         regionType: "",
-        deckOwner: user.email,
+        deckOwner: userEmailId,
         deckId: deckId.deckId || ""
     });
     const [errors, setErrors] = useState<any>({});

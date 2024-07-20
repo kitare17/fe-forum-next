@@ -38,7 +38,7 @@ const CustomCheckbox = styled(Checkbox)(({ theme }) => ({
 
 const SettingsComponent: React.FC<{ onStart: (settings: Settings) => void }> = ({ onStart }) => {
     const [answerType, setAnswerType] = useState<'radio' | 'multiple'>('radio');
-    const [numberOfQuestions, setNumberOfQuestions] = useState(3);
+    const [numberOfQuestions, setNumberOfQuestions] = useState(1);
     const [randomizeQuestions, setRandomizeQuestions] = useState(false);
     const router = useRouter();
     const handleStart = () => {
@@ -108,7 +108,7 @@ const TestExam = (deckId: any) => {
 
     const { listFlashCard, isLoading, isError } = useSelector((state: RootState) => state.quiz);
     const { user } = useSelector((state: RootState) => state.auth);
-
+    const userEmailId = user?.userEmailId ?? "";
     const getListFlashCardByDeckId = (listFlashCard: QuestionResponse[], deckId: string): QuestionResponse[] => {
         return listFlashCard.filter((flashCard) => flashCard.deck === deckId);
     };
@@ -218,7 +218,7 @@ const TestExam = (deckId: any) => {
         const durationInMinutes = Math.floor(duration / 60);
 
         const testResult: TestInterfaceRequest = {
-            testOwner: user.email,
+            testOwner: userEmailId,
             deckId: deckId.deckId,
             score,
             numberCorrectAnswer,
