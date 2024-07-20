@@ -7,7 +7,7 @@ import {toast} from "react-toastify";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
 import {ReplyCommentInterface} from "@/app/interface/ReplyCommentInterface";
-import {BlOG_COMMENT_REMOVE, BLOG_FIND_ONE_CHECK, BlOG_REMOVE} from "../../constant/ActionType";
+import {BlOG_COMMENT_EDIT, BlOG_COMMENT_REMOVE, BLOG_FIND_ONE_CHECK, BlOG_REMOVE} from "../../constant/ActionType";
 import {MessageEnglish} from "@/app/interface/ChatInterface";
 
 export const createBlog = createAsyncThunk(
@@ -396,3 +396,32 @@ export const removeCommentBlog = createAsyncThunk(
         }
     }
 );
+
+
+export const editCommentBlog = createAsyncThunk(
+    Types.BlOG_COMMENT_EDIT,
+    async ({
+               blogId,
+               commentId,
+               detail
+
+           }:
+               {
+                   blogId: string,
+                   commentId: string,
+                   detail: string
+               }) => {
+        try {
+            const response = await axios.put(`http://localhost:3001/posts/${blogId}/editComment`, {
+                commentId: commentId,
+                detail: detail
+            });
+            const data = response.data;
+            return data;
+        } catch (error) {
+            console.log("Error: " + Types.BlOG_COMMENT_EDIT);
+
+        }
+    }
+);
+

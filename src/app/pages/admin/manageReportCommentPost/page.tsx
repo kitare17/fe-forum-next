@@ -1,53 +1,57 @@
 "use client"
-import React, {useState, useEffect, Suspense} from "react";
+import React, {Suspense, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {findBlog, getAllReport, getAllReportComment, showAllBlog} from "@/app/store/action/dashboard";
+import {
+    getAllReport,
+    getAllReportComment,
+    showReportCommentFollowStatus,
+    showReportFollowStatus
+} from "@/app/store/action/dashboard";
 import BuildIcon from '@mui/icons-material/Build';
 import {
+    Avatar,
+    Box,
+    Button,
+    IconButton,
+    ListItemIcon,
+    Menu,
+    MenuItem,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
-    IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Typography,
-    Button,
-    TextField,
-    InputAdornment,
-    Avatar
+    Tooltip,
+    Typography
 } from "@mui/material";
-import {
-    Edit as EditIcon,
-    Visibility as ViewIcon,
-    Lock as LockIcon,
-    LockOpen as UnlockIcon,
-    Search as SearchIcon
-} from "@mui/icons-material";
+import {Logout, Visibility as ViewIcon} from "@mui/icons-material";
 import {RootState} from "@/app/store";
-import {BlogInterface} from "@/app/interface/Blog";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
 import {useRouter, useSearchParams} from "next/navigation";
-import InputBase from "@mui/material/InputBase";
 import {useForm} from "react-hook-form";
-import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
 import ModalEditCommentReport from "@/app/pages/admin/manageReportCommentPost/component/ModalEditCommentReport";
+import {setStateShowCommentReport} from "@/app/store/reducer/dashboard";
+import {ReportCommentInterface} from "@/app/interface/ReportCommentInterface";
+import Image from "next/image";
+import { resetInitialState } from "@/app/store/reducer/auth";
+import { fetchLogout } from "@/app/store/action/auth";
 
 
 const ManagePost: React.FC = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const page = searchParams.get('page') ?? 1;
+    var page = searchParams.get('page') ?? 1;
     const searchBlogTitle = searchParams.get('searchBlogTitle') ?? "";
     const {
-        listReportCommentBlog,isUpdate,isLoading
+        listReportCommentBlog,
+        isUpdate,
+        isLoading,
+        showListCommentReportType,
+
     } =
         useSelector((state: RootState) => state.dashboard);
     const dispatch = useDispatch();
@@ -71,19 +75,29 @@ const ManagePost: React.FC = () => {
     useEffect(() => {
 
 
-        // @ts-ignore
-        dispatch(getAllReportComment({page:page}))
 
-        // if (searchBlogTitle) {
-        //     // @ts-ignore
-        //
-        //     dispatch(findBlog({page: page, searchBlogTitle: searchBlogTitle}));
-        // } else {
-        //     // @ts-ignore
-        //     dispatch(showAllBlog({page: page}));
-        // }
+        switch (showListCommentReportType) {
+            //all, pending, done, illegal
+            case "all":
+                // @ts-ignore
+                dispatch(getAllReportComment({page: page}))
+                break;
+            case "pending":
+                // @ts-ignore
+                dispatch(showReportCommentFollowStatus({page: page, statusReport: "Đang chờ xử lí"}))
+                break;
+            case "done":
+                // @ts-ignore
+                dispatch(showReportCommentFollowStatus({page: page, statusReport: "Đã giải quyết"}))
+                break;
+            case "illegal":
+                // @ts-ignore
+                dispatch(showReportCommentFollowStatus({page: page, statusReport: "Báo cáo không hợp lệ"}))
+                break;
 
-    }, [page]);
+        }
+
+    }, [page,isUpdate,showListCommentReportType]);
 
     const handlePaging = (event: any, value: number) => {
         if (searchBlogTitle)
@@ -99,12 +113,82 @@ const ManagePost: React.FC = () => {
 
     //handle modal edit open
     const [open, setOpen] = React.useState(false);
-    const [blogPick, setBlogPick] = React.useState<BlogInterface | undefined>(undefined);
-    const handleOpenModalEdit = (blog: BlogInterface|undefined) => {
+    const [reportPick, setReportPick] = React.useState<ReportCommentInterface | undefined>(undefined);
+    const handleOpenModalEdit = (report: ReportCommentInterface|undefined) => {
         setOpen(true);
-        setBlogPick(blog);
+        setReportPick(report);
     }
 
+
+    const handleShowAll = () => {
+        //@ts-ignore
+       // dispatch(getAllReport({page: page}))
+        dispatch(setStateShowCommentReport("all"));
+        //all, pending, done, illegal
+    }
+    const handleShowAccept = () => {
+        //@ts-ignore
+       // dispatch(showReportFollowStatus({page: "1", statusReport: "Đã giải quyết"}))
+        dispatch(setStateShowCommentReport("done"));
+
+    }
+
+    const handleShowCancel = () => {
+        //@ts-ignore
+
+        //dispatch(showReportFollowStatus({page: "1", statusReport: "Báo cáo không hợp lệ"}))
+        dispatch(setStateShowCommentReport("illegal"));
+
+    }
+    const handleShowPending = () => {
+        //@ts-ignore
+        //dispatch(showReportFollowStatus({page: "1", statusReport: "Đang chờ xử lí"}))
+        dispatch(setStateShowCommentReport("pending"));
+
+    }
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openLogout = Boolean(anchorEl);
+    const handleClick = (event: any) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const hanldeLogout = () => {
+      // @ts-ignore
+      dispatch(fetchLogout)
+      console.log("dang xuat")
+      dispatch(resetInitialState());
+      window.localStorage.clear()
+      router.push("/pages/auth/login")
+  };
+    const StatusReportCommentNoti = ({statusReport}: { statusReport: string | undefined }) => {
+
+        var hrefStatus = "https://img.icons8.com/ios-filled/50/40C057/ok--v1.png";
+        if (statusReport === "Đã giải quyết") {
+            hrefStatus = "https://img.icons8.com/ios-filled/50/40C057/ok--v1.png";
+        } else if (statusReport === "Báo cáo không hợp lệ") {
+            hrefStatus = "https://img.icons8.com/sf-black/64/FA5252/cancel-2.png";
+        } else {
+            hrefStatus = "https://img.icons8.com/color/48/clock--v1.png";
+        }
+
+       
+      
+
+
+        return (
+            <Image
+                src={hrefStatus}
+                width={24}
+                height={24}
+                alt="none"
+            />
+
+        )
+    }
 
     return (
         <>
@@ -124,9 +208,93 @@ const ManagePost: React.FC = () => {
 
                         </nav>
                         <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-
-
                         </div>
+                        <ul className="navbar-nav justify-content-end">
+                <li className="nav-item d-flex align-items-center">
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="inherit"
+                  >
+                    {/* <Avatar
+                      alt="Admin"
+                      src="https://img.icons8.com/?size=24&id=82751&format=png&color=000000"
+                    /> */}
+
+                    <React.Fragment>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Account settings">
+                          <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            sx={{ ml: 2 }}
+                            aria-controls={openLogout ? "account-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openLogout ? "true" : undefined}
+                          >
+                            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                      <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={openLogout}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                          elevation: 0,
+                          sx: {
+                            overflow: "visible",
+                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                            mt: 1.5,
+                            "& .MuiAvatar-root": {
+                              width: 32,
+                              height: 32,
+                              ml: -0.5,
+                              mr: 1,
+                            },
+                            "&::before": {
+                              content: '""',
+                              display: "block",
+                              position: "absolute",
+                              top: 0,
+                              right: 14,
+                              width: 10,
+                              height: 10,
+                              bgcolor: "background.paper",
+                              transform: "translateY(-50%) rotate(45deg)",
+                              zIndex: 0,
+                            },
+                          },
+                        }}
+                        transformOrigin={{
+                          horizontal: "right",
+                          vertical: "top",
+                        }}
+                        anchorOrigin={{
+                          horizontal: "right",
+                          vertical: "bottom",
+                        }}
+                      >
+                        <MenuItem onClick={hanldeLogout}>
+                          <ListItemIcon>
+                            <Logout fontSize="small" />
+                          </ListItemIcon>
+                          Logout
+                        </MenuItem>
+                      </Menu>
+                    </React.Fragment>
+                  </IconButton>
+                </li>
+              </ul>
                     </div>
                 </nav>
 
@@ -137,9 +305,13 @@ const ManagePost: React.FC = () => {
 
                         </div>
                         <div className="card-header pb-4 d-flex ">
-
-                    <Button  sx={{ mx: 2 }} variant="contained"> Hiện chưa xử lí</Button>
-                    <Button sx={{ mx: 2 }} variant="contained"> Hiện đã xử lí</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowAll()} variant="contained"> Tất cả</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowPending()} variant="contained"> Hiện chưa xử
+                                lí</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowAccept()} variant="contained"> Hiện đã xử
+                                lí</Button>
+                            <Button sx={{mx: 2}} onClick={() => handleShowCancel()} variant="contained"> Hiện không hợp
+                                lệ</Button>
                         </div>
                         <TableContainer>
                             <Table>
@@ -173,9 +345,10 @@ const ManagePost: React.FC = () => {
 
                                             </TableCell>
                                             <TableCell align="center">
-                                                <IconButton onClick={() => handleOpenModalEdit(report?.blogId)}>
+                                                <IconButton onClick={() => handleOpenModalEdit(report)}>
                                                     <BuildIcon/>
                                                 </IconButton>
+                                                <StatusReportCommentNoti statusReport={report?.status} />
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -211,7 +384,7 @@ const ManagePost: React.FC = () => {
                             showFirstButton/>
                     </Grid>
                 </Grid>
-                <ModalEditCommentReport openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} blog={blogPick}/>
+                <ModalEditCommentReport openEditStatusBlog ={open} setOpenCreateWordForm={setOpen} report={reportPick}/>
             </main>
         </>
     );

@@ -57,8 +57,6 @@ const TaskManagement = () => {
     message,
   } = useSelector((state: RootState) => state.auth);
 
-  console.log("nguyen diep hoang", user)
-
   const {
     listTask,
     isLoading: isTaskLoading,
@@ -177,7 +175,7 @@ const TaskManagement = () => {
               <div className="card mask-custom">
                 <div className="card-body p-4 text-white">
                   <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h1 className="text-center ">TASK MANAGEMENT</h1>
+                    <h1 className="text-center ">Quản lý nhiệm vụ</h1>
                     <button
                       type="button"
                       className="btn btn-primary fw-bold text-white"
@@ -206,7 +204,7 @@ const TaskManagement = () => {
                             }}                      
                             className="align-middle"
                           >
-                            <span>{task.taskName} </span>
+                            <span title="Xem chi tiết danh sách công việc">{task.taskName} </span>
                           </td>
                           <td className="align-middle">
                             <span>
@@ -299,8 +297,7 @@ const TaskManagement = () => {
                           autoFocus
                         />
                         <Button
-                          type="submit"
-                          fullWidth
+                          type="submit"                          
                           variant="contained"
                           sx={{ mt: 3, mb: 2 }}
                         >

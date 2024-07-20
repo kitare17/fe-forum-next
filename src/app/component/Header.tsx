@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { PaletteMode } from "@mui/material";
+import {PaletteMode} from "@mui/material";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,14 +11,17 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
-import { AppDispatch } from "../store";
-import { useDispatch } from "react-redux";
-import { fetchLogout } from "../store/action/auth";
-import { resetInitialState } from "../store/reducer/auth";
+import {AppDispatch} from "../store";
+import {useDispatch} from "react-redux";
+import {fetchLogout} from "../store/action/auth";
+import {resetInitialState} from "../store/reducer/auth";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
+import ReportIcon from '@mui/icons-material/Report';
+import Badge from '@mui/material/Badge';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const logoStyle = {
     width: "60px",
@@ -55,7 +58,7 @@ function Header() {
         const offset = 128;
         if (sectionElement) {
             const targetScroll = sectionElement.offsetTop - offset;
-            sectionElement.scrollIntoView({ behavior: "smooth" });
+            sectionElement.scrollIntoView({behavior: "smooth"});
             window.scrollTo({
                 top: targetScroll,
                 behavior: "smooth",
@@ -134,10 +137,10 @@ function Header() {
                                 </h3>
                             </div>
 
-                            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                            <Box sx={{display: {xs: "none", md: "flex"}}}>
                                 <MenuItem
                                     onClick={() => router.push("/")}
-                                    sx={{ py: "6px", px: "12px" }}
+                                    sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Trang chủ
@@ -145,7 +148,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => router.push("/pages/blog")}
-                                    sx={{ py: "6px", px: "12px" }}
+                                    sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Diễn đàn
@@ -153,7 +156,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => router.push("/pages/chat")}
-                                    sx={{ py: "6px", px: "12px" }}
+                                    sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Chat bot
@@ -161,7 +164,7 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => router.push("/pages/sale")}
-                                    sx={{ py: "6px", px: "12px" }}
+                                    sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Chợ trời
@@ -169,15 +172,31 @@ function Header() {
                                 </MenuItem>
                                 <MenuItem
                                     onClick={() => router.push("/pages/group")}
-                                    sx={{ py: "6px", px: "12px" }}
+                                    sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Hội nhóm
                                     </Typography>
                                 </MenuItem>
                                 <MenuItem
+                                    onClick={() => router.push("/pages/task-management")}
+                                    sx={{py: "6px", px: "12px"}}
+                                >
+                                    <Typography variant="body2" color="text.primary">
+                                        Nhiệm vụ
+                                    </Typography>
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => router.push("/pages/auth/myprofile")}
+                                    sx={{py: "6px", px: "12px"}}
+                                >
+                                    <Typography variant="body2" color="text.primary">
+                                        Tài khoản
+                                    </Typography>
+                                </MenuItem>
+                                <MenuItem
                                     onClick={() => router.push("/pages/quiz")}
-                                    sx={{ py: "6px", px: "12px" }}
+                                    sx={{py: "6px", px: "12px"}}
                                 >
                                     <Typography variant="body2" color="text.primary">
                                         Quiz
@@ -187,7 +206,7 @@ function Header() {
                         </Box>
                         <Box
                             sx={{
-                                display: { xs: "none", md: "flex" },
+                                display: {xs: "none", md: "flex"},
                                 gap: 0.5,
                                 alignItems: "center",
                             }}
@@ -225,15 +244,15 @@ function Header() {
                                 </>
                             )}
                         </Box>
-                        <Box sx={{ display: { sm: "", md: "none" } }}>
+                        <Box sx={{display: {sm: "", md: "none"}}}>
                             <Button
                                 variant="text"
                                 color="primary"
                                 aria-label="menu"
                                 onClick={toggleDrawer(true)}
-                                sx={{ minWidth: "30px", p: "4px" }}
+                                sx={{minWidth: "30px", p: "4px"}}
                             >
-                                <MenuIcon />
+                                <MenuIcon/>
                             </Button>
                             <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
                                 <Box
@@ -267,7 +286,7 @@ function Header() {
                                     <MenuItem onClick={() => scrollToSection("faq")}>
                                         FAQ
                                     </MenuItem>
-                                    <Divider />
+                                    <Divider/>
                                     <MenuItem>
                                         <Button
                                             color="primary"
@@ -275,7 +294,7 @@ function Header() {
                                             component="a"
                                             href="/pages/auth/register"
                                             target="_blank"
-                                            sx={{ width: "100%" }}
+                                            sx={{width: "100%"}}
                                         >
                                             Đăng kí
                                         </Button>
@@ -287,7 +306,7 @@ function Header() {
                                             component="a"
                                             href="/pages/auth/login"
                                             target="_blank"
-                                            sx={{ width: "100%" }}
+                                            sx={{width: "100%"}}
                                         >
                                             Đăng nhập
                                         </Button>

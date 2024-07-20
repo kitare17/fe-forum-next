@@ -20,7 +20,7 @@ const GroupPage = () => {
     const searchName = searchParams.get('groupName') ?? "";
 
 
-    //fetch data
+    {/*fetch data*/}
     const dipatch = useDispatch();
     const {listGroup, maxPage, isLoading, isError} = useSelector((state: RootState) => state.group);
 
@@ -41,8 +41,8 @@ const GroupPage = () => {
         }
     }, [page, searchName])
     useEffect(() => {
-        // if (isLoading)
-        //     toast.info("Đang tải thông tin")
+       { /* if (isLoading)
+            toast.info("Đang tải thông tin")*/}
         if (isError)
             toast.error("lỗi rồi")
     }, [isLoading, isError])
@@ -93,10 +93,12 @@ const GroupPage = () => {
 
 const GroupPageRender = () => {
     return (
-        // You could have a loading skeleton as the `fallback` too
+        <>
+        {/* You could have a loading skeleton as the `fallback` too*/}
         <Suspense>
             <GroupPage/>
         </Suspense>
+        </>
     )
 };
 

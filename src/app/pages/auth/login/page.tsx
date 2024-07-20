@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -30,19 +30,23 @@ const Login = () => {
     (state: RootState) => state.auth
   );
 
-console.log("login lid", user)
+
   useEffect(() => {
-    if(isError){
+    if (isError) {
       toast.error(message);
     }
     // @ts-ignore
-    if(user?.token){
-      console.log("co token"+user)
+    if (user?.token) {
+      if (user.admin === true) {
+        console.log(user);
+        router.push("/pages/admin/dashboard");
+      } else {
+        console.log(user);
       router.push("/");
+      }
+      
     }
-
-  }, [isError,isLoading,user]);
-
+  }, [isError, isLoading, user]);
 
   //submit form login
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +57,7 @@ console.log("login lid", user)
 
     // Ensure the data conforms to LoginInterface
     const userLogin: LoginInterface = { email, password };
-    dispatch(fetchLogin(userLogin))
+    dispatch(fetchLogin(userLogin));
     //     .then((result) => {
     //   console.log("result", result)
     //   if (result?.payload?.code === "AxiosError") {
@@ -65,9 +69,6 @@ console.log("login lid", user)
     //   }
     // });
   };
-
-
-
 
   return (
     <>

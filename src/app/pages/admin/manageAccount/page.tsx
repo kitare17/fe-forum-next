@@ -1,5 +1,5 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import React, {Suspense, useEffect, useState} from "react";
 import {
   Table,
   TableBody,
@@ -17,8 +17,20 @@ import {
   Button,
   TextField,
   InputAdornment,
-  Avatar
+  Avatar,
+  InputBase,
+  Pagination,
+  Tooltip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Box
 } from "@mui/material";
+import Logout from "@mui/icons-material/Logout";
+
+import Grid from "@mui/material/Grid";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import {
   Edit as EditIcon,
   Visibility as ViewIcon,
@@ -26,127 +38,142 @@ import {
   LockOpen as UnlockIcon,
   Search as SearchIcon,
 } from "@mui/icons-material";
-
-interface User {
-  id: number;
-  userName: string;
-  email: string;
-  phone: string;
-  status: string;
-  role: string; // New field for role
-}
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLogout } from "@/app/store/action/auth";
+import { RootState } from "@/app/store";
+import { UserInterface } from "@/app/interface/User";
+import { findUser, showAllUser, updateUserStatus } from "@/app/store/action/dashboard";
+import FormComponentUserProfile from "../../auth/myprofile/component/FormComponentUserProfile";
+import { useForm } from "react-hook-form";
+import { resetInitialState } from "@/app/store/reducer/auth";
 
 const ManageAccount: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: 1,
-      userName: "John Michael",
-      email: "john@creative-tim.com",
-      phone: "123-456-7890",
-      status: "Online",
-      role: "Admin", // Example role
-    },
-    {
-      id: 2,
-      userName: "Alexa Liras",
-      email: "alexa@creative-tim.com",
-      phone: "234-567-8901",
-      status: "Offline",
-      role: "User", // Example role
-    },
-    {
-      id: 3,
-      userName: "Laurent Perrier",
-      email: "laurent@creative-tim.com",
-      phone: "345-678-9012",
-      status: "Online",
-      role: "User", // Example role
-    },
-    {
-      id: 4,
-      userName: "Michael Levi",
-      email: "michael@creative-tim.com",
-      phone: "456-789-0123",
-      status: "Online",
-      role: "Admin", // Example role
-    },
-    {
-      id: 5,
-      userName: "Richard Gran",
-      email: "richard@creative-tim.com",
-      phone: "567-890-1234",
-      status: "Offline",
-      role: "User", // Example role
-    },
-    {
-      id: 6,
-      userName: "Miriam Eric",
-      email: "miriam@creative-tim.com",
-      phone: "678-901-2345",
-      status: "Offline",
-      role: "User", // Example role
-    },
-  ]);
+  const dispatch = useDispatch();
+  const router = useRouter();
 
+  const { listUser, isLoading, isError } = useSelector(
+    (state: RootState) => state.dashboard
+  );
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") ?? 1;
+  const searchUser = searchParams.get('searchUser') ?? "";
+
+  const handleShowUserProfile = () => {
+    // @ts-ignore
+    dispatch(showAllUser({ page: page }));
+  };
+
+  useEffect(() => {
+    handleShowUserProfile();
+  }, [page]);
+
+  const [users, setUsers] = useState<UserInterface[]>();
+  const [openEditPopup, setOpenEditPopup] = useState(false);
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
   const [showViewModal, setShowViewModal] = useState<boolean>(false); // State for view modal
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [userUpdateState, setUserUpdateState] = useState<UserInterface | null>(
+    null
+  );
+  const [idUser, setIdUser] = useState("");
 
-  const handleEdit = (user: User) => {
-    setSelectedUser(user);
-    setShowEditModal(true);
+  const handleEdit = (user: UserInterface) => {
+    setIdUser(user?._id);
+    setUserUpdateState(user);
+    setOpenEditPopup(true);
   };
 
-  const handleCloseEditModal = () => {
-    setShowEditModal(false);
-    setSelectedUser(null);
+  const handleStatusChange = (id: string) => {
+    // @ts-ignore
+    dispatch(updateUserStatus({ userId: id }));
+    // @ts-ignore
+    dispatch(showAllUser({ page: page }));
+  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState,
+    control,
+    trigger,
+    setValue,
+    getValues
+} = useForm<any>(
+    {
+        defaultValues: {
+            "searchUser": searchUser,
+        }
+    }
+)
+
+useEffect(() => {
+
+    if (searchUser) {
+        // @ts-ignore
+        dispatch(findUser({page: page, searchUser: searchUser}));
+    } else {
+        // @ts-ignore
+        dispatch(showAllUser({ page: page }));
+    }
+
+}, [page, searchUser]);
+
+  const handlePaging = (event: any, value: number) => {
+    if (searchUser)
+    router.push(`/pages/admin/manageAccount?page=${value}&searchUser=${searchUser}`);
+    else
+    router.push('/pages/admin/manageAccount');
+  };
+  const handleFindUser = () => {
+    var searchUser = getValues("searchUser")
+    router.push(`/pages/admin/manageAccount?page=1&searchUser=${searchUser}`);
   };
 
-  const handleSaveEdit = () => {
-    // Perform save logic here
-    // For example, update the user information in the state or make an API call
-    // After saving, close the modal
-    setShowEditModal(false);
-    setSelectedUser(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  const handleView = (user: User) => {
-    setSelectedUser(user);
-    setShowViewModal(true);
-  };
-
-  const handleCloseViewModal = () => {
-    setShowViewModal(false);
-    setSelectedUser(null);
-  };
-
-  const handleStatusChange = (id: number) => {
-    const updatedUsers = users.map((user) => {
-      if (user.id === id) {
-        user.status = user.status === "Online" ? "Offline" : "Online";
-      }
-      return user;
-    });
-    setUsers(updatedUsers);
-  };
+  const hanldeLogout = () => {
+    // @ts-ignore
+    dispatch(fetchLogout)
+    console.log("dang xuat")
+    dispatch(resetInitialState());
+    window.localStorage.clear()
+    router.push("/pages/auth/login")
+};
 
   return (
     <>
       <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
-        <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur">
+        <nav
+          className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl"
+          id="navbarBlur"
+        >
           <div className="container-fluid py-1 px-3">
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                 <li className="breadcrumb-item text-sm">
-                  <a className="opacity-5 text-dark" href="javascript:;">Pages</a>
+                  <a className="opacity-5 text-dark" href="javascript:;">
+                    Pages
+                  </a>
                 </li>
-                <li className="breadcrumb-item text-sm text-dark active" aria-current="page">
+                <li
+                  className="breadcrumb-item text-sm text-dark active"
+                  aria-current="page"
+                >
                   Quản lý tài khoản
                 </li>
               </ol>
               <h6 className="font-weight-bolder mb-0">Quản lý tài khoản</h6>
             </nav>
-            <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+            <div
+              className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
+              id="navbar"
+            >
               <div className="ms-md-auto pe-md-3 d-flex align-items-center">
                 <TextField
                   fullWidth
@@ -168,7 +195,76 @@ const ManageAccount: React.FC = () => {
                     aria-haspopup="true"
                     color="inherit"
                   >
-                    <Avatar alt="Admin" src="https://img.icons8.com/?size=24&id=82751&format=png&color=000000" />
+                    <React.Fragment>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Account settings">
+                          <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            sx={{ ml: 2 }}
+                            aria-controls={open ? "account-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? "true" : undefined}
+                          >
+                            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                      <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={open}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                          elevation: 0,
+                          sx: {
+                            overflow: "visible",
+                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                            mt: 1.5,
+                            "& .MuiAvatar-root": {
+                              width: 32,
+                              height: 32,
+                              ml: -0.5,
+                              mr: 1,
+                            },
+                            "&::before": {
+                              content: '""',
+                              display: "block",
+                              position: "absolute",
+                              top: 0,
+                              right: 14,
+                              width: 10,
+                              height: 10,
+                              bgcolor: "background.paper",
+                              transform: "translateY(-50%) rotate(45deg)",
+                              zIndex: 0,
+                            },
+                          },
+                        }}
+                        transformOrigin={{
+                          horizontal: "right",
+                          vertical: "top",
+                        }}
+                        anchorOrigin={{
+                          horizontal: "right",
+                          vertical: "bottom",
+                        }}
+                      >
+                        <MenuItem onClick={hanldeLogout}>
+                          <ListItemIcon>
+                            <Logout fontSize="small" />
+                          </ListItemIcon>
+                          Logout
+                        </MenuItem>
+                      </Menu>
+                    </React.Fragment>
                   </IconButton>
                 </li>
               </ul>
@@ -177,8 +273,33 @@ const ManageAccount: React.FC = () => {
         </nav>
         <div className="container-fluid py-4">
           <Paper className="card mb-4">
-            <div className="card-header pb-4">
+            <div className="card-header pb-4 d-flex justify-content-between">
               <Typography variant="h5">Quản lý tài khoản</Typography>
+              <Paper
+                component="form"
+                sx={{
+                  p: "2px 4px",
+                  display: "flex",
+                  alignItems: "center",
+                  width: 400,
+                }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="Tìm kiếm người dùng"
+                  inputProps={{ "aria-label": "Tìm kiếm người dùng" }}
+                  {...register(
+                      'searchUser'
+                  )}
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="search"
+                >
+                  <SearchIcon onClick={() => handleFindUser()} />
+                </IconButton>
+              </Paper>
             </div>
             <TableContainer>
               <Table>
@@ -186,6 +307,7 @@ const ManageAccount: React.FC = () => {
                   <TableRow>
                     <TableCell>STT</TableCell>
                     <TableCell>Tên người dùng</TableCell>
+                    <TableCell>Họ và tên</TableCell>
                     <TableCell>Email</TableCell>
                     <TableCell>SDT</TableCell>
                     <TableCell>Vai trò</TableCell> {/* New column for Role */}
@@ -194,35 +316,53 @@ const ManageAccount: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map((user, index) => (
-                    <TableRow key={user.id}>
+                  {[...(listUser?.users ?? [])].map((user, index) => (
+                    <TableRow key={user._id}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
-                        <Typography variant="body2">{user.userName}</Typography>
+                        <Typography variant="body2">
+                          {user?.username}
+                        </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{user.email}</Typography>
+                        <Typography variant="body2">
+                          {user?.fullname}
+                        </Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{user.phone}</Typography>
+                        <Typography variant="body2">{user?.email}</Typography>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{user.role}</Typography> {/* Display Role */}
+                        <Typography variant="body2">{user?.phone}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2">
+                          {user?.admin === false
+                            ? "Người dùng"
+                            : "Quản trị viên"}
+                        </Typography>
+                        {/* Display Role */}
                       </TableCell>
                       <TableCell align="center">
                         <IconButton onClick={() => handleEdit(user)}>
                           <EditIcon />
                         </IconButton>
-                        <IconButton onClick={() => handleView(user)}>
+                        {/* <IconButton onClick={() => handleView(user)}>
                           <ViewIcon />
-                        </IconButton>
+                        </IconButton> */}
                       </TableCell>
                       <TableCell align="center">
                         <IconButton
-                          onClick={() => handleStatusChange(user.id)}
-                          color={user.status === "Online" ? "primary" : "secondary"}
+                          onClick={() => handleStatusChange(user._id)}
+                          color={
+                            user?.status === true ? "primary" : "error"
+                          }
                         >
-                          {user.status === "Online" ? <UnlockIcon /> : <LockIcon />}
+                          {user?.status === true ? (
+                            <UnlockIcon />
+                          ) : (
+                            <LockIcon />
+                          )}
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -234,110 +374,54 @@ const ManageAccount: React.FC = () => {
         </div>
 
         {/* View Modal */}
-        <Dialog open={showViewModal} onClose={handleCloseViewModal}>
-          <DialogTitle>Xem chi tiết tài khoản</DialogTitle>
-          <DialogContent>
-            {selectedUser && (
-              <div>
-                <Typography variant="body2">
-                  <strong>Tên người dùng:</strong> {selectedUser.userName}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Email:</strong> {selectedUser.email}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>SDT:</strong> {selectedUser.phone}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Vai trò:</strong> {selectedUser.role}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Trạng thái:</strong> {selectedUser.status}
-                </Typography>
-              </div>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseViewModal} color="primary">
-              Đóng
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <FormComponentUserProfile
+          // @ts-ignore
+          changeProfile={userUpdateState}
+          idUser={idUser}
+          openEditPopup={openEditPopup}
+          handleShowUserProfile={handleShowUserProfile}
+          setopenEditPopup={setOpenEditPopup}
+        />
 
-        {/* Edit Modal */}
-        <Dialog open={showEditModal} onClose={handleCloseEditModal}>
-          <DialogTitle>Chỉnh sửa người dùng</DialogTitle>
-          <DialogContent>
-            {selectedUser && (
-              <div>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  label="User Name"
-                  type="text"
-                  fullWidth
-                  value={selectedUser.userName}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...selectedUser,
-                      userName: e.target.value,
-                    })
-                  }
-                />
-                <TextField
-                  margin="dense"
-                  label="Email"
-                  type="email"
-                  fullWidth
-                  value={selectedUser.email}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...selectedUser,
-                      email: e.target.value,
-                    })
-                  }
-                />
-                <TextField
-                  margin="dense"
-                  label="Phone"
-                  type="text"
-                  fullWidth
-                  value={selectedUser.phone}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...selectedUser,
-                      phone: e.target.value,
-                    })
-                  }
-                />
-                <TextField
-                  margin="dense"
-                  label="Role"
-                  type="text"
-                  fullWidth
-                  value={selectedUser.role}
-                  onChange={(e) =>
-                    setSelectedUser({
-                      ...selectedUser,
-                      role: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseEditModal} color="primary">
-              Đóng
-            </Button>
-            <Button onClick={handleSaveEdit} color="primary">
-              Lưu thay đổi
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <Grid
+          container
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+          mb={5}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Pagination
+              onChange={handlePaging}
+              count={listUser?.maxPage}
+              defaultPage={1}
+              siblingCount={1}
+              page={Number(page) ?? 1}
+              size="large"
+              showLastButton
+              showFirstButton
+            />
+          </Grid>
+        </Grid>
       </main>
     </>
   );
 };
 
-export default ManageAccount;
+const ManageAccountRender = () => {
+  return (
+      // You could have a loading skeleton as the `fallback` too
+      <Suspense>
+        <ManageAccount/>
+      </Suspense>
+  )
+};
+export default ManageAccountRender;

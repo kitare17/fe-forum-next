@@ -1,49 +1,34 @@
 "use client"
-import React, {useState, useEffect, Suspense} from "react";
+import React, {Suspense, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {
-    acceptReportComment,
-    findBlog,
-    getAllReport,
-    showAllBlog,
-    showReportFollowStatus
-} from "@/app/store/action/dashboard";
+import {getAllReport, showReportFollowStatus} from "@/app/store/action/dashboard";
 import BuildIcon from '@mui/icons-material/Build';
 import {
+    Box,
+    Button,
+    IconButton,
+    ListItemIcon,
+    MenuItem,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
-    IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Typography,
-    Button,
-    TextField,
-    InputAdornment,
-    Avatar
+    Tooltip,
+    Typography, 
+    Menu, Avatar
 } from "@mui/material";
-import {
-    Edit as EditIcon,
-    Visibility as ViewIcon,
-    Lock as LockIcon,
-    LockOpen as UnlockIcon,
-    Search as SearchIcon
-} from "@mui/icons-material";
+import {Visibility as ViewIcon} from "@mui/icons-material";
+import Logout from "@mui/icons-material/Logout";
+import { fetchLogout } from "@/app/store/action/auth";
 import {RootState} from "@/app/store";
-import {BlogInterface} from "@/app/interface/Blog";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import Pagination from "@mui/material/Pagination";
 import {useRouter, useSearchParams} from "next/navigation";
-import InputBase from "@mui/material/InputBase";
 import {useForm} from "react-hook-form";
-import ModalEditStatusPost from "@/app/pages/admin/managePost/component/ModalEditStatusPost";
 import ModalEditReport from "@/app/pages/admin/manageReportPost/component/ModalEditReport";
 import {ReportBlogInterface} from "@/app/interface/ReportBlog";
 import Image from "next/image";
@@ -52,6 +37,8 @@ import {
     setStateShowIllegalReport,
     setStateShowPendingReport
 } from "@/app/store/reducer/dashboard";
+import { resetInitialState } from "@/app/store/reducer/auth";
+
 
 
 const ManagePost: React.FC = () => {
@@ -184,6 +171,25 @@ const ManagePost: React.FC = () => {
 
     }
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openlogout = Boolean(anchorEl);
+    const handleClick = (event: any) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+  
+    const hanldeLogout = () => {
+      // @ts-ignore
+      dispatch(fetchLogout)
+      console.log("dang xuat")
+      dispatch(resetInitialState());
+      window.localStorage.clear()
+      router.push("/pages/auth/login")
+  };
+  
+
     return (
         <>
             <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg p-2 mb-3">
@@ -201,10 +207,90 @@ const ManagePost: React.FC = () => {
                             </ol>
 
                         </nav>
-                        <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+                        <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar"></div>
+                        <ul className="navbar-nav justify-content-end">
+                <li className="nav-item d-flex align-items-center">
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    color="inherit"
+                  >               
+                    <React.Fragment>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Tooltip title="Account settings">
+                          <IconButton
+                            onClick={handleClick}
+                            size="small"
+                            sx={{ ml: 2 }}
+                            aria-controls={openlogout ? "account-menu" : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={openlogout ? "true" : undefined}
+                          >
+                            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                      <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={openlogout}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                          elevation: 0,
+                          sx: {
+                            overflow: "visible",
+                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                            mt: 1.5,
+                            "& .MuiAvatar-root": {
+                              width: 32,
+                              height: 32,
+                              ml: -0.5,
+                              mr: 1,
+                            },
+                            "&::before": {
+                              content: '""',
+                              display: "block",
+                              position: "absolute",
+                              top: 0,
+                              right: 14,
+                              width: 10,
+                              height: 10,
+                              bgcolor: "background.paper",
+                              transform: "translateY(-50%) rotate(45deg)",
+                              zIndex: 0,
+                            },
+                          },
+                        }}
+                        transformOrigin={{
+                          horizontal: "right",
+                          vertical: "top",
+                        }}
+                        anchorOrigin={{
+                          horizontal: "right",
+                          vertical: "bottom",
+                        }}
+                      >
+                        <MenuItem onClick={hanldeLogout}>
+                          <ListItemIcon>
+                            <Logout fontSize="small" />
+                          </ListItemIcon>
+                          Logout
+                        </MenuItem>
+                      </Menu>
+                    </React.Fragment>
+                  </IconButton>
+                </li>
+              </ul>
 
-
-                        </div>
+                        
                     </div>
                 </nav>
 

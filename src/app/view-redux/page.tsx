@@ -40,14 +40,14 @@ const View = () => {
             <button onClick={handleClick}>Click me</button>
             {isLoading && <CircularProgress />}
             <ul>
-                {listUser.map((user:UserInterface) => {
+                {/* {listUser.map((user:UserInterface) => {
                     return (
                         <li key={user.id}>
                             {user.id} {user.title}
                         </li>
                     )
                 })
-                }
+                } */}
             </ul>
 
         </div>

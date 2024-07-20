@@ -25,7 +25,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { updateTodoList } from "@/app/store/action/todoList";
 
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -70,15 +69,6 @@ const FormComponentTodoList = ({
     getValues,
   } = useForm({
     defaultValues: {
-      //  _id: "",
-      // title: "",
-      // detail: "",
-      // startDate: "",
-      // endDate: "",
-      // label: "",
-      // status: "",
-      // prioritize: "",
-
       title: changeTodoList?.title,
       detail: changeTodoList?.detail,
       startDate: changeTodoList?.startDate,
@@ -97,8 +87,6 @@ const FormComponentTodoList = ({
     setValue("status", changeTodoList?.status);
     setValue("prioritize", changeTodoList?.prioritize);
   }, [changeTodoList]);
-
-  console.log("todilist page", changeTodoList);
 
   const { errors } = formState;
 
@@ -121,13 +109,11 @@ const FormComponentTodoList = ({
       } else {
         toast.success("Chỉnh sửa nhiệm vụ thành công");
       }
-    }
-  );
+    });
 
     setOpenUpdateTodoList(false);
   };
 
-  
   useEffect(() => {
     handleShowTodoList();
   }, [openUpdateTodoList]);
@@ -143,13 +129,9 @@ const FormComponentTodoList = ({
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Thêm Nhiệm Vụ Mới
+            Chỉnh sửa nhiệm vụ
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleEditTodoList}
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" onSubmit={handleEditTodoList} sx={{ mt: 1 }}>
             <Box sx={styleInput}>
               <TextField
                 margin="normal"
@@ -167,7 +149,7 @@ const FormComponentTodoList = ({
                 helperText={errors.title?.message}
                 // onChange={handleOnchangeTitle}
               />
-              <FormControl fullWidth sx={{ mt: 2 }} error={!!errors.label}>
+              <FormControl required fullWidth sx={{ mt: 2 }} error={!!errors.label}>
                 <InputLabel id="demo-simple-select-label">Nhãn</InputLabel>
                 <Controller
                   name="label"
@@ -191,55 +173,59 @@ const FormComponentTodoList = ({
             </Box>
 
             <Box sx={styleInput}>
-            <FormControl fullWidth sx={{ mt: 1 }} error={!!errors.prioritize}>
-      <InputLabel id="demo-simple-select-label">Ưu tiên</InputLabel>
-      <Controller
-        name="prioritize"
-        control={control}
-        defaultValue=""
-        rules={{ required: "Phải chọn độ ưu tiên" }}
-        render={({ field }) => (
-          <Select
-            labelId="demo-simple-select-label"
-            id="prioritize"
-            label="Độ ưu tiên"
-            style={{ marginRight: "15px" }}
-            {...field}
-          >
-            <MenuItem value={"Rất quan trọng"}>Rất quan trọng</MenuItem>
-            <MenuItem value={"Quan trọng"}>Quan trọng</MenuItem>
-            <MenuItem value={"Bình thường"}>Bình thường</MenuItem>
-          </Select>
-        )}
-      />
-    </FormControl>
+              <FormControl required fullWidth sx={{ mt: 1 }} error={!!errors.prioritize}>
+                <InputLabel id="demo-simple-select-label">Ưu tiên</InputLabel>
+                <Controller
+                  name="prioritize"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "Phải chọn độ ưu tiên" }}
+                  render={({ field }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="prioritize"
+                      label="Độ ưu tiên"
+                      style={{ marginRight: "15px" }}
+                      {...field}
+                    >
+                      <MenuItem value={"Rất quan trọng"}>
+                        Rất quan trọng
+                      </MenuItem>
+                      <MenuItem value={"Quan trọng"}>Quan trọng</MenuItem>
+                      <MenuItem value={"Bình thường"}>Bình thường</MenuItem>
+                    </Select>
+                  )}
+                />
+              </FormControl>
 
-    <FormControl fullWidth sx={{ mt: 1 }} error={!!errors.status}>
-        <InputLabel id="demo-simple-select-label">Trạng thái</InputLabel>
-        <Controller
-          name="status"
-          control={control}
-          defaultValue=""
-          rules={{ required: "Phải chọn trạng thái" }}
-          render={({ field }) => (
-            <Select
-              labelId="demo-simple-select-label"
-              id="status"
-              label="Trạng thái"
-              {...field}
-            >
-              <MenuItem value={"Nhiệm vụ"}>Nhiệm vụ</MenuItem>
-              <MenuItem value={"Đang làm"}>Đang làm</MenuItem>
-              <MenuItem value={"Đã xong"}>Đã xong</MenuItem>
-              <MenuItem value={"Hủy"}>Hủy</MenuItem>
-            </Select>
-          )}
-        />
-      </FormControl>
+              <FormControl required fullWidth sx={{ mt: 1 }} error={!!errors.status}>
+                <InputLabel id="demo-simple-select-label">
+                  Trạng thái
+                </InputLabel>
+                <Controller
+                  name="status"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "Phải chọn trạng thái" }}
+                  render={({ field }) => (
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="status"
+                      label="Trạng thái"
+                      {...field}
+                    >
+                      <MenuItem value={"Nhiệm vụ"}>Nhiệm vụ</MenuItem>
+                      <MenuItem value={"Đang làm"}>Đang làm</MenuItem>
+                      <MenuItem value={"Đã xong"}>Đã xong</MenuItem>
+                      <MenuItem value={"Hủy"}>Hủy</MenuItem>
+                    </Select>
+                  )}
+                />
+              </FormControl>
             </Box>
             <TextField
               margin="normal"
-              sx={{marginBottom: "20px"}}
+              sx={{ marginBottom: "20px" }}
               required
               fullWidth
               id="detail"
@@ -253,93 +239,65 @@ const FormComponentTodoList = ({
               autoFocus
             />
 
-
-<Box sx={{display: "flex"}}>
-      <Box sx={{marginRight: "180px"}}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Controller        
-          name="startDate"
-          control={control}
-          rules={{ required: "Phải chọn ngày bắt đầu" }}
-          render={({ field: { onChange, value, ...rest } }) => (
-            <DatePicker
-              label="Ngày bắt đầu"
-              value={value ? dayjs(value) : null} // Convert to dayjs object
-              onChange={(newValue) => onChange(newValue)} // Handle onChange
-               // @ts-ignore
-              renderInput={(params: any) => (
-                <TextField
-                  {...params}
-                  error={!!errors.startDate}
-                  helperText={errors.startDate ? errors.startDate.message : null}
-                  sx={{width: "190%" }} // Adjust spacing here
-                />
-              )}
-              {...rest}
-            />
-          )}
-        />
-      </LocalizationProvider>
-      </Box>
-
-    <Box>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Controller
-          name="endDate"
-          control={control}
-          rules={{ required: "Phải chọn ngày kết thúc" }}
-          render={({ field: { onChange, value, ...rest } }) => (
-            <DatePicker
-              label="Ngày kết thúc"
-              value={value ? dayjs(value) : null} // Convert to dayjs object
-              onChange={(newValue) => onChange(newValue)} // Handle onChange
- // @ts-ignore
-              renderInput={(params: any) => (
-                <TextField
-                  {...params}
-                  error={!!errors.endDate}
-                  helperText={errors.endDate ? errors.endDate.message : null}
-                  sx={{ mt: 4, width: '100%' }} // Adjust spacing here
-                />
-              )}
-              {...rest}
-            />
-          )}
-        />
-      </LocalizationProvider>
-    </Box>
-
-    </Box>
-
-
-
-
-            {/* <Box sx={styleInput}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  sx={{ pr: "130px" }}
-                  components={["DatePicker", "DatePicker"]}
-                >
-                  <DatePicker
-                    label="Ngày bắt đầu"
-                    // value={startDate}
-                    // onChange={(newValue) => setStartDate(newValue)}
+            <Box sx={{ display: "flex" }}>
+              <Box sx={{ marginRight: "180px" }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Controller
+                    name="startDate"
+                    control={control}
+                    rules={{ required: "Phải chọn ngày bắt đầu" }}
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <DatePicker
+                        label="Ngày bắt đầu"
+                        value={value ? dayjs(value) : null} // Convert to dayjs object
+                        onChange={(newValue) => onChange(newValue)} // Handle onChange
+                        // @ts-ignore
+                        renderInput={(params: any) => (
+                          <TextField
+                            {...params}
+                            error={!!errors.startDate}
+                            helperText={
+                              errors.startDate ? errors.startDate.message : null
+                            }
+                            sx={{ width: "190%" }} // Adjust spacing here
+                          />
+                        )}
+                        {...rest}
+                      />
+                    )}
                   />
-                </DemoContainer>
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer
-                  sx={{}}
-                  components={["DatePicker", "DatePicker"]}
-                >
-                  <DatePicker
-                    label="Ngày kết thúc"
-                    // value={endDate}
-                    // onChange={(newValue) => setEndDate(newValue)}
+                </LocalizationProvider>
+              </Box>
+
+              <Box>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Controller
+                    name="endDate"
+                    control={control}
+                    rules={{ required: "Phải chọn ngày kết thúc" }}
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <DatePicker
+                        label="Ngày kết thúc"
+                        value={value ? dayjs(value) : null} // Convert to dayjs object
+                        onChange={(newValue) => onChange(newValue)} // Handle onChange
+                        // @ts-ignore
+                        renderInput={(params: any) => (
+                          <TextField
+                            {...params}
+                            error={!!errors.endDate}
+                            helperText={
+                              errors.endDate ? errors.endDate.message : null
+                            }
+                            sx={{ mt: 4, width: "100%" }} // Adjust spacing here
+                          />
+                        )}
+                        {...rest}
+                      />
+                    )}
                   />
-                </DemoContainer>
-              </LocalizationProvider>
-            </Box> */}
+                </LocalizationProvider>
+              </Box>
+            </Box>
             <Button
               type="submit"
               fullWidth
