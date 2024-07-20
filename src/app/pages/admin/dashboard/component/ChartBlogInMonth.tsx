@@ -1,3 +1,4 @@
+"use client"
 import React, {useEffect} from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import {getXDaysAgoDate} from "@/app/constant/Fomart";

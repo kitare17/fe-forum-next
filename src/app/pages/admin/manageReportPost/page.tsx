@@ -209,88 +209,83 @@ const ManagePost: React.FC = () => {
                         </nav>
                         <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar"></div>
                         <ul className="navbar-nav justify-content-end">
-                <li className="nav-item d-flex align-items-center">
-                  <IconButton
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    color="inherit"
-                  >               
-                    <React.Fragment>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          textAlign: "center",
-                        }}
-                      >
-                        <Tooltip title="Account settings">
-                          <IconButton
-                            onClick={handleClick}
-                            size="small"
-                            sx={{ ml: 2 }}
-                            aria-controls={openlogout ? "account-menu" : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={openlogout ? "true" : undefined}
-                          >
-                            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                      <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={openlogout}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                          elevation: 0,
-                          sx: {
-                            overflow: "visible",
-                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                            mt: 1.5,
-                            "& .MuiAvatar-root": {
-                              width: 32,
-                              height: 32,
-                              ml: -0.5,
-                              mr: 1,
-                            },
-                            "&::before": {
-                              content: '""',
-                              display: "block",
-                              position: "absolute",
-                              top: 0,
-                              right: 14,
-                              width: 10,
-                              height: 10,
-                              bgcolor: "background.paper",
-                              transform: "translateY(-50%) rotate(45deg)",
-                              zIndex: 0,
-                            },
-                          },
-                        }}
-                        transformOrigin={{
-                          horizontal: "right",
-                          vertical: "top",
-                        }}
-                        anchorOrigin={{
-                          horizontal: "right",
-                          vertical: "bottom",
-                        }}
-                      >
-                        <MenuItem onClick={hanldeLogout}>
-                          <ListItemIcon>
-                            <Logout fontSize="small" />
-                          </ListItemIcon>
-                          Logout
-                        </MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  </IconButton>
-                </li>
-              </ul>
+                            <li className="nav-item d-flex align-items-center">
 
-                        
+
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    <Tooltip title="Account settings">
+                                        <IconButton
+                                            onClick={handleClick}
+                                            size="small"
+                                            sx={{ml: 2}}
+                                            aria-controls={open ? "account-menu" : undefined}
+                                            aria-haspopup="true"
+                                            aria-expanded={open ? "true" : undefined}
+                                        >
+                                            <Avatar sx={{width: 32, height: 32}}>A</Avatar>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    id="account-menu"
+                                    open={open}
+                                    onClose={handleClose}
+                                    onClick={handleClose}
+                                    PaperProps={{
+                                        elevation: 0,
+                                        sx: {
+                                            overflow: "visible",
+                                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                                            mt: 1.5,
+                                            "& .MuiAvatar-root": {
+                                                width: 32,
+                                                height: 32,
+                                                ml: -0.5,
+                                                mr: 1,
+                                            },
+                                            "&::before": {
+                                                content: '""',
+                                                display: "block",
+                                                position: "absolute",
+                                                top: 0,
+                                                right: 14,
+                                                width: 10,
+                                                height: 10,
+                                                bgcolor: "background.paper",
+                                                transform: "translateY(-50%) rotate(45deg)",
+                                                zIndex: 0,
+                                            },
+                                        },
+                                    }}
+                                    transformOrigin={{
+                                        horizontal: "right",
+                                        vertical: "top",
+                                    }}
+                                    anchorOrigin={{
+                                        horizontal: "right",
+                                        vertical: "bottom",
+                                    }}
+                                >
+                                    <MenuItem onClick={hanldeLogout}>
+                                        <ListItemIcon>
+                                            <Logout fontSize="small"/>
+                                        </ListItemIcon>
+                                        Logout
+                                    </MenuItem>
+                                </Menu>
+
+
+                            </li>
+                        </ul>
+
+
                     </div>
                 </nav>
 
