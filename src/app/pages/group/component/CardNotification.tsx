@@ -33,7 +33,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
-export default function CardNotification({title,detail}:{title:string,detail:string}) {
+export default function CardNotification({title,date,detail}:{title:string,detail:string,date:string}) {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -54,7 +54,7 @@ export default function CardNotification({title,detail}:{title:string,detail:str
                     </IconButton>
                 }
                 title="Trưởng nhóm"
-                subheader={createDayToString("5/5/2012")}
+                subheader={createDayToString(date)}
             />
 
             <CardContent>

@@ -123,24 +123,44 @@ const FormCreateWork = (
             "assignee": assignId,
             "groupId": groupDetail?._id
         }
-        // @ts-ignore
-        dipatch(createTaskGroup(
-            {
-                title: work.title,
-                detail:work.detail,
-                startDay: work.startDay,
-                endDay: work.endDay,
-                level: work.level,
-                assignee: work.assignee,
-                groupId: work.groupId
-            }
-        ))
 
-        reset();
-        handleClickCloseForm();
+
+        let startDay = new Date(work.startDay);
+        let endDay = new Date(work.endDay);
+        if(startDay>=endDay){
+            toast.error("Ngày bắt đầu phải trước ngày kết thúc")
+        }
+        else{
+            // @ts-ignore
+            dipatch(createTaskGroup(
+                {
+                    title: work.title,
+                    detail:work.detail,
+                    startDay: work.startDay,
+                    endDay: work.endDay,
+                    level: work.level,
+                    assignee: work.assignee,
+                    groupId: work.groupId
+                }
+            ))
+
+            reset();
+            handleClickCloseForm();
+        }
+
 
     }
 
+    const getToday = () => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0 nên cần +1
+        const dd = String(today.getDate()).padStart(2, '0');
+        const hh = String(today.getHours()).padStart(2, '0');
+        const min = String(today.getMinutes()).padStart(2, '0');
+
+        return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    };
     return (
         <React.Fragment>
 
@@ -233,6 +253,9 @@ const FormCreateWork = (
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
+                                    inputProps={{
+                                        min: getToday()
+                                    }}
                                     error={!!errors.startDay}
                                     helperText={(errors.startDay?.message ?? "").toString()}
                                 />
@@ -253,6 +276,9 @@ const FormCreateWork = (
                                     )}
                                     InputLabelProps={{
                                         shrink: true,
+                                    }}
+                                    inputProps={{
+                                        min: getToday()
                                     }}
                                     error={!!errors.endDay}
                                     helperText={(errors.endDay?.message ?? "").toString()}
