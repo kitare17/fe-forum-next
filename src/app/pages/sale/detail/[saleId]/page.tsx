@@ -119,7 +119,7 @@ const SaleDetail = () => {
                                         : {saleDetail?.brand}</div>
                                     <hr/>
                                     <h4>Mô tả chi tiết</h4>
-                                    <p>{saleDetail?.title}
+                                    <p>{saleDetail?.detail}
                                     </p>
                                 </div>
                             </div>
