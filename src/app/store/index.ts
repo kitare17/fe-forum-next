@@ -9,6 +9,8 @@ import topic from "@/app/store/reducer/topic";
 import group from "@/app/store/reducer/group";
 import sale from "@/app/store/reducer/sale";
 import wishlistReducer from '@/app/store/reducer/wishlistSlice';
+import quiz from "@/app/store/reducer/quiz";
+import test from "@/app/store/reducer/test";
 import todoList from './reducer/todoList'
 import dashboard from './reducer/dashboard'
 
@@ -22,6 +24,8 @@ export const index =
                 auth: auth,
                 group: group,
                 sale: sale,
+                quiz:  quiz,
+                test: test,
                 wishlist: wishlistReducer,
                 task: task,
                 todoList: todoList,

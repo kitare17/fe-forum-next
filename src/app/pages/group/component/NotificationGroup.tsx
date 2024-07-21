@@ -73,7 +73,7 @@ const NotificationGroup = (
 
             {listNotification.map((notification, index) => {
                 return (
-                    <CardNotification title={notification.title} detail={notification.detail} key={index}/>
+                    <CardNotification date={notification.createdAt} title={notification.title} detail={notification.detail} key={index}/>
                 )
             })}
             <Grid container

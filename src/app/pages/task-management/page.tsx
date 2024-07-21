@@ -99,18 +99,22 @@ const TaskManagement = () => {
       userId: user?.userEmailId,
       todoList: [],
     };
-    await dispatch(createTask(newTask)).then((result: any) => {
-      // @ts-ignore
-      if (result?.payload?.error) {
-        toast.error("Tạo nhiệm vụ không thành công");
-        handleCloseAddTask();
-        handleShowTask();
-      } else {
-        toast.success("Tạo nhiệm vụ thành công");
-        handleCloseAddTask();
-        handleShowTask();
-      }
-    });
+    if(mission === ""){
+      toast.error("Phải điền nhiệm vụ")
+    }else{
+      await dispatch(createTask(newTask)).then((result: any) => {
+        // @ts-ignore
+        if (result?.payload?.error) {
+          toast.error("Tạo nhiệm vụ không thành công");
+          handleCloseAddTask();
+          handleShowTask();
+        } else {
+          toast.success("Tạo nhiệm vụ thành công");
+          handleCloseAddTask();
+          handleShowTask();
+        }
+      });
+    }
   };
 
   // Modal update task

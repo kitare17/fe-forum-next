@@ -40,11 +40,11 @@ function Header() {
     const [open, setOpen] = React.useState(false);
 
 
-    const [authLoginString,setAuthLoginString] = useState("");
+    const [authLoginString, setAuthLoginString] = useState("");
 
     useEffect(() => {
         // @ts-ignore
-        const authnRes:string=window.localStorage.getItem("authnRes")
+        const authnRes: string = window.localStorage.getItem("authnRes")
         setAuthLoginString(authnRes);
     }, []);
     const authLogin = authLoginString ? JSON.parse(authLoginString) : null;
@@ -194,6 +194,14 @@ function Header() {
                                         Tài khoản
                                     </Typography>
                                 </MenuItem>
+                                <MenuItem
+                                    onClick={() => router.push("/pages/quiz")}
+                                    sx={{py: "6px", px: "12px"}}
+                                >
+                                    <Typography variant="body2" color="text.primary">
+                                        Quiz
+                                    </Typography>
+                                </MenuItem>
                             </Box>
                         </Box>
                         <Box
@@ -232,6 +240,7 @@ function Header() {
                                             Đăng kí
                                         </Button>
                                     </Link>
+
                                 </>
                             )}
                         </Box>

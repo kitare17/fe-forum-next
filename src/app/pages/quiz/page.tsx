@@ -1,9 +1,14 @@
 "use client"
-const Quiz=()=>{
-    return(
+import DeckComponent from "./component/DeckComponent";
+
+
+const Quiz = () => {
+
+    return (
         <>
-            <p className="text-danger">hello</p>
+            <DeckComponent />
         </>
     )
 }
 export default Quiz;
+

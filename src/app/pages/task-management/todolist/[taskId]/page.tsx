@@ -15,7 +15,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import ReportIcon from '@mui/icons-material/Report';
+import ReportIcon from "@mui/icons-material/Report";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -143,12 +143,17 @@ const ToDoList = () => {
       userId: "nn",
       idTaskManagement: "nn",
     };
-
+    let startDay = formattedStartDate;
+    let endDay = formattedEndDate;
     if (
       formattedEndDate === "Invalid Date" ||
       formattedStartDate === "Invalid Date"
     ) {
       toast.error("Phải nhập ngày");
+      handleCloseAddWork();
+    } else if (startDay > endDay) {
+      handleCloseAddWork();
+      toast.error("Ngày bắt đầu phải trước ngày kết thúc");
     } else {
       dispatch(
         createTodoList({ newTodoList: newTodoList, idTaskManagement: taskId })
@@ -305,17 +310,15 @@ const ToDoList = () => {
                           />{" "}
                         </button>
 
-                                                 
-                          {new Date(lmission.endDate ?? "") < new Date() ? (
-                            <Tooltip title="Task quá thời hạn">
-                              <IconButton>
-                                <ReportIcon style={{ color: "red" }} />
-                              </IconButton>
-                            </Tooltip>
-                          ) : (
-                            <></>
-                          )}
-                        
+                        {new Date(lmission.endDate ?? "") < new Date() ? (
+                          <Tooltip title="Task quá thời hạn">
+                            <IconButton>
+                              <ReportIcon style={{ color: "red" }} />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -345,7 +348,7 @@ const ToDoList = () => {
                     <div className="card mt-4 mb-4 mx-auto w-75">
                       <div className="card-body">
                         <h5 className="card-title">{ltodo.title}</h5>
-                        <span className="badge bg-success mb-2">Học tập</span>
+                        <span className="badge bg-success mb-2">{ltodo.label}</span>
                         <span className="badge bg-warning text-dark mb-2 ml-2">
                           {ltodo.prioritize}
                         </span>
@@ -409,17 +412,15 @@ const ToDoList = () => {
                           />{" "}
                         </button>
 
-                      
-                          {new Date(ltodo.endDate ?? "") < new Date() ? (
-                            <Tooltip title="Task quá thời hạn">
-                              <IconButton>
-                                <ReportIcon style={{ color: "red" }} />
-                              </IconButton>
-                            </Tooltip>
-                          ) : (
-                            <></>
-                          )}
-                      
+                        {new Date(ltodo.endDate ?? "") < new Date() ? (
+                          <Tooltip title="Task quá thời hạn">
+                            <IconButton>
+                              <ReportIcon style={{ color: "red" }} />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -510,7 +511,6 @@ const ToDoList = () => {
                             alt="Picture of the author"
                           />{" "}
                         </button>
-                        
                       </div>
                     </div>
                   </div>
@@ -634,7 +634,6 @@ const ToDoList = () => {
                   label="Tên nhiệm vụ"
                   name="title"
                   type="title"
-                  autoFocus
                   onChange={handleOnchangeTitle}
                 />
                 <FormControl required fullWidth sx={{ mt: 2 }}>
@@ -696,17 +695,15 @@ const ToDoList = () => {
                 label="Mô tả"
                 name="detail"
                 type="detail"
-                autoFocus
                 onChange={handleOnChangeDetail}
               />
-              <Box sx={styleInput} >
+              <Box sx={styleInput}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
                     sx={{ pr: "220px" }}
                     components={["DatePicker", "DatePicker"]}
                   >
                     <DatePicker
-                    
                       label="Ngày bắt đầu"
                       value={startDate}
                       // @ts-ignore
@@ -714,11 +711,9 @@ const ToDoList = () => {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
-                
+
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer
-                  components={["DatePicker", "DatePicker"]}
-                  >
+                  <DemoContainer components={["DatePicker", "DatePicker"]}>
                     <DatePicker
                       label="Ngày kết thúc"
                       value={endDate}

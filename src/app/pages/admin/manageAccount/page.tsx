@@ -171,101 +171,96 @@ useEffect(() => {
               <h6 className="font-weight-bolder mb-0">Quản lý tài khoản</h6>
             </nav>
             <div
-              className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
-              id="navbar"
+                className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4"
+                id="navbar"
             >
               <div className="ms-md-auto pe-md-3 d-flex align-items-center">
                 <TextField
-                  fullWidth
-                  placeholder="Type here..."
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
+                    fullWidth
+                    placeholder="Type here..."
+                    InputProps={{
+                      startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon/>
+                          </InputAdornment>
+                      ),
+                    }}
                 />
               </div>
               <ul className="navbar-nav justify-content-end">
                 <li className="nav-item d-flex align-items-center">
-                  <IconButton
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    color="inherit"
+
+
+                  <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "center",
+                      }}
                   >
-                    <React.Fragment>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          textAlign: "center",
-                        }}
+                    <Tooltip title="Account settings">
+                      <IconButton
+                          onClick={handleClick}
+                          size="small"
+                          sx={{ml: 2}}
+                          aria-controls={open ? "account-menu" : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={open ? "true" : undefined}
                       >
-                        <Tooltip title="Account settings">
-                          <IconButton
-                            onClick={handleClick}
-                            size="small"
-                            sx={{ ml: 2 }}
-                            aria-controls={open ? "account-menu" : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? "true" : undefined}
-                          >
-                            <Avatar sx={{ width: 32, height: 32 }}>A</Avatar>
-                          </IconButton>
-                        </Tooltip>
-                      </Box>
-                      <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={open}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                          elevation: 0,
-                          sx: {
-                            overflow: "visible",
-                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                            mt: 1.5,
-                            "& .MuiAvatar-root": {
-                              width: 32,
-                              height: 32,
-                              ml: -0.5,
-                              mr: 1,
-                            },
-                            "&::before": {
-                              content: '""',
-                              display: "block",
-                              position: "absolute",
-                              top: 0,
-                              right: 14,
-                              width: 10,
-                              height: 10,
-                              bgcolor: "background.paper",
-                              transform: "translateY(-50%) rotate(45deg)",
-                              zIndex: 0,
-                            },
+                        <Avatar sx={{width: 32, height: 32}}>A</Avatar>
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+                  <Menu
+                      anchorEl={anchorEl}
+                      id="account-menu"
+                      open={open}
+                      onClose={handleClose}
+                      onClick={handleClose}
+                      PaperProps={{
+                        elevation: 0,
+                        sx: {
+                          overflow: "visible",
+                          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                          mt: 1.5,
+                          "& .MuiAvatar-root": {
+                            width: 32,
+                            height: 32,
+                            ml: -0.5,
+                            mr: 1,
                           },
-                        }}
-                        transformOrigin={{
-                          horizontal: "right",
-                          vertical: "top",
-                        }}
-                        anchorOrigin={{
-                          horizontal: "right",
-                          vertical: "bottom",
-                        }}
-                      >
-                        <MenuItem onClick={hanldeLogout}>
-                          <ListItemIcon>
-                            <Logout fontSize="small" />
-                          </ListItemIcon>
-                          Logout
-                        </MenuItem>
-                      </Menu>
-                    </React.Fragment>
-                  </IconButton>
+                          "&::before": {
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            top: 0,
+                            right: 14,
+                            width: 10,
+                            height: 10,
+                            bgcolor: "background.paper",
+                            transform: "translateY(-50%) rotate(45deg)",
+                            zIndex: 0,
+                          },
+                        },
+                      }}
+                      transformOrigin={{
+                        horizontal: "right",
+                        vertical: "top",
+                      }}
+                      anchorOrigin={{
+                        horizontal: "right",
+                        vertical: "bottom",
+                      }}
+                  >
+                    <MenuItem onClick={hanldeLogout}>
+                      <ListItemIcon>
+                        <Logout fontSize="small"/>
+                      </ListItemIcon>
+                      Logout
+                    </MenuItem>
+                  </Menu>
+
+
                 </li>
               </ul>
             </div>
@@ -276,28 +271,28 @@ useEffect(() => {
             <div className="card-header pb-4 d-flex justify-content-between">
               <Typography variant="h5">Quản lý tài khoản</Typography>
               <Paper
-                component="form"
-                sx={{
-                  p: "2px 4px",
-                  display: "flex",
-                  alignItems: "center",
-                  width: 400,
-                }}
+                  component="form"
+                  sx={{
+                    p: "2px 4px",
+                    display: "flex",
+                    alignItems: "center",
+                    width: 400,
+                  }}
               >
                 <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="Tìm kiếm người dùng"
-                  inputProps={{ "aria-label": "Tìm kiếm người dùng" }}
-                  {...register(
-                      'searchUser'
-                  )}
+                    sx={{ml: 1, flex: 1}}
+                    placeholder="Tìm kiếm người dùng"
+                    inputProps={{"aria-label": "Tìm kiếm người dùng"}}
+                    {...register(
+                        'searchUser'
+                    )}
                 />
                 <IconButton
-                  type="button"
-                  sx={{ p: "10px" }}
-                  aria-label="search"
+                    type="button"
+                    sx={{p: "10px"}}
+                    aria-label="search"
                 >
-                  <SearchIcon onClick={() => handleFindUser()} />
+                  <SearchIcon onClick={() => handleFindUser()}/>
                 </IconButton>
               </Paper>
             </div>
@@ -317,34 +312,34 @@ useEffect(() => {
                 </TableHead>
                 <TableBody>
                   {[...(listUser?.users ?? [])].map((user, index) => (
-                    <TableRow key={user._id}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {user?.username}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {user?.fullname}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">{user?.email}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">{user?.phone}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2">
-                          {user?.admin === false
-                            ? "Người dùng"
-                            : "Quản trị viên"}
-                        </Typography>
-                        {/* Display Role */}
-                      </TableCell>
-                      <TableCell align="center">
-                        <IconButton onClick={() => handleEdit(user)}>
+                      <TableRow key={user._id}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {user?.username}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {user?.fullname}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">{user?.email}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">{user?.phone}</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {user?.admin === false
+                                ? "Người dùng"
+                                : "Quản trị viên"}
+                          </Typography>
+                          {/* Display Role */}
+                        </TableCell>
+                        <TableCell align="center">
+                          <IconButton onClick={() => handleEdit(user)}>
                           <EditIcon />
                         </IconButton>
                         {/* <IconButton onClick={() => handleView(user)}>

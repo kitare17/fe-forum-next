@@ -118,7 +118,7 @@ const GroupJob = ({groupId}: { groupId: string }) => {
             <div className="row justify-content-center">
                 <div className="col-md-3">
                     <div className="card" style={{backgroundColor: '#A9A9A9', opacity: 0.8}}>
-                        <div className="card-header bg-secondary text-white text-center">To Do</div>
+                        <div className="card-header bg-secondary text-white text-center">Nhiệm vụ</div>
                         <div className="overflow-auto" style={{maxHeight: '500px'}}>
                             {listTodoTask.map(
                                 (task) => {
@@ -173,8 +173,8 @@ const GroupJob = ({groupId}: { groupId: string }) => {
 
                 <div className="col-md-3">
                     <div className="card " style={{backgroundColor: ' #81B1CC', opacity: 0.8}}>
-                        <div className="card-header text-white text-center" style={{backgroundColor: '#4169E1	'}}>In
-                            Progress
+                        <div className="card-header text-white text-center" style={{backgroundColor: '#4169E1	'}}>
+                            Đang làm
                         </div>
                         <div className="overflow-auto" style={{maxHeight: '500px'}}>
                             {listPending.map(
@@ -228,7 +228,7 @@ const GroupJob = ({groupId}: { groupId: string }) => {
 
                 <div className="col-md-3">
                     <div className="card" style={{backgroundColor: '#AAD9CD', opacity: 0.8}}>
-                        <div className="card-header bg-success text-white text-center">Done</div>
+                        <div className="card-header bg-success text-white text-center">Hoàn thành</div>
                         <div className="overflow-auto" style={{maxHeight: '500px'}}>
                             {listDone.map(
                                 (task) => {
@@ -269,7 +269,7 @@ const GroupJob = ({groupId}: { groupId: string }) => {
 
                 <div className="col-md-3">
                     <div className="card " style={{backgroundColor: '#E5B3BB', opacity: 0.8}}>
-                        <div className="card-header bg-danger text-white text-center">Cancel</div>
+                        <div className="card-header bg-danger text-white text-center">Đã hủy</div>
                         <div className="overflow-auto" style={{maxHeight: '500px'}}>
                             {listCancel.map(
                                 (task) => {
