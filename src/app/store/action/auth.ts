@@ -46,10 +46,10 @@ export const fetchRegister = createAsyncThunk(
                     email: userRegister.email,
                     password: userRegister.password,
                     username: userRegister.username,
-                    fullname: "",
+                    fullname: userRegister.username,
                     phone:"",
                     avatar: "", 
-                    statusUser: true
+                    status: true
                 }
             );
             const data: RegisterInterface = response.data;
