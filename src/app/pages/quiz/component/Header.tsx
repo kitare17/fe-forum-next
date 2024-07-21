@@ -17,7 +17,6 @@ const Header: React.FC<HeaderProps> = ({ deckId, questionsCount }) => {
             sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
-                padding: '20px'
             }}
         >
             {!deckId.deckId ? (

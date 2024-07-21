@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 import {
-    getDecks, showAllQuizzes, createDeck, createQuiz, editQuestion, deleteQuestion,
+    getDecks, showAllQuizzes, createDeck, createQuiz, editQuestion, deleteQuestion,deleteDeck,
     getQuestion
 } from "@/app/store/action/quiz";
 import {DeckInterface, FlashCardInterface, QuestionRequest, QuestionResponse, QuizInterface} from "@/app/interface/Quizz";
@@ -90,7 +90,14 @@ const quizSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false
             })
-                 // Get flashCard list
+
+            .addCase(deleteDeck.fulfilled, (state, action) => {
+                // Remove the deck from the listDeck array
+                state.listDeck = state.listDeck.filter(deck => deck._id !== action.payload);
+            })
+            .addCase(deleteDeck.rejected, (state) => {
+                state.isError = true;
+            })
             .addCase(showAllQuizzes.fulfilled, (state, action) => {
                 state.listFlashCard = action.payload;
                 state.isLoading = false;

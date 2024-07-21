@@ -10,12 +10,13 @@ const CreateDeckPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
     const { user } = useSelector((state: RootState) => state.auth);
+
+    const userEmailId = user?.userEmailId ?? "";
     const [formData, setFormData] = useState<DeckInterface>({
         name: '',
         regionType: '',
-        deckOwner: user.email,
+        deckOwner: userEmailId,
     });
-
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
